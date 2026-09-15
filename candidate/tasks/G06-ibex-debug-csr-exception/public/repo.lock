@@ -1,0 +1,72 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "source_id": "ibex-pr475-base",
+  "repository_url": "https://github.com/lowRISC/ibex",
+  "base_commit": "aefbcdceb327a7af47e8c9af710a5110aab5a0eb",
+  "submodule_commits": {},
+  "source_archive_sha256": "16151ab18e68d7eebc090e0be6890d388fd5057fa90d69b0fdb31215e79a4cbb",
+  "release_date": "2019-11-15T09:23:03Z",
+  "license_spdx": "Apache-2.0",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "full_source_archive_exposed_to_workflow": false,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_files": [
+    {
+      "path": "rtl/ibex_controller.sv",
+      "mode": "editable",
+      "sha256": "7de14c684ac6608059bd32573fd37565c760c9298bfe043012832ca97fe9807f",
+      "bytes": 23926
+    },
+    {
+      "path": "rtl/ibex_cs_registers.sv",
+      "mode": "editable",
+      "sha256": "caab041bc48f5c6175a2aa595bd282fd253e14fdd1ebc6280e81fbbd29f1d255",
+      "bytes": 33779
+    },
+    {
+      "path": "rtl/ibex_pkg.sv",
+      "mode": "read_only",
+      "sha256": "ef0ead1689ac53ca598336c9366456e1603840e671a3426b0e2150568ed212c3",
+      "bytes": 9272
+    },
+    {
+      "path": "rtl/ibex_core.sv",
+      "mode": "read_only",
+      "sha256": "1d7cf1b54ec606f90990dc48c3e1b1725d6dbff6d9e1835bd802d78be0f57ffc",
+      "bytes": 32243
+    },
+    {
+      "path": "rtl/ibex_id_stage.sv",
+      "mode": "read_only",
+      "sha256": "f8d3995cec198c3dca119733c24dcd3ea6e861158c56b6b47e3fbf94ab2e1570",
+      "bytes": 23789
+    },
+    {
+      "path": "LICENSE",
+      "mode": "read_only",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358
+    },
+    {
+      "path": "README.md",
+      "mode": "read_only",
+      "sha256": "55b82f9ea46835a62290018e96be7d24aec41e997eaa18673a2117dd91daae1a",
+      "bytes": 3386
+    }
+  ],
+  "required_notice_paths": [
+    "LICENSE"
+  ],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    "dv/",
+    "vendor/",
+    "examples/",
+    "upstream_repair.patch",
+    "reference/",
+    "private/"
+  ],
+  "note": "The planned workflow projection contains seven base files. Only the controller and CSR-register RTL are editable; no repaired revision, upstream diff, testbench, or evaluator asset is included."
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G08-common-fifo-dv",
+  "source_id": "common-cells-cutoff",
+  "repository_url": "https://github.com/pulp-platform/common_cells",
+  "base_commit": "ca493e681f208a68b9a5e8809f12d772a5db2ec7",
+  "submodule_commits": {},
+  "source_archive_sha256": "a2fb6ab09e89ce8c533d189fc6c0e11b47699e4a702106bf9cc3779f2e0104db",
+  "release_date": "2022-11-29T14:36:45Z",
+  "license_spdx": "SHL-0.51",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": [
+    "src/fifo_v3.sv",
+    "LICENSE"
+  ],
+  "repository_projection_sha256": {
+    "src/fifo_v3.sv": "0b33c4ca3d81eb0af72772aa8f064d655974627841e4ba5aca5634cbb46147ce",
+    "LICENSE": "6527a46225891b976fa94f634f6ee0cd22e1c7129d6f11c5c98c997627625fc7"
+  },
+  "required_notice_paths": [
+    "LICENSE",
+    "src/fifo_v3.sv"
+  ],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    "test/fifo_tb.sv",
+    "formal/fifo_v3_properties.sv",
+    "formal/fifo_v3.sby",
+    "test/",
+    "formal/"
+  ],
+  "note": "src/fifo_v3.sv is the read-only DUT, not a solution to the requested verification task. Existing upstream verification and all evaluator assets are excluded so the submission must be independently authored."
+}

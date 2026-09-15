@@ -1,0 +1,21 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G10-serv-area-qor",
+  "source_id": "serv-cutoff",
+  "license_spdx": "ISC",
+  "license_evidence_url": "https://github.com/olofk/serv/blob/7c004e8f7b0776cf4664a5311625f534eaff49f1/LICENSE",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the SERV repository, cutoff commit, archive SHA256, SPDX identifier, release date, and license-evidence URL.",
+    "The content-addressed archive contains LICENSE with SHA256 d9a1bd691f04280a8369a4aa69b6be20c0e2ee6d164a17ad8a8ef49da8ea0ea9.",
+    "The development projection retains LICENSE and exposes only the allowlisted baseline RTL and build context.",
+    "This receipt is evidence for review, not legal advice or an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the projected files.",
+    "The exact development projection and notice retention have not received independent review or freeze."
+  ]
+}

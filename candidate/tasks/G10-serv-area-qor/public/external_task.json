@@ -1,0 +1,134 @@
+{
+  "benchmark_id": "chipflow-golden12",
+  "benchmark_version": "golden12-universal-v3-candidate",
+  "budget": {
+    "eda_call_limits": {
+      "compile_or_lint": 30,
+      "formal": 10,
+      "simulation": 50,
+      "synthesis": 20
+    },
+    "human_interventions": {
+      "maximum": 0
+    },
+    "llm_calls": {
+      "maximum": 8
+    },
+    "network_access": false,
+    "status": "provisional_not_frozen",
+    "tokens": {
+      "accounting_policy": "enforced_limits",
+      "maximum_input_tokens": 524288,
+      "maximum_output_tokens": 32768,
+      "missing_measurement_policy": "reject"
+    },
+    "wall_time_seconds": 3600,
+    "workflow_attempts": 1
+  },
+  "evaluation_contract": {
+    "canonical_verdicts": [
+      "invalid_instance",
+      "infra_error",
+      "invalid_submission",
+      "scope_violation",
+      "blocked",
+      "timeout",
+      "compile_error",
+      "fail_f2p",
+      "fail_p2p",
+      "fail_formal",
+      "fail_ppa",
+      "pass"
+    ],
+    "evaluator_status": "development",
+    "hidden_evaluator_isolated": true,
+    "required_oracle_classes": [
+      "build",
+      "lint",
+      "simulation",
+      "differential",
+      "synthesis",
+      "ppa",
+      "scope"
+    ],
+    "runner_protocol_version": "rtlflowbench.runner.v1"
+  },
+  "family": "qor_optimization",
+  "packet_status": "draft",
+  "public_packet": {
+    "contains_evaluator_assets": false,
+    "digest_status": "not_frozen",
+    "network_access": false,
+    "root": ".",
+    "sha256": null
+  },
+  "rights": {
+    "receipt_path": "rights_review.json",
+    "redistribution_review_complete": false,
+    "status": "pending_independent_review"
+  },
+  "schema_version": "rtlflowbench.task.v1",
+  "scoring_contract": {
+    "profile_id": "universal-qor-v3",
+    "raw_metric_ids": [
+      "functional_correctness",
+      "f2p",
+      "p2p",
+      "area",
+      "timing",
+      "performance",
+      "scope_violation_count",
+      "trust_event_count",
+      "wall_time_seconds",
+      "input_tokens",
+      "output_tokens",
+      "llm_calls",
+      "eda_calls",
+      "human_interventions"
+    ]
+  },
+  "submission_contract": {
+    "artifact_format": "file_bundle",
+    "editable_paths": [
+      "rtl/serv_aligner.v",
+      "rtl/serv_alu.v",
+      "rtl/serv_bufreg.v",
+      "rtl/serv_bufreg2.v",
+      "rtl/serv_compdec.v",
+      "rtl/serv_csr.v",
+      "rtl/serv_ctrl.v",
+      "rtl/serv_decode.v",
+      "rtl/serv_immdec.v",
+      "rtl/serv_mem_if.v",
+      "rtl/serv_rf_if.v",
+      "rtl/serv_rf_ram.v",
+      "rtl/serv_rf_ram_if.v",
+      "rtl/serv_rf_top.v",
+      "rtl/serv_state.v",
+      "rtl/serv_synth_wrapper.v",
+      "rtl/serv_top.v"
+    ],
+    "max_files_changed": 17,
+    "max_submission_bytes": 1048576,
+    "required_files": [
+      "rtl/serv_aligner.v",
+      "rtl/serv_alu.v",
+      "rtl/serv_bufreg.v",
+      "rtl/serv_bufreg2.v",
+      "rtl/serv_compdec.v",
+      "rtl/serv_csr.v",
+      "rtl/serv_ctrl.v",
+      "rtl/serv_decode.v",
+      "rtl/serv_immdec.v",
+      "rtl/serv_mem_if.v",
+      "rtl/serv_rf_if.v",
+      "rtl/serv_rf_ram.v",
+      "rtl/serv_rf_ram_if.v",
+      "rtl/serv_rf_top.v",
+      "rtl/serv_state.v",
+      "rtl/serv_synth_wrapper.v",
+      "rtl/serv_top.v"
+    ]
+  },
+  "task_id": "G10-serv-area-qor"
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": "rtlflowbench.g11_riscv_formal_projection.v1",
+  "task_id": "G11-picorv32-qor",
+  "top_module": "picorv32",
+  "compile_defines": [
+    "RISCV_FORMAL"
+  ],
+  "ordinary_port_source": "spec/cpu_interface_spec.json#/ports",
+  "rvfi_ports": [
+    {"name": "rvfi_valid", "direction": "output", "width": 1},
+    {"name": "rvfi_order", "direction": "output", "width": 64},
+    {"name": "rvfi_insn", "direction": "output", "width": 32},
+    {"name": "rvfi_trap", "direction": "output", "width": 1},
+    {"name": "rvfi_halt", "direction": "output", "width": 1},
+    {"name": "rvfi_intr", "direction": "output", "width": 1},
+    {"name": "rvfi_mode", "direction": "output", "width": 2},
+    {"name": "rvfi_ixl", "direction": "output", "width": 2},
+    {"name": "rvfi_rs1_addr", "direction": "output", "width": 5},
+    {"name": "rvfi_rs2_addr", "direction": "output", "width": 5},
+    {"name": "rvfi_rs1_rdata", "direction": "output", "width": 32},
+    {"name": "rvfi_rs2_rdata", "direction": "output", "width": 32},
+    {"name": "rvfi_rd_addr", "direction": "output", "width": 5},
+    {"name": "rvfi_rd_wdata", "direction": "output", "width": 32},
+    {"name": "rvfi_pc_rdata", "direction": "output", "width": 32},
+    {"name": "rvfi_pc_wdata", "direction": "output", "width": 32},
+    {"name": "rvfi_mem_addr", "direction": "output", "width": 32},
+    {"name": "rvfi_mem_rmask", "direction": "output", "width": 4},
+    {"name": "rvfi_mem_wmask", "direction": "output", "width": 4},
+    {"name": "rvfi_mem_rdata", "direction": "output", "width": 32},
+    {"name": "rvfi_mem_wdata", "direction": "output", "width": 32},
+    {"name": "rvfi_csr_mcycle_rmask", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_mcycle_wmask", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_mcycle_rdata", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_mcycle_wdata", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_minstret_rmask", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_minstret_wmask", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_minstret_rdata", "direction": "output", "width": 64},
+    {"name": "rvfi_csr_minstret_wdata", "direction": "output", "width": 64}
+  ],
+  "ordinary_port_count": 27,
+  "rvfi_port_count": 29,
+  "expected_total_top_port_count": 56,
+  "preservation_rule": "With RISCV_FORMAL defined, every ordinary and RVFI top-level port name, direction, and width must exactly match this public projection before a candidate can proceed to semantic equivalence or QoR evaluation.",
+  "status": "development_contract_not_frozen",
+  "excluded_claims": [
+    "This structural projection does not prove RVFI observation semantics or architectural correctness.",
+    "It is not a hidden oracle, complete formal-equivalence proof, ISA-compliance result, QoR result, score, or benchmark PASS."
+  ]
+}

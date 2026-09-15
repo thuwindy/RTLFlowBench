@@ -1,0 +1,31 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G08-common-fifo-dv",
+  "scope_kind": "neutral_submission",
+  "editable_paths": [
+    "verification/g08_fifo_tb.sv",
+    "verification/g08_fifo_properties.sv"
+  ],
+  "read_only_repository_paths": [
+    "src/fifo_v3.sv",
+    "LICENSE"
+  ],
+  "allowed_file_operations": [
+    "add_file"
+  ],
+  "max_files_changed": 2,
+  "forbidden_paths": [
+    "src/fifo_v3.sv",
+    "LICENSE",
+    "test/",
+    "formal/",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/",
+    "mutants/"
+  ],
+  "network_access": false
+}

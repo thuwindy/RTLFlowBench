@@ -1,0 +1,21 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "status": "development_materialized_not_frozen",
+  "mode": "content_addressed_repository_projection",
+  "source": "repo.lock",
+  "editable_paths": [
+    "rtl/ibex_controller.sv",
+    "rtl/ibex_cs_registers.sv"
+  ],
+  "read_only_file_count": 5,
+  "blank_rtl_scaffold": false,
+  "workflow_workspace_contains_reference_solution": false,
+  "planned_checks": [
+    "Verify the source archive SHA256 before projection.",
+    "Verify every projected file byte count and SHA256.",
+    "Reject symlinks, devices, archive traversal, and files outside the allowlist.",
+    "Make read-only context non-editable and monitor the complete workspace.",
+    "Accept a submission only when differences are limited to the two editable RTL paths."
+  ]
+}

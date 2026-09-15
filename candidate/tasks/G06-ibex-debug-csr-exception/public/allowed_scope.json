@@ -1,0 +1,37 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "scope_kind": "neutral_submission",
+  "editable_paths": [
+    "rtl/ibex_controller.sv",
+    "rtl/ibex_cs_registers.sv"
+  ],
+  "read_only_repository_paths": [
+    "rtl/ibex_pkg.sv",
+    "rtl/ibex_core.sv",
+    "rtl/ibex_id_stage.sv",
+    "LICENSE",
+    "README.md"
+  ],
+  "allowed_file_operations": [
+    "replace_text"
+  ],
+  "max_files_changed": 2,
+  "forbidden_paths": [
+    "dv/",
+    "vendor/",
+    "examples/",
+    "LICENSE",
+    "README.md",
+    "rtl/ibex_pkg.sv",
+    "rtl/ibex_core.sv",
+    "rtl/ibex_id_stage.sv",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "network_access": false
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "source_id": "verilog-axis-cutoff",
+  "license_spdx": "MIT",
+  "license_evidence_url": "https://github.com/alexforencich/verilog-axis/blob/ed6130575df11b48a20c9e39b83d9a37011a3723/COPYING",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the repository, commit, archive SHA256, SPDX identifier, release date, and license URL.",
+    "The proposed public projection contains only axis_fifo.v and COPYING; upstream tests are excluded.",
+    "This receipt records technical provenance only and is not legal advice or approval."
+  ],
+  "blockers": [
+    "An independent reviewer has not approved MIT redistribution and benchmark use of the exact projection.",
+    "The public package digest and notice handling have not been independently frozen."
+  ]
+}

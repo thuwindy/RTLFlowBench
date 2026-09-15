@@ -1,0 +1,95 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G06-A01",
+      "statement": "Both submitted RTL files preserve their pinned module interfaces, enum contracts, legal parameters, and integration compatibility.",
+      "acceptance_rule": "The affected units and pinned integration elaborate without a submission-induced port, type, parameter, or compile failure.",
+      "verification_intent": "Planned visible build/lint and hidden integration build."
+    },
+    {
+      "requirement_id": "G06-A02",
+      "statement": "A synchronous exception taken while already in Debug Mode follows the existing debug-exception control-flow route.",
+      "acceptance_rule": "The exception is neither suppressed nor routed through the normal machine trap vector, and execution reaches the pinned debug-exception handler without deadlock or duplicate retirement.",
+      "verification_intent": "Planned hidden controller/full-core differential sequences."
+    },
+    {
+      "requirement_id": "G06-A03",
+      "statement": "An exception taken while already in Debug Mode does not overwrite the saved machine exception context.",
+      "acceptance_rule": "Values observable through mepc, mcause, mtval, exception-related mstatus fields, and subsequent machine-context restoration remain equal to their pre-event values.",
+      "verification_intent": "Planned hidden CSR before/after trace and bounded stability properties."
+    },
+    {
+      "requirement_id": "G06-A04",
+      "statement": "An exception taken while already in Debug Mode is not treated as a fresh Debug Mode entry.",
+      "acceptance_rule": "The previously saved debug-entry PC/cause context is not rewritten solely by the in-debug exception.",
+      "verification_intent": "Planned hidden debug-entry then exception trace."
+    },
+    {
+      "requirement_id": "G06-A05",
+      "statement": "Normal synchronous exceptions outside Debug Mode retain pinned machine-trap behavior.",
+      "acceptance_rule": "Representative instruction, environment-call and LSU/fetch exception classes update the expected machine exception context and redirect normally.",
+      "verification_intent": "Planned visible smoke and hidden P2P exception matrix."
+    },
+    {
+      "requirement_id": "G06-A06",
+      "statement": "Initial debug entry, in-debug EBREAK behavior, DRET, and subsequent debug entry are preserved.",
+      "acceptance_rule": "Debug entry/exit context and cause behavior remain equivalent to the pinned base except for the stated in-debug exception side-effect correction.",
+      "verification_intent": "Planned visible debug-entry smoke and hidden P2P debug sequence."
+    },
+    {
+      "requirement_id": "G06-A07",
+      "statement": "Interrupt, NMI, MRET, CSR access, PMP, performance counter, fetch, LSU, and pipeline behavior outside the defect is preserved.",
+      "acceptance_rule": "Pinned regression and differential scenarios remain equivalent outside the intended debug-mode exception state update.",
+      "verification_intent": "Planned hidden integration regression, coverage, and mutation checks."
+    },
+    {
+      "requirement_id": "G06-A08",
+      "statement": "Reset behavior is unchanged.",
+      "acceptance_rule": "Asserting active-low reset asynchronously restores the pinned state and clears any repair-specific transient state.",
+      "verification_intent": "Planned reset-directed simulation and bounded reset property."
+    },
+    {
+      "requirement_id": "G06-A09",
+      "statement": "The change remains within the two editable RTL files.",
+      "acceptance_rule": "Only rtl/ibex_controller.sv and rtl/ibex_cs_registers.sv may differ; no file is added, removed, renamed, or symlinked and read-only hashes remain unchanged.",
+      "verification_intent": "Planned exact projection and scope checks."
+    },
+    {
+      "requirement_id": "G06-A10",
+      "statement": "The repair is self-contained and offline.",
+      "acceptance_rule": "Evaluation needs no network access and the submission does not depend on public-runner internals, hidden assets, or host-specific files.",
+      "verification_intent": "Planned hermetic runner and workspace-isolation checks."
+    }
+  ],
+  "operation_table": [
+    {
+      "condition": "synchronous exception is taken while Debug Mode is already active",
+      "required_effect": "use the pinned debug-exception route while preserving existing machine exception context and prior debug-entry context"
+    },
+    {
+      "condition": "synchronous exception is taken outside Debug Mode",
+      "required_effect": "preserve the pinned normal machine exception CSR updates and trap redirect"
+    },
+    {
+      "condition": "the hart enters Debug Mode from normal execution",
+      "required_effect": "preserve pinned debug PC/cause save semantics"
+    },
+    {
+      "condition": "active-low reset is asserted",
+      "required_effect": "reset wins asynchronously according to the pinned repository behavior"
+    }
+  ],
+  "visible_verification_status": "development_positive_preservation_behavior_calibrated_not_frozen",
+  "evaluator_verification_status": "development_private_integration_calibrated_not_frozen",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "This draft does not disclose or encode a repaired revision or historical repair diff.",
+    "No exact repair structure, cycle count, or performance guarantee is frozen.",
+    "SERVER26 development calibration observed the buggy base fail, two independently derived repairs pass, and one preservation mutant fail; this is not a frozen hidden oracle or admission.",
+    "A SERVER26 public positive-preservation smoke is calibrated, but no bounded formal proof, coverage measurement, multi-mutant score, performance result, or PPA result is reported.",
+    "No environment, score, projection digest, benchmark admission, or adapter admission is frozen."
+  ]
+}

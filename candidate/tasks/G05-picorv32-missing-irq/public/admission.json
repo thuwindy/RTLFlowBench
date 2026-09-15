@@ -1,0 +1,31 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G05-picorv32-missing-irq",
+  "manifest_status": "oracle_development",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": true,
+  "hidden_p2p_calibrated": true,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent ISC rights review and freeze of the embedded picorv32.v notice and attribution handling",
+    "Independent IRQ behavior-contract review and specification freeze",
+    "Independent review and freeze of the reproduced minimal repository projection",
+    "Fail-closed negative calibration plus independent review/freeze of the development visible runner",
+    "Independent review and freeze of the cross-environment simultaneous-event F2P calibration",
+    "Independent review/freeze of the development-calibrated hidden masked, latched, runtime-mask, reset-priority, wrapper, and server-only non-RVC firmware checks",
+    "Independent review and freeze of the cross-environment depth-16 bounded-formal calibration",
+    "Independent review/freeze of the development 5/5 semantic mutant calibration and two-subject 0.0 false-positive calibration",
+    "Cross-environment reproduction, threshold selection, anti-gaming review, and independent freeze of DUT-only simulation coverage",
+    "Independent audit and freeze of both structurally distinct correct repairs",
+    "Frozen environment, budget, scoring, and public packet digest",
+    "Independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "source_id": "picorv32-pr152-base",
+  "license_spdx": "ISC",
+  "license_evidence_url": "https://github.com/YosysHQ/picorv32/blob/e308982e18fc952a8d446ddb7ea8b70433a998c2/picorv32.v#L1-L17",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the repository, commit, source archive digest, SPDX identifier, and the embedded ISC notice in picorv32.v lines 1-17.",
+    "The frozen archive contains picorv32.v with the complete ISC copyright, permission, and warranty notice.",
+    "README.md independently identifies PicoRV32 as ISC licensed.",
+    "The development workflow projection contains picorv32.v and README.md only and retains the embedded notice; this receipt is not legal advice or an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the projected files.",
+    "The embedded ISC notice, attribution handling, and benchmark-use interpretation have not received independent review.",
+    "The reproduced development repository projection and notice-retention evidence have not received independent review or freeze."
+  ]
+}

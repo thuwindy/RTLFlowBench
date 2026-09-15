@@ -1,0 +1,77 @@
+{
+  "schema_version": "rtlflowbench.task_workspace_monitor_profile.v1",
+  "task_id": "G10-serv-area-qor",
+  "suite_id": null,
+  "required_public_assets": [
+    "runner.py",
+    "verdict.py",
+    "software_smoke_tb.sv"
+  ],
+  "repository_files": [
+    "LICENSE",
+    "README.md",
+    "data/params.tcl",
+    "rtl/serv_aligner.v",
+    "rtl/serv_alu.v",
+    "rtl/serv_bufreg.v",
+    "rtl/serv_bufreg2.v",
+    "rtl/serv_compdec.v",
+    "rtl/serv_csr.v",
+    "rtl/serv_ctrl.v",
+    "rtl/serv_decode.v",
+    "rtl/serv_immdec.v",
+    "rtl/serv_mem_if.v",
+    "rtl/serv_rf_if.v",
+    "rtl/serv_rf_ram.v",
+    "rtl/serv_rf_ram_if.v",
+    "rtl/serv_rf_top.v",
+    "rtl/serv_state.v",
+    "rtl/serv_synth_wrapper.v",
+    "rtl/serv_top.v",
+    "serv.core"
+  ],
+  "submission_files": [
+    "rtl/serv_aligner.v",
+    "rtl/serv_alu.v",
+    "rtl/serv_bufreg.v",
+    "rtl/serv_bufreg2.v",
+    "rtl/serv_compdec.v",
+    "rtl/serv_csr.v",
+    "rtl/serv_ctrl.v",
+    "rtl/serv_decode.v",
+    "rtl/serv_immdec.v",
+    "rtl/serv_mem_if.v",
+    "rtl/serv_rf_if.v",
+    "rtl/serv_rf_ram.v",
+    "rtl/serv_rf_ram_if.v",
+    "rtl/serv_rf_top.v",
+    "rtl/serv_state.v",
+    "rtl/serv_synth_wrapper.v",
+    "rtl/serv_top.v"
+  ],
+  "runner_argv": [
+    "{python}",
+    "{visible}/runner.py",
+    "--submission-root",
+    "{submission}",
+    "--output-dir",
+    "{runner_output}",
+    "--yosys",
+    "{yosys}",
+    "--iverilog",
+    "{iverilog}",
+    "--vvp",
+    "{vvp}",
+    "--command-timeout-seconds",
+    "{command_timeout_seconds}"
+  ],
+  "result_filename": "runner/result.json",
+  "pass_sentinel": "CHIPFLOW_G10_VISIBLE_MONITORED_PASS task=G10-serv-area-qor",
+  "tool_requirements": [
+    {
+      "name": "yosys",
+      "executable": "bin/yosys",
+      "environment_relative_paths": {}
+    }
+  ]
+}

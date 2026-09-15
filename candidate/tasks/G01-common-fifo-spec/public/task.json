@@ -1,0 +1,37 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G01-common-fifo-spec",
+  "title": "Parameterized synchronous FIFO from a clean interface contract",
+  "family": "spec_to_rtl",
+  "source_mode": "blank_scaffold",
+  "packet_status": "reviewable_draft",
+  "top_module": "golden12_fifo",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "rtl/golden12_fifo.sv"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_non_cpu_interface_spec",
+  "claims": [
+    "This packet is sufficient for an independent developer to design the requested FIFO.",
+    "The interface and behavioral acceptance contracts are public."
+  ],
+  "excluded_claims": [
+    "The public visible suite is a development implementation and is not frozen or admitted.",
+    "An evaluator-private development suite exists but is not included in this public packet, frozen, or independently admitted.",
+    "No evaluated AI workflow submission has a frozen benchmark, performance, or PPA PASS.",
+    "Benchmark readiness is not claimed."
+  ]
+}

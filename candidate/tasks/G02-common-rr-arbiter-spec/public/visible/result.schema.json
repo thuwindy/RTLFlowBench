@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.invalid/schemas/g02-visible-result.v1.json",
+  "title": "G02 development visible result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "task_id", "status", "verdict", "visible_pass",
+    "score_eligible", "submission_sha256", "stages", "raw_metrics",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g02_visible_result.v1"},
+    "task_id": {"const": "G02-common-rr-arbiter-spec"},
+    "status": {"enum": ["complete", "failed"]},
+    "verdict": {
+      "enum": ["pass", "invalid_submission", "scope_violation", "infra_error", "timeout", "compile_error", "fail_f2p"]
+    },
+    "visible_pass": {"type": "boolean"},
+    "score_eligible": {"const": false},
+    "submission_sha256": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["stage_id", "status", "exit_code", "log_path"],
+        "properties": {
+          "stage_id": {"type": "string", "minLength": 1},
+          "status": {"enum": ["pass", "fail", "timeout", "infra_error", "not_run"]},
+          "exit_code": {"type": ["integer", "null"]},
+          "log_path": {"type": ["string", "null"]},
+          "detail": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "raw_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compile_calls", "simulation_calls", "visible_sentinel_count", "invalid_parameter_rejected"],
+      "properties": {
+        "compile_calls": {"type": "integer", "minimum": 0},
+        "simulation_calls": {"type": "integer", "minimum": 0},
+        "visible_sentinel_count": {"type": "integer", "minimum": 0},
+        "invalid_parameter_rejected": {"type": "boolean"}
+      }
+    },
+    "excluded_claims": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

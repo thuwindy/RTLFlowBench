@@ -1,0 +1,37 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "title": "Repair immediate PMP-CSR update enforcement",
+  "family": "repo_repair",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "ibex_core",
+  "affected_design_unit": "ibex_id_stage",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "rtl/ibex_id_stage.sv"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/cpu_interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": true,
+  "non_cpu_interface_projection": "not_applicable_cpu_interface_spec",
+  "claims": [
+    "This draft defines a narrow pipeline-control repair against the pinned Ibex repository base.",
+    "The public behavior contract is independently worded and the stable task identifier does not override the corrected PMP-CSR semantics."
+  ],
+  "excluded_claims": [
+    "The upstream repair diff, repair commit contents, evaluator RTL, hidden traces, and future hidden tests are not public inputs.",
+    "The repository projection, visible runner, hidden evaluator, formal properties, environment, scoring, and public digest are not frozen.",
+    "No RTL PASS, formal proof, coverage, performance, PPA, or benchmark readiness is claimed."
+  ]
+}

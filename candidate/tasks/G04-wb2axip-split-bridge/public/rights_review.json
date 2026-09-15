@@ -1,0 +1,20 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "source_id": "wb2axip-cutoff",
+  "license_spdx": "Apache-2.0",
+  "license_evidence_url": "https://github.com/ZipCPU/wb2axip/blob/18895fa9531f9c273411de48369604ff61dd5959/README.md#license",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the repository commit and source archive digest.",
+    "Both projected RTL headers identify Apache-2.0 and the projected README contains the project license statement.",
+    "This receipt is not legal advice and is not an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not signed redistribution and benchmark-use review.",
+    "The exact public projection archive and included notice have not been frozen."
+  ]
+}

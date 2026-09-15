@@ -1,0 +1,22 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G08-common-fifo-dv",
+  "source_id": "common-cells-cutoff",
+  "license_spdx": "SHL-0.51",
+  "license_evidence_url": "https://github.com/pulp-platform/common_cells/blob/ca493e681f208a68b9a5e8809f12d772a5db2ec7/LICENSE",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The source manifest pins the repository, commit, archive digest, SPDX identifier, release date, and license URL.",
+    "The proposed public projection contains only LICENSE and src/fifo_v3.sv; both pinned file digests are recorded in repo.lock.",
+    "Existing upstream test and formal assets are deliberately excluded from the workflow projection.",
+    "This receipt records technical provenance only and is not legal advice or an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the proposed SHL-0.51 projection.",
+    "Required notice handling and the exact public-projection digest have not received independent review.",
+    "The public packet must remain a draft until the signed rights decision is recorded."
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "source_id": "ibex-pr1735-base",
+  "repository_url": "https://github.com/lowRISC/ibex",
+  "base_commit": "23806e2ad7d0d6fab429ae227d9a45cbd42f0fb3",
+  "submodule_commits": {},
+  "source_archive_sha256": "1f2c7e9b14e6ef75b1e54a1fca1e40274ae690c629158379e60c346dd6a8c505",
+  "release_date": "2022-08-05T11:03:36Z",
+  "license_spdx": "Apache-2.0",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "full_source_archive_exposed_to_workflow": false,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_files": [
+    {
+      "path": "rtl/ibex_id_stage.sv",
+      "mode": "editable",
+      "sha256": "858621158e8e6a749960a2c5bb24ef04cb2aa20428bb882368f6cc271243afff",
+      "bytes": 43471
+    },
+    {
+      "path": "rtl/ibex_core.sv",
+      "mode": "read_only",
+      "sha256": "88c6ccd65cb92dfd3c951a931204af4baded476833849523b623d9a8e6ab90b1",
+      "bytes": 66518
+    },
+    {
+      "path": "rtl/ibex_controller.sv",
+      "mode": "read_only",
+      "sha256": "9eb84db3902f1a2fec07efb240ee9a305703b7a6d5fcd883b239dc005805d1c3",
+      "bytes": 40367
+    },
+    {
+      "path": "rtl/ibex_decoder.sv",
+      "mode": "read_only",
+      "sha256": "fe157cce2c43764c2b4d486e1bebd15a9bd288b04a9fc377a57549ae13c9972b",
+      "bytes": 46154
+    },
+    {
+      "path": "rtl/ibex_cs_registers.sv",
+      "mode": "read_only",
+      "sha256": "b2a5c0de6772983d63622af143f4975446e3b4834b58d8d729c721ac9aaf5b90",
+      "bytes": 57553
+    },
+    {
+      "path": "rtl/ibex_if_stage.sv",
+      "mode": "read_only",
+      "sha256": "f582e3949622abd698d8d33b20ae48e19104378f543baa8e262cdc1e0adc2002",
+      "bytes": 34403
+    },
+    {
+      "path": "rtl/ibex_pmp.sv",
+      "mode": "read_only",
+      "sha256": "951d0aa1da6c27f8dace5795ba8d97d92131c207fc20c5b59e90466af4fe79b3",
+      "bytes": 11917
+    },
+    {
+      "path": "rtl/ibex_pkg.sv",
+      "mode": "read_only",
+      "sha256": "2ed4fc720a7f4442b2422c4b8a42fa4178fab56627890d755d5cb949996ded06",
+      "bytes": 17805
+    },
+    {
+      "path": "LICENSE",
+      "mode": "read_only",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358
+    },
+    {
+      "path": "README.md",
+      "mode": "read_only",
+      "sha256": "1e7a58aa150bda23103a9204e8536d00ad057696b9623bba89a950a81d1fdd8e",
+      "bytes": 6627
+    }
+  ],
+  "required_notice_paths": [
+    "LICENSE"
+  ],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    "dv/",
+    "vendor/",
+    "examples/",
+    "upstream_repair.patch",
+    "reference/",
+    "private/"
+  ],
+  "note": "The workflow receives a ten-file base projection. Only rtl/ibex_id_stage.sv is editable; rtl/ibex_decoder.sv is included read-only so the public visible lint does not suppress unknown-module failures. No upstream repair diff, repaired revision, testbench, or evaluator asset is included."
+}

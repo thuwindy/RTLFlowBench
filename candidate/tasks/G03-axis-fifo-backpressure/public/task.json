@@ -1,0 +1,40 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "title": "AXI-Stream frame FIFO integration under backpressure",
+  "family": "protocol_integration",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "golden12_axis_fifo",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "rtl/golden12_axis_fifo.sv"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_non_cpu_interface_spec",
+  "claims": [
+    "This draft specifies a wrapper integration around the pinned axis_fifo dependency.",
+    "Only the minimal read-only repository projection and public contracts may enter the workflow workspace."
+  ],
+  "excluded_claims": [
+    "The upstream cocotb tests, evaluator reference wrapper, hidden vectors, and private runner are not public inputs.",
+    "Visible and hidden oracle development evidence is not a frozen benchmark result.",
+    "Cross-environment build and raw coverage, one exact SERVER26 upstream regression, workflow-neutral reference conformance, development scoring, and evaluator repeatability exist privately, but no full-matrix regression, threshold, environment, scoring, or independent admission freeze is claimed.",
+    "Evaluator repeatability is not AI workflow repeatability; no multi-run workflow success rate or variance is claimed.",
+    "The calibrated reference wrapper is not an AI workflow submission or workflow PASS.",
+    "A development public-visible monitor and neutral exporter exist, but no frozen runner or benchmark readiness is claimed.",
+    "No AI workflow coverage, performance, PPA, or benchmark readiness is claimed."
+  ]
+}

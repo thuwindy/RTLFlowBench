@@ -1,0 +1,23 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "source_id": "verilog-axis-cutoff",
+  "repository_url": "https://github.com/alexforencich/verilog-axis",
+  "base_commit": "ed6130575df11b48a20c9e39b83d9a37011a3723",
+  "submodule_commits": {},
+  "source_archive_sha256": "819f776b81b57d8d5f0a2eb29e449ceefb5c1df8675482d69f75866865660f06",
+  "release_date": "2022-11-02T06:27:39Z",
+  "license_spdx": "MIT",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": ["rtl/axis_fifo.v", "COPYING"],
+  "repository_projection_sha256": {
+    "rtl/axis_fifo.v": "6aa530205a5c72ecf298a2e818c1dda683062616c148a29947ba70ca3f84bf01",
+    "COPYING": "8ea57f95365e9b16a5b516f422b71269183a1ae53bab5878ae6d69039e58fe77"
+  },
+  "required_notice_paths": ["COPYING"],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": ["tb/", "syn/", "example/", "tox.ini"],
+  "note": "axis_fifo.v is the read-only DUT. The upstream cocotb tests and every evaluator or hidden mutant are excluded from the workflow projection."
+}

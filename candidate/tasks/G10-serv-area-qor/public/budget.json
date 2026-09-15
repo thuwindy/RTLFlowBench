@@ -1,0 +1,30 @@
+{
+  "schema_version": "chipflow.golden12.budget.v1",
+  "task_id": "G10-serv-area-qor",
+  "status": "provisional_not_frozen",
+  "limits": {
+    "wall_time_seconds": 3600,
+    "workflow_attempts": 1,
+    "maximum_changed_files": 17,
+    "maximum_submission_bytes": 1048576,
+    "network_access": false,
+    "maximum_llm_calls": 8,
+    "maximum_human_interventions": 0,
+    "maximum_input_tokens": 524288,
+    "maximum_output_tokens": 32768,
+    "token_accounting_policy": "enforced_limits",
+    "missing_token_measurement_policy": "reject"
+  },
+  "eda_call_limits": {
+    "compile_or_lint": 30,
+    "simulation": 50,
+    "formal": 10,
+    "synthesis": 20
+  },
+  "measurement_status": "development_stage_runners_exercised_complete_workflow_budget_not_measured",
+  "excluded_claims": [
+    "Visible structural, bounded differential, and generic synthesis proxy stages have development observations, but the provisional 3600-second end-to-end workflow budget has not been calibrated.",
+    "Stage artifacts record raw wall time and EDA calls privately; no complete workflow runtime, token use, LLM-call count, human intervention count, physical PPA metric, or workflow success rate is reported.",
+    "CPU, memory, process, seed, timeout, artifact-retention, and repeat limits are not frozen."
+  ]
+}

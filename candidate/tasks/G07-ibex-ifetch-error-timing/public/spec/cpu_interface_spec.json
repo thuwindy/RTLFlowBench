@@ -1,0 +1,107 @@
+{
+  "schema_version": "chipflow.golden12.cpu_interface_spec.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "interface_kind": "ibex_pmp_csr_pipeline_repair",
+  "top_module": "ibex_core",
+  "affected_design_unit": "ibex_id_stage",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": true,
+  "projection": "internal_id_stage_pipeline_control_with_architectural_pmp_effect",
+  "repair_relevant_parameters": [
+    {
+      "name": "PMPEnable",
+      "scope": "ibex_core",
+      "repair_relevant_condition": "enabled"
+    },
+    {
+      "name": "PMPNumRegions",
+      "scope": "ibex_core",
+      "repair_relevant_condition": "one or more implemented regions",
+      "legal_range_source": "pinned_repository_base"
+    },
+    {
+      "name": "WritebackStage",
+      "scope": "ibex_id_stage",
+      "repair_relevant_condition": "both legal pinned configurations must preserve behavior"
+    }
+  ],
+  "clock": {
+    "port": "clk_i",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "rst_ni",
+    "polarity": "active_low",
+    "timing": "asynchronous_assertion_as_pinned",
+    "release_contract": "preserve_pinned_repository_behavior",
+    "priority": "higher_than_pipeline_update",
+    "state_after_reset": "no repair-specific pending serialization state may survive reset"
+  },
+  "relevant_existing_signals": [
+    {
+      "name": "instr_rdata_i",
+      "direction_at_affected_unit": "input",
+      "meaning": "Carries the decoded instruction bits, including the architectural CSR address field."
+    },
+    {
+      "name": "csr_access_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Identifies a decoded CSR instruction in the pinned ID-stage interface."
+    },
+    {
+      "name": "csr_op_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Carries the pinned CSR operation class."
+    },
+    {
+      "name": "csr_op_en_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Indicates that the CSR operation is executing under the pinned pipeline rules."
+    },
+    {
+      "name": "instr_valid_clear_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Participates in the existing removal of an instruction from the IF-ID path."
+    },
+    {
+      "name": "instr_req_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Participates in the existing instruction-request control path."
+    },
+    {
+      "name": "pc_set_o",
+      "direction_at_affected_unit": "output",
+      "meaning": "Participates in the existing control-flow redirection path."
+    }
+  ],
+  "csr_operation_semantics": {
+    "target_class": "implemented architectural PMP configuration and PMP address CSRs",
+    "state_changing_operations": [
+      "write",
+      "set",
+      "clear"
+    ],
+    "read_operation": "A pure CSR read is not a PMP state update and must preserve pinned behavior.",
+    "illegal_or_unimplemented": "Existing illegal-access and unimplemented-region behavior is preserved; the repair must not legalize an access."
+  },
+  "pipeline_semantics": {
+    "ordering": "The PMP CSR operation takes effect before a following instruction can obtain an architecturally effective execute-permission decision.",
+    "denied_following_instruction": "The existing instruction-access fault behavior is used and no prohibited architectural side effect may occur.",
+    "allowed_following_instruction": "Execution resumes through the existing fetch and pipeline path without deadlock, duplication, or a repair-induced exception.",
+    "implementation_freedom": "The contract does not prescribe an internal predicate, exact signal assignment, or exact bubble count."
+  },
+  "preservation_requirements": [
+    "Preserve the complete ibex_id_stage module signature and pinned legal parameter behavior.",
+    "Preserve non-PMP CSR, branch, jump, exception, interrupt, debug, WFI, fetch, LSU, and writeback behavior outside the repair.",
+    "Preserve PMP-disabled behavior and the pinned behavior for zero implemented regions.",
+    "Preserve upstream copyright and license headers.",
+    "Do not modify read-only projection files or add, delete, rename, or symlink files."
+  ],
+  "latency_semantics": {
+    "mode": "correctness_serialization_without_cycle_count_freeze",
+    "new_architectural_latency_guarantee": false,
+    "new_pipeline_stage_allowed": false,
+    "performance_claim": "not_measured"
+  }
+}

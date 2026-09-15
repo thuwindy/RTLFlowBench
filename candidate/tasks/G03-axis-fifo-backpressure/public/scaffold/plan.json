@@ -1,0 +1,24 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "status": "planned_not_materialized",
+  "workspace_files": [
+    {
+      "path": "rtl/axis_fifo.v",
+      "initial_state": "read_only_pinned_dependency",
+      "purpose": "Existing AXI-Stream FIFO implementation to integrate"
+    },
+    {
+      "path": "COPYING",
+      "initial_state": "read_only_license_notice",
+      "purpose": "License evidence accompanying the projected dependency"
+    },
+    {
+      "path": "rtl/golden12_axis_fifo.sv",
+      "initial_state": "absent",
+      "purpose": "Required wrapper submission"
+    }
+  ],
+  "contains_rtl": false,
+  "contains_testbench": false
+}

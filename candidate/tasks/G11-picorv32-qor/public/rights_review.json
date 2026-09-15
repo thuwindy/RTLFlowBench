@@ -1,0 +1,21 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G11-picorv32-qor",
+  "source_id": "picorv32-cutoff",
+  "license_spdx": "ISC",
+  "license_evidence_url": "https://github.com/YosysHQ/picorv32/blob/6399aeaa5981b5e77a76f5d4036d763893ab5a72/COPYING",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The Golden-12 manifest pins the PicoRV32 repository, cutoff commit, archive SHA256, SPDX identifier, release date, and license-evidence URL.",
+    "SERVER26 source intake observed COPYING SHA256 041ebc727233e5bf096dd41260cbb81014d3d29ca007a15f3b1807d4e9ff288e and picorv32.v SHA256 f862900d19d41857c7167a3234f15fa812dbd25f0d3c46245ba3677f4425d2ee.",
+    "The planned public projection retains COPYING and the notice embedded in picorv32.v while withholding evaluator-only repository paths.",
+    "This receipt is evidence for review, not legal advice or an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the materialized development projection.",
+    "The exact projection and notice-retention behavior have not been independently reviewed or frozen."
+  ]
+}

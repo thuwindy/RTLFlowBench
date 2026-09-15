@@ -1,0 +1,24 @@
+{
+  "schema_version": "rtlflowbench.acceptance_spec.v1",
+  "task_id": "G02-common-rr-arbiter-spec",
+  "top_module": "golden12_rr_arbiter",
+  "required_file": "rtl/golden12_rr_arbiter.sv",
+  "requirements": [
+    {"id": "A01", "text": "The exact parameter and port contract compiles for NUM_REQUESTERS=1, 3, 4, and 5."},
+    {"id": "A02", "text": "NUM_REQUESTERS=0 is explicitly rejected at elaboration or time zero."},
+    {"id": "A03", "text": "Asynchronous active-low reset clears grants, index, priority, and held-lock state."},
+    {"id": "A04", "text": "grant_o is always one-hot-or-zero; valid and index agree exactly with it."},
+    {"id": "A05", "text": "No-request cycles produce zero outputs and do not change priority."},
+    {"id": "A06", "text": "An accepted unlocked grant rotates the next search to the following requester modulo NUM_REQUESTERS."},
+    {"id": "A07", "text": "An unaccepted grant does not rotate priority."},
+    {"id": "A08", "text": "Lock prevents preemption and priority rotation while the held requester remains asserted."},
+    {"id": "A09", "text": "A dropped locked request causes immediate work-conserving reselection or zero if no requester remains."},
+    {"id": "A10", "text": "A continuously asserted requester is served within NUM_REQUESTERS accepted unlocked grants when progress is not suspended."},
+    {"id": "A11", "text": "Non-power-of-two requester counts wrap correctly and never emit an invalid index."},
+    {"id": "A12", "text": "Known binary inputs produce no X/Z public output outside an illegal instance."},
+    {"id": "A13", "text": "The submission changes exactly the allowed one-file scope and uses no network access."}
+  ],
+  "visible_scope": ["A01", "A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A11", "A12", "A13"],
+  "hidden_scope": ["A01", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", "A11", "A12", "A13"],
+  "status": "reviewable_draft_not_frozen"
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "manifest_status": "source_selected",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent Apache-2.0 rights and redistribution review",
+    "Independent debug-mode CSR behavior-contract review and specification freeze",
+    "Independent freeze of the development-materialized content-addressed seven-file repository projection",
+    "Independent review/freeze of the development public component-lint and positive-preservation behavioral runner",
+    "Atomic central-manifest propagation plus affected candidate-lock and reviewer-bundle relock",
+    "Independent review, expansion, and freeze of the development private exception-in-debug integration suite",
+    "Bounded formal properties, non-vacuity checks, coverage, and a multi-mutant calibration suite",
+    "Independent audit of both derived alternate correct implementations and any admissible reference subject",
+    "Frozen environment, resource budget, scoring profile, and public packet digest",
+    "Independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

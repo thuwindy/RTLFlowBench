@@ -1,0 +1,15 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G02-common-rr-arbiter-spec",
+  "source_id": "common-cells-cutoff",
+  "repository_url": "https://github.com/pulp-platform/common_cells",
+  "base_commit": "ca493e681f208a68b9a5e8809f12d772a5db2ec7",
+  "submodule_commits": {},
+  "source_archive_sha256": "a2fb6ab09e89ce8c533d189fc6c0e11b47699e4a702106bf9cc3779f2e0104db",
+  "release_date": "2022-11-29T14:36:45Z",
+  "license_spdx": "SHL-0.51",
+  "agent_source_mode": "blank_scaffold",
+  "source_snapshot_exposed_to_workflow": false,
+  "reference_implementation_exposed_to_workflow": false,
+  "note": "The source lock records evaluator provenance only; the workflow receives neither the upstream tree nor reference RTL."
+}

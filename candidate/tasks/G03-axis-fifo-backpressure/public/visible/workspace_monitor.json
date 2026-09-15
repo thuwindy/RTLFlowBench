@@ -1,0 +1,36 @@
+{
+  "schema_version": "rtlflowbench.task_workspace_monitor_profile.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "suite_id": null,
+  "required_public_assets": [
+    "runner.py",
+    "verdict.py",
+    "g03_visible_tb.sv",
+    "g03_invalid_parameter_tb.sv"
+  ],
+  "repository_files": [
+    "rtl/axis_fifo.v",
+    "COPYING"
+  ],
+  "submission_files": [
+    "rtl/golden12_axis_fifo.sv"
+  ],
+  "runner_argv": [
+    "{python}",
+    "{visible}/runner.py",
+    "--repository-root",
+    "{repository}",
+    "--submission-root",
+    "{submission}",
+    "--output-dir",
+    "{runner_output}",
+    "--iverilog",
+    "{iverilog}",
+    "--vvp",
+    "{vvp}",
+    "--command-timeout-seconds",
+    "{command_timeout_seconds}"
+  ],
+  "result_filename": "runner/result.json",
+  "pass_sentinel": "CHIPFLOW_G03_VISIBLE_MONITORED_PASS task=G03-axis-fifo-backpressure"
+}

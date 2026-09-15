@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/public/g12-block-decision.v1.json",
+  "title": "G12 neutral BLOCK decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "outcome",
+    "reason_codes",
+    "summary",
+    "repository_mutation_performed",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.block_decision.v1"
+    },
+    "task_id": {
+      "const": "G12-common-cdc-missing-contract"
+    },
+    "outcome": {
+      "enum": [
+        "blocked",
+        "proceed"
+      ]
+    },
+    "reason_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "missing_reset_assertion_semantics",
+          "missing_reset_release_synchronization",
+          "missing_clock_relationship",
+          "missing_reset_sequencing"
+        ]
+      }
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "repository_mutation_performed": {
+      "type": "boolean"
+    },
+    "claims": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  }
+}

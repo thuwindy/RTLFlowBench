@@ -1,0 +1,107 @@
+{
+  "schema_version": "chipflow.golden12.cpu_interface_spec.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "interface_kind": "ibex_debug_mode_exception_context_repair",
+  "top_module": "ibex_core",
+  "affected_design_units": [
+    "ibex_controller",
+    "ibex_cs_registers"
+  ],
+  "language": "systemverilog",
+  "cpu_interface_spec_required": true,
+  "projection": "internal_controller_to_csr_exception_and_debug_control_with_architectural_state_effect",
+  "clock": {
+    "port": "clk_i",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "rst_ni",
+    "polarity": "active_low",
+    "timing": "asynchronous_assertion_as_pinned",
+    "release_contract": "preserve_pinned_repository_behavior",
+    "priority": "higher_than_exception_or_debug_state_update",
+    "state_after_reset": "no repair-specific pending state survives reset"
+  },
+  "relevant_existing_signals": [
+    {
+      "name": "debug_mode_o/debug_mode_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Indicates that the hart is already executing in Debug Mode."
+    },
+    {
+      "name": "csr_save_cause_o/csr_save_cause_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Requests an exception/debug context save through the pinned CSR update path."
+    },
+    {
+      "name": "csr_save_if_o/csr_save_if_i and csr_save_id_o/csr_save_id_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Selects the pinned program-counter source for a context save."
+    },
+    {
+      "name": "debug_csr_save_o/debug_csr_save_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Distinguishes a fresh Debug Mode entry context save from a normal machine exception save."
+    },
+    {
+      "name": "debug_cause_o/debug_cause_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Carries the pinned reason for a fresh Debug Mode entry."
+    },
+    {
+      "name": "exc_cause_o/csr_mcause_i",
+      "producer_consumer": "controller through core integration to CSR block",
+      "meaning": "Carries the machine exception cause on the normal exception-save path."
+    },
+    {
+      "name": "csr_mtval_o/csr_mtval_i",
+      "producer_consumer": "ibex_controller to ibex_cs_registers",
+      "meaning": "Carries the pinned trap-value candidate for a machine exception."
+    },
+    {
+      "name": "pc_set_o, pc_mux_o, exc_pc_mux_o",
+      "producer_consumer": "ibex_controller to fetch/core control",
+      "meaning": "Selects the existing normal or debug exception control-flow destination."
+    }
+  ],
+  "architectural_state_contract": {
+    "preserve_on_exception_while_debug": [
+      "mepc",
+      "mcause",
+      "mtval",
+      "exception-related mstatus state",
+      "machine exception context observable through later restoration",
+      "previously saved debug-entry PC and cause"
+    ],
+    "update_on_normal_exception": [
+      "machine exception PC",
+      "machine exception cause",
+      "machine trap value when applicable",
+      "pinned machine exception status/context"
+    ],
+    "update_on_fresh_debug_entry": [
+      "pinned debug-entry PC",
+      "pinned debug cause and prior privilege fields"
+    ]
+  },
+  "exception_semantics": {
+    "already_in_debug": "Redirect through the pinned debug-exception route without overwriting machine exception context or re-saving debug-entry context.",
+    "outside_debug": "Retain pinned normal trap redirect and machine exception context updates.",
+    "exception_classes": "The contract applies across supported synchronous exception causes; it is not limited to one opcode or cause.",
+    "ebreak": "Preserve the pinned special handling inside and outside Debug Mode.",
+    "interrupts": "Preserve pinned interrupt/NMI masking, entry, and restoration behavior outside the stated synchronous exception defect."
+  },
+  "preservation_requirements": [
+    "Preserve both editable module signatures and every pinned legal parameter configuration.",
+    "Preserve debug entry, debug exit, EBREAK, normal exception, interrupt, NMI, MRET, CSR, PMP, performance-counter, fetch, LSU, and pipeline behavior outside the repair.",
+    "Preserve upstream copyright and license headers.",
+    "Do not modify read-only projection files or add, delete, rename, or symlink files."
+  ],
+  "latency_semantics": {
+    "mode": "preserve_existing_control_flow_without_cycle_count_freeze",
+    "new_architectural_latency_guarantee": false,
+    "new_pipeline_stage_allowed": false,
+    "performance_claim": "not_measured"
+  }
+}

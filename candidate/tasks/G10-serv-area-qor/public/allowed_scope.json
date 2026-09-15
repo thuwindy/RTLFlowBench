@@ -1,0 +1,54 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G10-serv-area-qor",
+  "scope_kind": "neutral_submission",
+  "editable_paths": [
+    "rtl/serv_aligner.v",
+    "rtl/serv_alu.v",
+    "rtl/serv_bufreg.v",
+    "rtl/serv_bufreg2.v",
+    "rtl/serv_compdec.v",
+    "rtl/serv_csr.v",
+    "rtl/serv_ctrl.v",
+    "rtl/serv_decode.v",
+    "rtl/serv_immdec.v",
+    "rtl/serv_mem_if.v",
+    "rtl/serv_rf_if.v",
+    "rtl/serv_rf_ram.v",
+    "rtl/serv_rf_ram_if.v",
+    "rtl/serv_rf_top.v",
+    "rtl/serv_state.v",
+    "rtl/serv_synth_wrapper.v",
+    "rtl/serv_top.v"
+  ],
+  "read_only_repository_paths": [
+    "LICENSE",
+    "README.md",
+    "data/params.tcl",
+    "serv.core"
+  ],
+  "allowed_file_operations": [
+    "replace_text"
+  ],
+  "max_files_changed": 17,
+  "forbidden_paths": [
+    "LICENSE",
+    "README.md",
+    "data/",
+    "serv.core",
+    "bench/",
+    "doc/",
+    "riscv-target/",
+    "servant/",
+    "serving/",
+    "sw/",
+    "zephyr/",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "network_access": false
+}

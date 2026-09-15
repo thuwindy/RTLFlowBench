@@ -1,0 +1,94 @@
+{
+  "schema_version": "chipflow.golden12.interface_spec.v1",
+  "task_id": "G08-common-fifo-dv",
+  "interface_kind": "common_cells_fifo_dut",
+  "top_module": "fifo_v3",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": false,
+  "projection": "independent_non_cpu_interface_spec",
+  "parameters": [
+    {
+      "name": "FALL_THROUGH",
+      "type": "bit",
+      "default": 0,
+      "valid_range": "0 or 1"
+    },
+    {
+      "name": "DATA_WIDTH",
+      "type": "positive_integer",
+      "default": 32,
+      "valid_range": "DATA_WIDTH >= 1"
+    },
+    {
+      "name": "DEPTH",
+      "type": "positive_integer",
+      "default": 8,
+      "valid_range": "DEPTH >= 1; arbitrary non-power-of-two values are legal"
+    },
+    {
+      "name": "dtype",
+      "type": "systemverilog_type",
+      "default": "logic [DATA_WIDTH-1:0]",
+      "valid_range": "The benchmark projection and evaluator use the default packed logic type"
+    },
+    {
+      "name": "ADDR_DEPTH",
+      "type": "derived_positive_integer",
+      "default": "(DEPTH > 1) ? $clog2(DEPTH) : 1",
+      "valid_range": "Derived internally by fifo_v3 from DEPTH. Neither the submission nor evaluator may override the DUT's ADDR_DEPTH. A verification property module may declare a same-named mirror parameter only so the public bind wrapper can forward fifo_v3's already-derived value."
+    }
+  ],
+  "clock": {
+    "port": "clk_i",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "rst_ni",
+    "polarity": "active_low",
+    "timing": "asynchronous",
+    "assertion_effect": "Control pointers and occupancy clear without waiting for a rising clock edge; stored data also clears.",
+    "deassertion_contract": "The test environment deasserts reset away from the active clock edge before applying stimulus.",
+    "priority": "higher_than_flush_and_transactions"
+  },
+  "ports": [
+    {"name": "clk_i", "direction": "input", "width": "1"},
+    {"name": "rst_ni", "direction": "input", "width": "1"},
+    {"name": "flush_i", "direction": "input", "width": "1"},
+    {"name": "testmode_i", "direction": "input", "width": "1"},
+    {"name": "full_o", "direction": "output", "width": "1"},
+    {"name": "empty_o", "direction": "output", "width": "1"},
+    {"name": "usage_o", "direction": "output", "width": "ADDR_DEPTH"},
+    {"name": "data_i", "direction": "input", "width": "DATA_WIDTH"},
+    {"name": "push_i", "direction": "input", "width": "1"},
+    {"name": "data_o", "direction": "output", "width": "DATA_WIDTH"},
+    {"name": "pop_i", "direction": "input", "width": "1"}
+  ],
+  "transaction_semantics": {
+    "push_accept": "At a rising edge with rst_ni=1 and flush_i=0, a push is accepted exactly when push_i && !full_o.",
+    "pop_accept": "At a rising edge with rst_ni=1 and flush_i=0, a pop is accepted exactly when pop_i && !empty_o.",
+    "simultaneous_push_pop": "When both operations are accepted, the pre-edge head is popped, data_i is appended at the tail, ordering is preserved, and occupancy is unchanged. In FALL_THROUGH mode at empty with push_i && pop_i, data_i is transferred combinationally and occupancy remains zero.",
+    "full_boundary": "At current occupancy DEPTH, full_o=1. A push is not accepted even if pop_i is high; a legal full-boundary pop decreases occupancy by one.",
+    "empty_boundary": "With FALL_THROUGH=0 at occupancy zero, empty_o=1 and pop is not accepted. With FALL_THROUGH=1 and push_i=1, empty_o is combinationally deasserted and data_o equals data_i.",
+    "ordering": "Every accepted, non-bypassed push is returned exactly once by accepted pops in FIFO order; a fall-through empty push/pop returns that input without storing it.",
+    "legal_stimulus": "Every binary push_i/pop_i combination is legal at every occupancy. A push while full_o or a pop while empty_o is not accepted and must not corrupt state; flush_i and reset take precedence over transactions."
+  },
+  "state_semantics": {
+    "occupancy": "The abstract occupancy is in [0, DEPTH]; accepted push only increments, accepted pop only decrements, and simultaneous accepted push/pop is stable.",
+    "usage_encoding": "usage_o equals occupancy modulo 2**ADDR_DEPTH. Consequently a full power-of-two DEPTH encodes as zero, while non-power-of-two full occupancy is exactly representable.",
+    "full_empty": "For DEPTH>=1, full_o is true exactly at occupancy DEPTH. Except for FALL_THROUGH combinational push behavior, empty_o is true exactly at occupancy zero.",
+    "reset_state": "Asserting rst_ni low clears pointers, occupancy, and stored data; full_o=0 and empty_o=1 when push_i=0.",
+    "flush_state": "At a rising edge with rst_ni=1 and flush_i=1, pointers and occupancy clear; reset has higher priority and no transaction is accepted.",
+    "memory_after_flush": "Stored array contents after flush are not part of the interface contract; empty status prevents their observation until overwritten by later accepted pushes."
+  },
+  "latency_semantics": {
+    "registered_mode": "With FALL_THROUGH=0, data_o reflects the current stored head; a newly accepted push into an empty FIFO becomes a stored head after the accepting edge.",
+    "fall_through_mode": "With FALL_THROUGH=1 and occupancy zero, push_i makes data_o equal data_i combinationally and deasserts empty_o.",
+    "empty_data": "data_o is don't-care for verification while empty_o=1, except the documented FALL_THROUGH input bypass."
+  },
+  "invalid_parameter_behavior": {
+    "required_result": "elaboration_or_static_failure",
+    "runtime_behavior_defined": false,
+    "invalid_domain": "DEPTH < 1, DATA_WIDTH < 1, or a submission/evaluator override of fifo_v3's ADDR_DEPTH that differs from the derived expression. Forwarding the DUT's derived value into the property-module mirror parameter is valid."
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/g10-visible-result.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "suite_status",
+    "verdict",
+    "pass",
+    "wall_time_seconds",
+    "tool_paths",
+    "scope_receipt",
+    "checks",
+    "diagnostic_structural_statistics",
+    "evidence_manifest",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "chipflow.golden12.g10_visible_result.v1"},
+    "task_id": {"const": "G10-serv-area-qor"},
+    "suite_status": {
+      "const": "development_structural_and_software_smoke_not_frozen"
+    },
+    "verdict": {
+      "enum": [
+        "invalid_submission",
+        "scope_violation",
+        "infra_error",
+        "timeout",
+        "compile_error",
+        "structural_fail",
+        "functional_fail",
+        "pass"
+      ]
+    },
+    "pass": {"type": "boolean"},
+    "wall_time_seconds": {"type": ["number", "null"], "minimum": 0},
+    "tool_paths": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "scope_receipt": {"type": "object"},
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "stage", "verdict", "reason"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "stage": {
+            "enum": [
+              "scope",
+              "elaboration_synthesis",
+              "interface",
+              "software_smoke_compile",
+              "software_smoke"
+            ]
+          },
+          "verdict": {
+            "enum": [
+              "invalid_submission",
+              "scope_violation",
+              "infra_error",
+              "timeout",
+              "compile_error",
+              "structural_fail",
+              "functional_fail",
+              "pass"
+            ]
+          },
+          "reason": {"type": "string", "minLength": 1},
+          "process": {"type": "object"}
+        }
+      }
+    },
+    "diagnostic_structural_statistics": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "top_port_count",
+            "generic_cell_count",
+            "netname_count"
+          ],
+          "properties": {
+            "unit": {"const": "generic_yosys_cells_not_area"},
+            "top_port_count": {"type": "integer", "minimum": 1},
+            "generic_cell_count": {"type": "integer", "minimum": 1},
+            "netname_count": {"type": "integer", "minimum": 1}
+          }
+        }
+      ]
+    },
+    "evidence_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "error": {"type": "string"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}},
+      "then": {"properties": {"pass": {"const": true}}},
+      "else": {"properties": {"pass": {"const": false}}}
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "status": "development_materialized_not_frozen",
+  "workspace_files": [
+    {
+      "path": "picorv32.v",
+      "initial_state": "editable_pinned_repository_base",
+      "purpose": "Only permitted RTL repair target; its embedded ISC notice must be preserved"
+    },
+    {
+      "path": "README.md",
+      "initial_state": "read_only_repository_context",
+      "purpose": "Public module and IRQ documentation plus project license statement"
+    }
+  ],
+  "contains_rtl": true,
+  "contains_testbench": false
+}

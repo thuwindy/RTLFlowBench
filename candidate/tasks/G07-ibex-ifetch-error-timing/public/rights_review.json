@@ -1,0 +1,22 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "source_id": "ibex-pr1735-base",
+  "license_spdx": "Apache-2.0",
+  "license_evidence_url": "https://github.com/lowRISC/ibex/blob/23806e2ad7d0d6fab429ae227d9a45cbd42f0fb3/LICENSE",
+  "license_file_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest and repo lock pin the repository, base commit, source archive, SPDX identifier, and license evidence URL.",
+    "The content-addressed base archive contains LICENSE and the projected RTL files carry upstream headers.",
+    "The public contract and future evaluator must remain independently authored and must not redistribute the upstream repair diff as an oracle."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the ten-file projection.",
+    "The projection materialization receipt and notice-retention evidence are not frozen.",
+    "No signed rights attestation targets a content-locked G07 candidate."
+  ]
+}

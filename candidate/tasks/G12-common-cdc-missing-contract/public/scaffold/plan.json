@@ -1,0 +1,24 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "status": "planned_not_materialized",
+  "scaffold_kind": "neutral_block_decision_artifact",
+  "required_output_paths": [
+    "decision/block_decision.json"
+  ],
+  "repository_paths_writable": [],
+  "repository_paths_read_only": [
+    "LICENSE",
+    "README.md",
+    "common_cells.core",
+    "include/common_cells/registers.svh",
+    "src/binary_to_gray.sv",
+    "src/cdc_fifo_gray.sv",
+    "src/gray_to_binary.sv",
+    "src/spill_register.sv",
+    "src/sync.sv"
+  ],
+  "contains_reference_rtl": false,
+  "contains_hidden_test": false,
+  "note": "The scaffold is an empty submission-artifact directory outside the read-only repository. It does not provide a BLOCK answer, evaluator oracle, or ChipFlow executor."
+}

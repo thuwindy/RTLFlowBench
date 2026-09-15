@@ -1,0 +1,38 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "title": "Repair CSR side effects for exceptions in debug mode",
+  "family": "repo_repair",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "ibex_core",
+  "affected_design_unit": "ibex_controller+ibex_cs_registers",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "rtl/ibex_controller.sv",
+    "rtl/ibex_cs_registers.sv"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/cpu_interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": true,
+  "non_cpu_interface_projection": "not_applicable_cpu_repository_repair",
+  "claims": [
+    "This draft defines a narrow debug-mode exception-context repair against a content-addressed Ibex base snapshot.",
+    "The public behavior contract is independently worded and does not disclose a historical repair diff."
+  ],
+  "excluded_claims": [
+    "The repaired revision, upstream repair diff, evaluator RTL, hidden traces, and future hidden tests are not public inputs.",
+    "The repository projection, visible runner, hidden evaluator, formal properties, environment, scoring, and public digest are not frozen.",
+    "No RTL PASS, formal proof, coverage, performance, PPA, or benchmark readiness is claimed."
+  ]
+}

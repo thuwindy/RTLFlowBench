@@ -1,0 +1,19 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G01-common-fifo-spec",
+  "source_id": "common-cells-cutoff",
+  "license_spdx": "SHL-0.51",
+  "license_evidence_url": "https://github.com/pulp-platform/common_cells/blob/ca493e681f208a68b9a5e8809f12d772a5db2ec7/LICENSE",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "Repository license identifier and pinned license URL are recorded.",
+    "The public packet contains an independently written behavioral specification and no upstream RTL.",
+    "This receipt is not legal advice and is not an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not signed the SHL-0.51 redistribution and benchmark-use review."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G08-common-fifo-dv",
+  "title": "Generate verification assets for fifo_v3 semantic defects",
+  "family": "dv_mutation",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "fifo_v3",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "verification/g08_fifo_tb.sv",
+    "verification/g08_fifo_properties.sv"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_non_cpu_interface_spec",
+  "claims": [
+    "This draft asks for independently authored simulation and formal verification assets for the pinned fifo_v3 DUT.",
+    "The workflow receives only the pinned DUT, its license notice, and independently worded public contracts."
+  ],
+  "excluded_claims": [
+    "The upstream fifo_tb, upstream property file, formal script, hidden mutants, evaluator harnesses, and calibration solutions are not public inputs.",
+    "A private development reference has exercised the local visible runner, but that observation is not a workflow or benchmark result.",
+    "A private simulation development phase was observed on one calibration subject locally and on SERVER26, but the canonical evaluator verdict remains BLOCKED and no hidden calibration gate is claimed.",
+    "Development-only mutation counts, false-positive observations, bounded-formal outcomes, and raw coverage metrics are not frozen benchmark results; benchmark readiness is not claimed."
+  ]
+}

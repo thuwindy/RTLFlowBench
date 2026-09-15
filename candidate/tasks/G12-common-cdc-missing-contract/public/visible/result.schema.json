@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/public/g12-visible-result.v1.json",
+  "title": "G12 visible BLOCK preflight result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "suite_id",
+    "suite_status",
+    "verdict",
+    "expected_block_observed",
+    "checks",
+    "raw_metrics",
+    "runner_sources",
+    "evidence_manifest",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "chipflow.golden12.g12_visible_result.v1"
+    },
+    "task_id": {
+      "const": "G12-common-cdc-missing-contract"
+    },
+    "suite_id": {
+      "const": "g12-visible-block-preflight-v1-development"
+    },
+    "suite_status": {
+      "const": "development_not_calibrated"
+    },
+    "verdict": {
+      "enum": [
+        "invalid_submission",
+        "tool_execution",
+        "mutation_declared",
+        "forbidden_claim",
+        "unsafe_proceed",
+        "incomplete_block",
+        "blocked"
+      ]
+    },
+    "expected_block_observed": {
+      "type": "boolean"
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "check_id",
+          "verdict",
+          "reason"
+        ],
+        "properties": {
+          "check_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verdict": {
+            "enum": [
+              "invalid_submission",
+              "tool_execution",
+              "mutation_declared",
+              "forbidden_claim",
+              "unsafe_proceed",
+              "incomplete_block",
+              "blocked"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "raw_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_reason_count",
+        "observed_reason_count",
+        "missing_reason_count",
+        "declared_repository_mutation",
+        "declared_eda_calls",
+        "forbidden_claim_count",
+        "repository_identity_observed"
+      ],
+      "properties": {
+        "required_reason_count": {
+          "const": 4
+        },
+        "observed_reason_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing_reason_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "declared_repository_mutation": {
+          "type": ["boolean", "null"]
+        },
+        "declared_eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            },
+            "simulation": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            },
+            "formal": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            },
+            "synthesis": {
+              "type": ["integer", "null"],
+              "minimum": 0
+            }
+          }
+        },
+        "forbidden_claim_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "repository_identity_observed": {
+          "const": false
+        }
+      }
+    },
+    "runner_sources": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "evidence_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$)).+$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "error": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verdict": {
+            "const": "blocked"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "expected_block_observed": {
+            "const": true
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "expected_block_observed": {
+            "const": false
+          }
+        }
+      }
+    }
+  ]
+}

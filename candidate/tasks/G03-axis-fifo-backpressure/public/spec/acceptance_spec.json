@@ -1,0 +1,108 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G03-A01",
+      "statement": "The submission defines the exact golden12_axis_fifo parameter and port contract.",
+      "acceptance_rule": "The supplied repository dependency and submitted wrapper elaborate together without modifying existing files.",
+      "verification_intent": "Implemented development-visible compile and scope checks; runner freeze remains pending."
+    },
+    {
+      "requirement_id": "G03-A02",
+      "statement": "The wrapper structurally instantiates the supplied axis_fifo dependency with the frozen frame-FIFO configuration.",
+      "acceptance_rule": "Elaborated hierarchy and parameter bindings show one axis_fifo instance with KEEP, LAST, FRAME_FIFO, and oversize-drop enabled and optional metadata disabled.",
+      "verification_intent": "Implemented development-visible elaboration checks plus planned private synthesis hierarchy inspection."
+    },
+    {
+      "requirement_id": "G03-A03",
+      "statement": "Accepted non-oversized frames preserve data, byte-valid masks, boundaries, and ordering.",
+      "acceptance_rule": "The output frame sequence exactly equals the accepted input frame sequence for tdata, tkeep, and tlast.",
+      "verification_intent": "Directed visible comparison and development hidden seeded differential; neither is frozen."
+    },
+    {
+      "requirement_id": "G03-A04",
+      "statement": "Output payload and metadata remain stable under sink backpressure.",
+      "acceptance_rule": "No m_axis signal covered by the interface contract changes while valid is high and ready is low, absent sampled reset.",
+      "verification_intent": "Deterministic visible and development hidden seeded stall checks."
+    },
+    {
+      "requirement_id": "G03-A05",
+      "statement": "Source and sink stalls do not cause loss, duplication, or reordering.",
+      "acceptance_rule": "Alternating and prolonged independent stalls preserve the accepted-to-emitted frame sequence.",
+      "verification_intent": "Public deterministic stalls and development hidden seeded backpressure."
+    },
+    {
+      "requirement_id": "G03-A06",
+      "statement": "Partial frames are withheld from the output.",
+      "acceptance_rule": "No beat from a frame becomes output-valid before that frame has been accepted through tlast.",
+      "verification_intent": "Implemented development-visible partial-frame hold check plus private differential calibration; neither is frozen."
+    },
+    {
+      "requirement_id": "G03-A07",
+      "statement": "Oversized frames are dropped atomically.",
+      "acceptance_rule": "A frame larger than DEPTH_BYTES produces no output prefix and exactly one status_overflow pulse when it terminates.",
+      "verification_intent": "Implemented development-visible oversize sequence plus private boundary calibration; neither is frozen."
+    },
+    {
+      "requirement_id": "G03-A08",
+      "statement": "A committed good frame produces a one-cycle status_good_frame pulse.",
+      "acceptance_rule": "Each accepted, completed, non-dropped frame produces one pulse and no other event produces a pulse.",
+      "verification_intent": "Implemented development-visible status-event checks plus private seeded calibration; neither is frozen."
+    },
+    {
+      "requirement_id": "G03-A09",
+      "statement": "Synchronous active-high reset flushes complete and partial buffered frames.",
+      "acceptance_rule": "After a sampled reset, output valid and status pulses are low and no pre-reset beat is later emitted.",
+      "verification_intent": "Development reset-during-partial and reset-during-output-stall parameter tests."
+    },
+    {
+      "requirement_id": "G03-A10",
+      "statement": "Representative legal widths and capacities preserve the same protocol contract.",
+      "acceptance_rule": "DATA_WIDTH values 8, 32, and 64 with at least two legal beat capacities elaborate and pass the applicable behavior checks.",
+      "verification_intent": "Development hidden P2P sweep at DATA_WIDTH 8, 32, and 64; not frozen."
+    },
+    {
+      "requirement_id": "G03-A11",
+      "statement": "Illegal parameter combinations fail statically.",
+      "acceptance_rule": "Non-byte-aligned DATA_WIDTH, non-integral capacity, or non-power-of-two beat capacity causes elaboration or equivalent static failure.",
+      "verification_intent": "Implemented development-visible negative elaboration probes plus private parameter probes; neither is frozen."
+    },
+    {
+      "requirement_id": "G03-A12",
+      "statement": "The submission remains within the one-file additive scope.",
+      "acceptance_rule": "Only rtl/golden12_axis_fifo.sv is added; the supplied axis_fifo dependency and all other repository files remain byte-identical.",
+      "verification_intent": "Submission manifest and repository-base digest validation."
+    }
+  ],
+  "simultaneous_operation_table": [
+    {
+      "condition": "input and output handshakes on the same rising edge",
+      "required_effect": "Both independent transfers occur; frame and beat order remain unchanged."
+    },
+    {
+      "condition": "input valid while input ready is low",
+      "required_effect": "No input transfer occurs and FIFO state does not consume the beat."
+    },
+    {
+      "condition": "output valid while output ready is low",
+      "required_effect": "No output transfer occurs and output payload plus metadata remain stable."
+    },
+    {
+      "condition": "sampled reset coincides with either handshake expression",
+      "required_effect": "Reset wins; neither transfer is retained."
+    }
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "Visible and hidden development calibration is not frozen benchmark admission.",
+    "Local raw Verilator coverage is measured, but no threshold or cross-environment coverage calibration is frozen.",
+    "One exact SERVER26 upstream configuration passed, but the local macOS and full 96-configuration matrix are not reproduced.",
+    "The alternate correct wrapper has not received independent structural review.",
+    "No environment, scoring profile, public digest, or benchmark admission is frozen.",
+    "No workflow result, timing, area, power, throughput, or PPA claim exists."
+  ]
+}

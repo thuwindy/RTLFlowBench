@@ -1,0 +1,31 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G10-serv-area-qor",
+  "manifest_status": "source_selected",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "ppa_environment_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Atomic Golden-12 manifest projection after the current G10 candidate is content-locked and independently reviewed",
+    "Independent ISC rights and repository-projection review",
+    "Independent SERV configuration, ISA, reset, interrupt, and cycle-visible interface freeze",
+    "Independent freeze and expanded adversarial calibration of the development visible runner; SERVER26 evidence covers the baseline, one known false-improvement functional mutant, syntax and scope failures, three unavailable-tool paths, and one controlled process timeout with zero negative false PASS results",
+    "Hidden ISA/compliance and differential architectural-trace F2P calibration",
+    "Complete hidden reset, timer-interrupt, bus, register-file, and cycle-visible P2P calibration; development evidence is limited to four bounded cases repeated three times for the baseline and a syntax-only equivalent positive, plus one killed mutant",
+    "Structurally distinct functionally correct positive implementation",
+    "Frozen synthesis/STA container, liberty, constraints, seeds, resource limits, and parser",
+    "Independent freeze and cross-host reproduction of the five-pair same-server physical area/STA repeatability policy, plus expanded physical false-improvement calibration; the observed official alternate is physically larger and is not a positive QoR reference",
+    "Frozen correctness-first QoR scoring profile and public packet digest",
+    "Independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

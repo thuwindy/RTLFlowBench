@@ -1,0 +1,30 @@
+{
+  "schema_version": "chipflow.golden12.budget.v1",
+  "task_id": "G11-picorv32-qor",
+  "status": "provisional_not_frozen",
+  "limits": {
+    "wall_time_seconds": 3600,
+    "workflow_attempts": 1,
+    "maximum_changed_files": 1,
+    "maximum_submission_bytes": 524288,
+    "network_access": false,
+    "maximum_llm_calls": 8,
+    "maximum_human_interventions": 0,
+    "maximum_input_tokens": 524288,
+    "maximum_output_tokens": 32768,
+    "token_accounting_policy": "enforced_limits",
+    "missing_token_measurement_policy": "reject"
+  },
+  "eda_call_limits": {
+    "compile_or_lint": 30,
+    "simulation": 60,
+    "formal": 20,
+    "synthesis": 20
+  },
+  "measurement_status": "no_task_specific_runner_or_complete_workflow_measurement",
+  "excluded_claims": [
+    "The provisional 3600-second budget and EDA-call ceilings have not been calibrated on a complete G11 workflow.",
+    "No runtime, token, LLM-call, EDA-call, intervention, memory, CPU, PPA, success-rate, or variance measurement is available.",
+    "CPU, memory, process, seed, timeout, artifact-retention, and repeat limits are not frozen."
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G11-picorv32-qor",
+  "source_id": "picorv32-cutoff",
+  "repository_url": "https://github.com/YosysHQ/picorv32",
+  "base_commit": "6399aeaa5981b5e77a76f5d4036d763893ab5a72",
+  "submodule_commits": {},
+  "source_archive_sha256": "16b05316bb25a8ec010294347fce21ca79a85d139f2c665b6197c72c1ed48c0a",
+  "release_date": "2022-05-12T08:32:58Z",
+  "license_spdx": "ISC",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": [
+    "COPYING",
+    "README.md",
+    "picorv32.v"
+  ],
+  "projected_file_sha256": {
+    "COPYING": "041ebc727233e5bf096dd41260cbb81014d3d29ca007a15f3b1807d4e9ff288e",
+    "README.md": "e2e87fcbbe959aaaf27c377c7909d0c2f2f01da8c9640109cf5b88a852b7499f",
+    "picorv32.v": "f862900d19d41857c7167a3234f15fa812dbd25f0d3c46245ba3677f4425d2ee"
+  },
+  "required_notice_paths": [
+    "COPYING",
+    "picorv32.v"
+  ],
+  "baseline_rtl_exposed_to_workflow": true,
+  "optimized_reference_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    ".github/",
+    "dhrystone/",
+    "firmware/",
+    "formal/",
+    "picosoc/",
+    "scripts/",
+    "tests/",
+    "testbench.cc",
+    "testbench.v",
+    "testbench_ez.v",
+    "testbench_wb.v"
+  ],
+  "note": "The development workflow projection contains only the editable baseline picorv32.v plus read-only README.md and the ISC COPYING notice. It is materialized for deterministic verification but is not independently frozen or admitted. Firmware, Dhrystone, synthesis scripts, formal assets, optimized references, and evaluator artifacts remain outside the workflow workspace."
+}

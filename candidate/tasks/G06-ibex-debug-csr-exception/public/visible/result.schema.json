@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.invalid/schemas/g06-visible-result-v2.json",
+  "title": "G06 Visible Runner Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "task_id", "suite_status", "observed_at", "verdict",
+    "pass", "reason", "wall_time_seconds", "scope", "tool", "lint_checks",
+    "compile", "simulation", "semantics", "public_assets", "raw_artifacts",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "process_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "process_status", "exit_code", "timeout_seconds", "output_limit_bytes", "stdout_sha256", "stderr_sha256", "stdout_bytes", "stderr_bytes"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "process_status": {"enum": ["completed", "timeout", "output_limit", "error", "not_run"]},
+        "exit_code": {"type": ["integer", "null"]},
+        "timeout_seconds": {"type": "number", "minimum": 0},
+        "output_limit_bytes": {"type": "integer", "minimum": 1},
+        "stdout_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "stderr_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "stdout_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "stderr_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g06_visible_result.v2"},
+    "task_id": {"const": "G06-ibex-debug-csr-exception"},
+    "suite_status": {"const": "development_not_frozen"},
+    "observed_at": {"type": "string", "minLength": 1},
+    "verdict": {"enum": ["scope_violation", "invalid_submission", "infra_error", "timeout", "compile_error", "functional_fail", "pass"]},
+    "pass": {"type": "boolean"},
+    "reason": {"type": "string", "minLength": 1},
+    "wall_time_seconds": {"type": "number", "minimum": 0},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "projected_file_count", "editable_files", "combined_editable_bytes", "issues"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "projected_file_count": {"type": ["integer", "null"], "minimum": 0},
+        "editable_files": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "bytes", "sha256"],
+            "properties": {
+              "path": {"enum": ["rtl/ibex_controller.sv", "rtl/ibex_cs_registers.sv"]},
+              "bytes": {"type": "integer", "minimum": 0},
+              "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+            }
+          }
+        },
+        "combined_editable_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "issues": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "name", "version", "executable_sha256"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "name": {"const": "verilator"},
+        "version": {"type": ["string", "null"]},
+        "executable_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "lint_checks": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check_id", "top_module", "sources", "status", "process_status", "exit_code", "timeout_seconds", "warning_count", "output_limit_bytes", "stdout_sha256", "stderr_sha256", "stdout_bytes", "stderr_bytes"],
+        "properties": {
+          "check_id": {"enum": ["controller_lint", "csr_registers_lint"]},
+          "top_module": {"enum": ["ibex_controller", "ibex_cs_registers"]},
+          "sources": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+          "status": {"enum": ["pass", "fail", "not_run"]},
+          "process_status": {"enum": ["completed", "timeout", "output_limit", "error", "not_run"]},
+          "exit_code": {"type": ["integer", "null"]},
+          "timeout_seconds": {"type": "number", "minimum": 0},
+          "warning_count": {"type": ["integer", "null"], "minimum": 0},
+          "output_limit_bytes": {"type": "integer", "minimum": 1},
+          "stdout_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "stderr_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+          "stdout_bytes": {"type": ["integer", "null"], "minimum": 0},
+          "stderr_bytes": {"type": ["integer", "null"], "minimum": 0}
+        }
+      }
+    },
+    "compile": {"$ref": "#/$defs/process_result"},
+    "simulation": {"$ref": "#/$defs/process_result"},
+    "semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_pass_counts", "fail_line_count", "suite_pass_count"],
+      "properties": {
+        "case_pass_counts": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "reset_state": {"type": "integer", "minimum": 0},
+            "normal_exception_save": {"type": "integer", "minimum": 0},
+            "fresh_debug_entry_preserves_machine_csrs": {"type": "integer", "minimum": 0}
+          }
+        },
+        "fail_line_count": {"type": "integer", "minimum": 0},
+        "suite_pass_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "public_assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testbench_path", "testbench_sha256", "testbench_is_public", "private_evaluator_assets_exposed"],
+      "properties": {
+        "testbench_path": {"const": "visible/g06_visible_tb.sv"},
+        "testbench_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "testbench_is_public": {"const": true},
+        "private_evaluator_assets_exposed": {"const": false}
+      }
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "sha256", "bytes"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}, "required": ["verdict"]},
+      "then": {"properties": {"pass": {"const": true}}},
+      "else": {"properties": {"pass": {"const": false}}}
+    }
+  ]
+}

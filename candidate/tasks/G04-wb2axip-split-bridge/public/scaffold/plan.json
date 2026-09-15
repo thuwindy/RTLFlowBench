@@ -1,0 +1,29 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "status": "planned_not_materialized",
+  "workspace_files": [
+    {
+      "path": "rtl/axilrd2wbsp.v",
+      "initial_state": "read_only_pinned_dependency",
+      "purpose": "Existing AXI-Lite read to Wishbone split bridge"
+    },
+    {
+      "path": "rtl/axilwr2wbsp.v",
+      "initial_state": "read_only_pinned_dependency",
+      "purpose": "Existing AXI-Lite write to Wishbone split bridge"
+    },
+    {
+      "path": "README.md",
+      "initial_state": "read_only_license_notice",
+      "purpose": "License evidence accompanying the projection"
+    },
+    {
+      "path": "rtl/golden12_axil_wb_split_bridge.sv",
+      "initial_state": "absent",
+      "purpose": "Required arbitration wrapper submission"
+    }
+  ],
+  "contains_rtl": false,
+  "contains_testbench": false
+}

@@ -1,0 +1,14 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "status": "blank_scaffold",
+  "required_paths": [
+    "verification/test_axis_fifo_backpressure.py"
+  ],
+  "precreated_files": [],
+  "implementation_supplied": false,
+  "notes": [
+    "The submission must independently implement both cocotb stimulus/checking and its pytest simulator entry point.",
+    "The scaffold contains no upstream test, reference verification, mutant implementation, hidden seed, or oracle threshold."
+  ]
+}

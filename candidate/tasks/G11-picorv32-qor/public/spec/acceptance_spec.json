@@ -1,0 +1,88 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G11-picorv32-qor",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G11-A01",
+      "statement": "The complete submission contains exactly picorv32.v and elaborates the frozen picorv32 configuration as Verilog 2005.",
+      "acceptance_rule": "The required file exists, no unexpected file or symlink is present, the source stays within the byte limit, and the frozen top elaborates without a submission-induced compile error.",
+      "verification_intent": "The development public scope, ordinary elaboration, and RISCV_FORMAL structural-projection gates are implemented and server-calibrated; independent freeze and semantic formal evaluation remain outstanding."
+    },
+    {
+      "requirement_id": "G11-A02",
+      "statement": "The module, parameter, ordinary port, auxiliary-module, preprocessor, and RVFI contracts are preserved.",
+      "acceptance_rule": "Names, widths, directions, declarations, frozen values, and RISCV_FORMAL observation ports match CPUInterfaceSpec and the immutable baseline.",
+      "verification_intent": "The ordinary-port and exact 29-port RISCV_FORMAL structural checks are implemented and server-calibrated; RVFI semantics and the hidden elaboration/formal matrix remain planned."
+    },
+    {
+      "requirement_id": "G11-A03",
+      "statement": "Architectural behavior remains equivalent for the frozen RV32I, compressed-instruction, multiply, counter, trap, and control-flow configuration.",
+      "acceptance_rule": "The planned firmware/formal suite and architectural differential traces match the immutable baseline for every evaluated case.",
+      "verification_intent": "A four-instruction public smoke, conservative four-step internal-name proof, reset-constrained depth-10 top-output BMC, development-only private behavioral campaign, and content-locked upstream workload observation exist. A generic private sequential-equivalence runner proves 2944 of 2944 full-state equivalence points for both the immutable identity control and the exact positive QoR candidate under the frozen public configuration, and rejects a known functional mutant with 32 unproven points. This does not establish that the baseline itself is ISA-correct or cover every PicoRV32 parameter combination; the proof and environment remain pending independent review and freeze."
+    },
+    {
+      "requirement_id": "G11-A04",
+      "statement": "The native memory and look-ahead interfaces remain externally cycle-visible equivalent.",
+      "acceptance_rule": "For identical evaluator inputs and backpressure, every request, ready reaction, instruction tag, address, data, strobe, look-ahead value, ordering decision, and consumed response matches the baseline on the same cycle.",
+      "verification_intent": "A private bounded deterministic differential and development activation campaign observe native-memory and look-ahead behavior; randomized, exhaustive, and independently frozen cycle-differential gates remain planned."
+    },
+    {
+      "requirement_id": "G11-A05",
+      "statement": "PCPI behavior remains externally cycle-visible equivalent with the internal multiplier and external responder enabled.",
+      "acceptance_rule": "Requests, operands, hold/wait/ready interaction, writeback, timeout behavior, and responder priority match the baseline; division stays disabled.",
+      "verification_intent": "A private bounded external-PCPI profile exercises response and downstream externally visible behavior; timeout, priority, randomized, and independently frozen PCPI gates remain planned."
+    },
+    {
+      "requirement_id": "G11-A06",
+      "statement": "IRQ, timer, eoi, reset, trap, and trace behavior remains externally cycle-visible equivalent.",
+      "acceptance_rule": "Reset sampling, restart, IRQ sampling/masking/latching, simultaneous sources, timer behavior, entry/return, acknowledgement, trap, and trace observations match the baseline under stalls and PCPI activity.",
+      "verification_intent": "Private bounded reset and IRQ profiles observe acknowledgement, trap, trace, reset-vector, and restart behavior; timer, simultaneous-source, randomized, and independently frozen architectural gates remain planned."
+    },
+    {
+      "requirement_id": "G11-A07",
+      "statement": "The submission changes only picorv32.v and preserves notices and repository structure.",
+      "acceptance_rule": "COPYING and README.md are byte-identical; no file is added, deleted, or renamed; no evaluator path, build product, repository metadata, or network-derived artifact enters the submission.",
+      "verification_intent": "The exact one-file development public submission monitor is implemented and server-calibrated; repository-projection and isolated private scope freeze remain planned."
+    },
+    {
+      "requirement_id": "G11-A08",
+      "statement": "Baseline and submission must pass identical correctness gates before QoR measurement.",
+      "acceptance_rule": "Any scope, build, simulation, formal, architectural, or cycle-visible failure makes the result ineligible for timing/area scoring.",
+      "verification_intent": "The development unified runner binds the exact candidate digest across visible, RISCV_FORMAL structural, full-state sequential-equivalence, bounded differential, workload, physical, parser, and unscored-classifier components and rejects drift before admitting metrics; release orchestration remains independently unfrozen."
+    },
+    {
+      "requirement_id": "G11-A09",
+      "statement": "Baseline and eligible submission run in the same frozen physical synthesis and timing environment.",
+      "acceptance_rule": "Tool binaries, container, library, constraints, top, parameter set, seeds, limits, parser, units, and aggregation rule are identical and content addressed; missing or non-finite metrics are not scored.",
+      "verification_intent": "Five real Nangate45 ORFS baseline runs under the same content-bound development inputs completed with all fifteen selected metrics exactly equal; flow wall-time median is 256 seconds with population variance 37.84. The image source, constraints, repeat policy, parser, and aggregation remain independently unfrozen."
+    },
+    {
+      "requirement_id": "G11-A10",
+      "statement": "Timing, performance, and cycle-visible non-regression precede any area reward, and false improvements are rejected.",
+      "acceptance_rule": "Empty, truncated, unmapped, constant-output, interface-pruned, timeout, parser-spoof, or functionally incorrect subjects cannot produce an eligible QoR result; a timing or workload-cycle regression beyond the frozen rule receives no improvement credit.",
+      "verification_intent": "The parser distinguishes one real 1830-second timeout and unit-calibrated candidate timeout, functional-digest mismatch, and evaluator-input drift. One real ALU mutant fails the correctness chain while diagnostic physical area is smaller; production returns functional_gate_fail with null area and score. A prior correct-under-current-gates candidate regressed in the physical flow and remains unscored. A newer private content-bound candidate passes the development frozen-configuration full-state equivalence and workload gates; one real physical run observes 26684.3 um2 versus the 26873.2 um2 baseline, with setup and hold slack deltas of +0.10058 ns and +0.00189 ns. Candidate repeat aggregation, scoring integration, independent review, and environment/scoring freeze remain unavailable."
+    },
+    {
+      "requirement_id": "G11-A11",
+      "statement": "Scoring and benchmark admission remain unavailable until independent freeze.",
+      "acceptance_rule": "Before rights, projection, specification, evaluator, physical environment, thresholds, repeat policy, scoring, public digest, and independent admission are frozen, observations remain development-only and unscored.",
+      "verification_intent": "Fail-closed admission and scoring checks."
+    }
+  ],
+  "correctness_before_qor": true,
+  "visible_verification_status": "development_scope_build_synthesis_smoke_riscv_formal_depth4_internal_name_and_depth10_top_output_bmc_partial_not_frozen",
+  "evaluator_verification_status": "development_generic_frozen_configuration_full_state_equivalence_bounded_differential_mutation_and_workload_observed_not_frozen_baseline_isa_unclaimed",
+  "qor_measurement_status": "development_five_run_baseline_repeatability_and_one_single_run_raw_positive_candidate_observed_not_scored_not_frozen",
+  "scoring_status": "not_frozen",
+  "excluded_claims": [
+    "The development public runner has one baseline positive and eleven fail-closed controls; the RISCV_FORMAL structural suite has one baseline positive and four fail-closed controls. The conservative four-step internal-name proof remains diagnostic, while the depth-10 top-output BMC passes two positives, kills four of five behavior mutants, retains one IRQ false PASS, and separates compile, infrastructure, and timeout failures. A generic frozen-configuration full-state sequential-equivalence runner passes two positives at 2944 of 2944 points, rejects a known functional mutant, and distinguishes compile, scope, infrastructure, and timeout outcomes; none of these assets is independently frozen.",
+    "Private development suites include bounded differential, activation, workload, and full-state-equivalence evidence with zero observed negative false PASS results in their recorded calibration cases. Source-distinct correct candidates pass the current development chain, but none has independent audit and these finite observations do not close release-strength hidden F2P/P2P calibration, RVFI semantics, all-parameter equivalence, or baseline ISA compliance.",
+    "Five content-bound development ORFS baseline runs have all fifteen selected physical metrics exactly equal; this meets the candidate repeat count but is not an independently frozen PPA baseline, optimization, score, or benchmark PASS.",
+    "The physical parser also classifies the retained oversubscribed 1830-second run as timeout from its explicit termination receipt; it does not infer OOM or turn the failure into missing-value PPA.",
+    "One functionally wrong ALU mutant has a 19.4 um2 smaller diagnostic standard-cell area, but the production result is functional_gate_fail with null physical area and score; this is one false-improvement calibration point, not QoR gain.",
+    "The development scoring classifier preserves real pass/fail/timeout distinctions with zero official scores. A separate content-locked workload matrix has correct positives with identical workload metrics and fail-closed negatives. One private content-bound candidate passes the generic frozen-configuration full-state equivalence gate and a real physical run observes 26684.3 um2 versus the 26873.2 um2 baseline, with setup and hold slack deltas of +0.10058 ns and +0.00189 ns. It remains unscored because repeated candidate runs, hidden-campaign and workload-policy freeze, independent review, and environment/scoring freeze are unavailable.",
+    "No environment, threshold, repeat policy, scoring profile, projection digest, benchmark admission, or adapter admission is frozen.",
+    "No benchmark PASS, timing/area improvement, performance result, QoR gain, score, or benchmark readiness is claimed."
+  ]
+}

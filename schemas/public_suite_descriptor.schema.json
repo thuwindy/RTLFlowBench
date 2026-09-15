@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-public-suite.v1.json",
+  "title": "Golden-12 public suite development descriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "suite_id",
+    "observed_at",
+    "status",
+    "task_count",
+    "tasks",
+    "workflow_contract",
+    "readiness",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_suite.v1"
+    },
+    "suite_id": {
+      "const": "Golden-12-v1-development-candidate"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "const": "development_candidate_not_released"
+    },
+    "task_count": {
+      "const": 12
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/task"
+      }
+    },
+    "workflow_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_schema",
+        "submission_schema",
+        "result_schema",
+        "task_archives_candidate_bound",
+        "private_evaluator_exposed",
+        "offline_evaluation_required",
+        "protocol_release_included",
+        "publishable_score_permitted",
+        "required_result_label"
+      ],
+      "properties": {
+        "task_schema": {
+          "const": "shared/schemas/task.schema.json"
+        },
+        "submission_schema": {
+          "const": "shared/schemas/submission.schema.json"
+        },
+        "result_schema": {
+          "const": "shared/schemas/result.schema.json"
+        },
+        "task_archives_candidate_bound": {
+          "const": true
+        },
+        "private_evaluator_exposed": {
+          "const": false
+        },
+        "offline_evaluation_required": {
+          "const": true
+        },
+        "protocol_release_included": {
+          "const": false
+        },
+        "publishable_score_permitted": {
+          "const": false
+        },
+        "required_result_label": {
+          "const": "development-trial-not-admitted"
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rights_review_complete_task_count",
+        "benchmark_ready_task_count",
+        "chipflow_adapter_ready_task_count",
+        "protocol_ready",
+        "suite_ready"
+      ],
+      "properties": {
+        "rights_review_complete_task_count": {
+          "const": 0
+        },
+        "benchmark_ready_task_count": {
+          "const": 0
+        },
+        "chipflow_adapter_ready_task_count": {
+          "const": 0
+        },
+        "protocol_ready": {
+          "const": false
+        },
+        "suite_ready": {
+          "const": false
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "capability_family",
+        "candidate_release",
+        "candidate_lock_sha256",
+        "public_archive_path",
+        "public_archive_sha256",
+        "public_archive_bytes",
+        "public_archive_member_count",
+        "public_archive_receipt_path",
+        "packet_status",
+        "rights_review_complete",
+        "benchmark_ready",
+        "chipflow_adapter_ready"
+      ],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+        },
+        "capability_family": {
+          "enum": [
+            "spec_to_rtl",
+            "protocol_integration",
+            "repo_repair",
+            "dv_mutation",
+            "qor_optimization",
+            "trust_block"
+          ]
+        },
+        "candidate_release": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_lock_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "public_archive_path": {
+          "type": "string",
+          "pattern": "^tasks/G(0[1-9]|1[0-2])-[a-z0-9-]+/g(0[1-9]|1[0-2])-public-input\\.tar\\.gz$"
+        },
+        "public_archive_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "public_archive_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "public_archive_member_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "public_archive_receipt_path": {
+          "type": "string",
+          "pattern": "^tasks/G(0[1-9]|1[0-2])-[a-z0-9-]+/receipt\\.json$"
+        },
+        "packet_status": {
+          "const": "draft"
+        },
+        "rights_review_complete": {
+          "const": false
+        },
+        "benchmark_ready": {
+          "const": false
+        },
+        "chipflow_adapter_ready": {
+          "const": false
+        }
+      }
+    }
+  }
+}

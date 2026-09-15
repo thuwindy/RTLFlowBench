@@ -1,0 +1,14 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G01-common-fifo-spec",
+  "status": "planned_not_materialized",
+  "workspace_files": [
+    {
+      "path": "rtl/golden12_fifo.sv",
+      "initial_state": "absent",
+      "purpose": "Required implementation submission"
+    }
+  ],
+  "contains_rtl": false,
+  "contains_testbench": false
+}

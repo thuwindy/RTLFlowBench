@@ -1,0 +1,33 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "source_id": "wb2axip-cutoff",
+  "repository_url": "https://github.com/ZipCPU/wb2axip",
+  "base_commit": "18895fa9531f9c273411de48369604ff61dd5959",
+  "submodule_commits": {},
+  "source_archive_sha256": "63dfabd2e68f4af0305b75442f424005c82459d765065ae4a268b695cb4de768",
+  "license_spdx": "Apache-2.0",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": [
+    "rtl/axilrd2wbsp.v",
+    "rtl/axilwr2wbsp.v",
+    "README.md"
+  ],
+  "required_notice_paths": ["README.md"],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    "rtl/axlite2wbsp.v",
+    "rtl/wbarbiter.v",
+    "bench/",
+    "doc/",
+    "sim/"
+  ],
+  "projected_file_sha256": {
+    "rtl/axilrd2wbsp.v": "7d535bbde1f719f0ef8b754c2dcb49857e9f0999cec4cc995e2e1318951c9239",
+    "rtl/axilwr2wbsp.v": "020eb692505d2e7badf3f36e9b881ba100e5737b70419a344c89a663cb92fc61",
+    "README.md": "e21ffe5300b43bf2c38286ee8f2e201606d0a93f974b67f4c7235bd605904dd3"
+  },
+  "note": "The two projected RTL files are read-only integration dependencies. The upstream combined wrapper, arbiter, native formal files, tests, and private evaluator assets must not enter the workflow workspace."
+}

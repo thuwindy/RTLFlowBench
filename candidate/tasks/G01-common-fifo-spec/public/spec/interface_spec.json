@@ -1,0 +1,120 @@
+{
+  "schema_version": "chipflow.golden12.interface_spec.v1",
+  "task_id": "G01-common-fifo-spec",
+  "interface_kind": "synchronous_fifo_ready_valid",
+  "top_module": "golden12_fifo",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": false,
+  "projection": "independent_non_cpu_interface_spec",
+  "parameters": [
+    {
+      "name": "DATA_WIDTH",
+      "type": "positive_integer",
+      "default": 32,
+      "valid_range": "DATA_WIDTH >= 1"
+    },
+    {
+      "name": "DEPTH",
+      "type": "positive_integer",
+      "default": 4,
+      "valid_range": "DEPTH >= 2",
+      "power_of_two_required": false
+    }
+  ],
+  "clock": {
+    "port": "clk_i",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "rst_ni",
+    "polarity": "active_low",
+    "timing": "synchronous",
+    "sample_edge": "rising_clk_i",
+    "priority": "higher_than_handshakes",
+    "asynchronous_effect_between_edges": false
+  },
+  "ports": [
+    {
+      "name": "clk_i",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "rst_ni",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "in_valid_i",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "in_ready_o",
+      "direction": "output",
+      "width": "1"
+    },
+    {
+      "name": "in_data_i",
+      "direction": "input",
+      "width": "DATA_WIDTH"
+    },
+    {
+      "name": "out_valid_o",
+      "direction": "output",
+      "width": "1"
+    },
+    {
+      "name": "out_ready_i",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "out_data_o",
+      "direction": "output",
+      "width": "DATA_WIDTH"
+    },
+    {
+      "name": "empty_o",
+      "direction": "output",
+      "width": "1"
+    },
+    {
+      "name": "full_o",
+      "direction": "output",
+      "width": "1"
+    },
+    {
+      "name": "fill_level_o",
+      "direction": "output",
+      "width": "$clog2(DEPTH + 1)"
+    }
+  ],
+  "transaction_semantics": {
+    "enqueue_accept": "in_valid_i && in_ready_o at a rising edge",
+    "dequeue_accept": "out_valid_o && out_ready_i at a rising edge",
+    "simultaneous_enqueue_dequeue": "When nonempty, remove the old head and append the accepted input; occupancy is unchanged. At full, in_ready_o may depend on an accepted dequeue so throughput remains one word per cycle.",
+    "overflow_attempt": "in_valid_i && !in_ready_o causes no state change",
+    "underflow_attempt": "out_ready_i && !out_valid_o causes no state change",
+    "ordering": "Accepted words are emitted exactly once in FIFO acceptance order",
+    "stalled_output": "While out_valid_o && !out_ready_i, out_valid_o and out_data_o remain stable"
+  },
+  "state_semantics": {
+    "empty": "empty_o is true exactly when fill_level_o is zero",
+    "full": "full_o is true exactly when fill_level_o equals DEPTH",
+    "fill_level": "Exact accepted-enqueue minus accepted-dequeue occupancy in the range 0 through DEPTH",
+    "reset_state": "empty_o=1, full_o=0, fill_level_o=0, out_valid_o=0",
+    "non_power_of_two_depth": "All legal depths, including 3, 5, and 7, must wrap without inaccessible or extra entries",
+    "invalid_output_data": "out_data_o is unspecified when out_valid_o is zero"
+  },
+  "latency_semantics": {
+    "mode": "registered_non_fall_through",
+    "empty_enqueue_visibility": "A word accepted into an empty FIFO becomes valid only after the accepting edge",
+    "same_cycle_empty_bypass": false
+  },
+  "invalid_parameter_behavior": {
+    "required_result": "elaboration_or_static_failure",
+    "runtime_behavior_defined": false
+  }
+}

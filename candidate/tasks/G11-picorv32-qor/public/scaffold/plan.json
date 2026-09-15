@@ -1,0 +1,17 @@
+{
+  "schema_version": "chipflow.golden12.scaffold_plan.v1",
+  "task_id": "G11-picorv32-qor",
+  "status": "repository_base_submission_plan",
+  "steps": [
+    "Materialize the digest-checked public repository projection outside the benchmark source tree.",
+    "Copy baseline picorv32.v into a new neutral submission bundle under the identical path.",
+    "Preserve the complete module, parameter, port, preprocessor, notice, and frozen behavior contracts.",
+    "Make only function-preserving edits within allowed_scope.json.",
+    "Record the changed file and exclude build products, evaluator assets, reports, waves, caches, and repository metadata.",
+    "Emit neutral workflow, resource-use, model, tool-call, and intervention metadata with the submission."
+  ],
+  "contains_solution": false,
+  "contains_reference_diff": false,
+  "contains_hidden_test": false,
+  "contains_qor_target": false
+}

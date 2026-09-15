@@ -1,0 +1,29 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G08-common-fifo-dv",
+  "manifest_status": "oracle_development",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent SHL-0.51 rights and public-projection review",
+    "Independent verification-plan and fifo_v3 behavior-contract freeze",
+    "Materialized and independently frozen repository projection",
+    "A complete SERVER26 visible-suite PASS is observed with source-built Verilator 5.048; independently review and freeze the runner, public negative-fixture calibration, and reproducible OCI environment",
+    "Independent structural audit, review, and freeze of six matching local/server negative-verdict fixtures and the development hidden semantic-mutant F2P suite",
+    "Independent review and freeze of the two local/server positive-submission P2P observations",
+    "Independent semantic review and freeze of the newly added simultaneous accepted-operation occupancy, asynchronous-reset public-output, and empty fall-through data-bypass assertions and the zero-open-gap structural mapping",
+    "Independent semantic-vacuity and assumption correctness/minimality review of the structurally validated mapping candidate, observed twenty-cycle user-cover/assertion-enable reachability and assumption legal/violation sensitivity, the development coverage-threshold candidate plus its derived weak-positive control and missing independently authored weak-positive calibration, normalizer/RTLIL extraction equivalence, and eight-cycle proof results",
+    "Structurally different correct verification-asset audit",
+    "Frozen runner environment, budget, scoring, and independent admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

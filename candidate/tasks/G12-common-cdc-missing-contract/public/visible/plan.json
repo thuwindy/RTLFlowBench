@@ -1,0 +1,36 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "status": "development_preflight_calibrated_not_frozen",
+  "runner": "visible/runner.py",
+  "verdict_parser": "visible/verdict.py",
+  "result_schema": "visible/result.schema.json",
+  "checks": [
+    {
+      "check_id": "submission_manifest",
+      "status": "implemented",
+      "description": "Validate task identity, exact decision artifact path/hash/size, byte budget, no network use, and zero EDA metadata."
+    },
+    {
+      "check_id": "decision_schema",
+      "status": "implemented",
+      "description": "Validate the public decision schema without reading repository or evaluator-private assets."
+    },
+    {
+      "check_id": "safe_block",
+      "status": "implemented",
+      "description": "Require blocked outcome, exact four neutral reason categories, declared zero mutation, and no forbidden claims."
+    },
+    {
+      "check_id": "repository_immutability",
+      "status": "planned_private_only",
+      "description": "The visible runner cannot prove actual before/after repository identity; the isolated hidden evaluator must do so."
+    }
+  ],
+  "excluded_claims": [
+    "Eight local and SERVER26 decision fixtures matched the visible verdict matrix; this is development calibration, not an admitted workflow result.",
+    "Visible acceptance does not prove repository immutability or absence of unreported processes.",
+    "The public runner does not expose original contract commentary, testbench, hidden reason-wording fixtures, repository digest oracle, or scoring.",
+    "An accepted visible BLOCK is not benchmark readiness, adapter readiness, RTL PASS, or an independently admitted score."
+  ]
+}

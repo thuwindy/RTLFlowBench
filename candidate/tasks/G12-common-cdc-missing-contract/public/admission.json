@@ -1,0 +1,29 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G12-common-cdc-missing-contract",
+  "manifest_status": "source_selected",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "ppa_environment_frozen": null,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent SHL-0.51 rights, attribution, and withheld-contract projection review",
+    "Independent incomplete-CDC request and four neutral reason-code freeze",
+    "Visible decision runner freeze and independent adversarial wording review after development fixture calibration",
+    "Hidden F2P calibration with actual workflow attempts rather than synthetic execution receipts",
+    "Hidden P2P freeze with actual AIRTL attempts and process-monitor repeatability beyond deterministic non-AI calibration subjects",
+    "Independent alternative correct BLOCK wording/structure audit",
+    "Frozen runner, environment, resource limits, and raw evidence contract",
+    "Frozen separate 100-point Trust/BLOCK correctness profile",
+    "Public packet digest and independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": true
+}

@@ -1,0 +1,103 @@
+{
+  "schema_version": "chipflow.golden12.cpu_interface_spec.v1",
+  "task_id": "G10-serv-area-qor",
+  "interface_kind": "serv_cycle_visible_qor",
+  "top_module": "serv_synth_wrapper",
+  "language": "verilog_2005",
+  "cpu_interface_spec_required": true,
+  "projection": "frozen_synthesis_wrapper_and_architectural_trace",
+  "parameters": [
+    {"name": "PRE_REGISTER", "type": "integer", "frozen_value": 1},
+    {"name": "RESET_STRATEGY", "type": "string", "frozen_value": "MINI"},
+    {"name": "WITH_CSR", "type": "integer", "frozen_value": 1},
+    {"name": "RF_WIDTH", "type": "integer", "frozen_value": 2},
+    {"name": "RF_L2D", "type": "derived_integer", "frozen_value": 10},
+    {"name": "RESET_PC", "type": "internal_integer", "frozen_value": 0},
+    {"name": "MDU", "type": "internal_bit", "frozen_value": 0},
+    {"name": "COMPRESSED", "type": "internal_bit", "frozen_value": 0},
+    {"name": "ALIGN", "type": "internal_bit", "frozen_value": 0}
+  ],
+  "clock": {
+    "port": "clk",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "i_rst",
+    "polarity": "active_high",
+    "state_update_timing": "synchronous_rising_edge",
+    "visible_combinational_effects": [
+      "o_ibus_cyc is suppressed while i_rst is high"
+    ],
+    "restart_pc": "32'h00000000",
+    "reset_strategy": "MINI"
+  },
+  "ports": [
+    {"name": "clk", "direction": "input", "width": "1"},
+    {"name": "i_rst", "direction": "input", "width": "1"},
+    {"name": "i_timer_irq", "direction": "input", "width": "1"},
+    {"name": "o_ibus_adr", "direction": "output", "width": "32"},
+    {"name": "o_ibus_cyc", "direction": "output", "width": "1"},
+    {"name": "i_ibus_rdt", "direction": "input", "width": "32"},
+    {"name": "i_ibus_ack", "direction": "input", "width": "1"},
+    {"name": "o_dbus_adr", "direction": "output", "width": "32"},
+    {"name": "o_dbus_dat", "direction": "output", "width": "32"},
+    {"name": "o_dbus_sel", "direction": "output", "width": "4"},
+    {"name": "o_dbus_we", "direction": "output", "width": "1"},
+    {"name": "o_dbus_cyc", "direction": "output", "width": "1"},
+    {"name": "i_dbus_rdt", "direction": "input", "width": "32"},
+    {"name": "i_dbus_ack", "direction": "input", "width": "1"},
+    {"name": "o_waddr", "direction": "output", "width": "10"},
+    {"name": "o_wdata", "direction": "output", "width": "2"},
+    {"name": "o_wen", "direction": "output", "width": "1"},
+    {"name": "o_raddr", "direction": "output", "width": "10"},
+    {"name": "i_rdata", "direction": "input", "width": "2"}
+  ],
+  "instruction_bus": {
+    "request": "o_ibus_cyc",
+    "address": "o_ibus_adr",
+    "acknowledge": "i_ibus_ack",
+    "read_data": "i_ibus_rdt",
+    "preservation_rule": "The cycle-by-cycle request/address sequence and reaction to evaluator-controlled acknowledgement latency must match the pinned baseline."
+  },
+  "data_bus": {
+    "request": "o_dbus_cyc",
+    "address": "o_dbus_adr",
+    "write_data": "o_dbus_dat",
+    "byte_select": "o_dbus_sel",
+    "write_enable": "o_dbus_we",
+    "acknowledge": "i_dbus_ack",
+    "read_data": "i_dbus_rdt",
+    "preservation_rule": "The cycle-by-cycle transaction sequence and reaction to evaluator-controlled acknowledgement latency must match the pinned baseline."
+  },
+  "register_file_interface": {
+    "external_storage_width": 2,
+    "address_width": 10,
+    "write_signals": ["o_waddr", "o_wdata", "o_wen"],
+    "read_signals": ["o_raddr", "i_rdata"],
+    "preservation_rule": "Address, enable, serialized data, request/ready-dependent timing inside the wrapper, and architectural register effects must match the pinned baseline."
+  },
+  "architectural_contract": {
+    "isa": "RV32I",
+    "compressed_extension": false,
+    "multiply_divide_extension": false,
+    "misaligned_instruction_support": false,
+    "machine_csr_support": true,
+    "timer_interrupt_input": "i_timer_irq",
+    "equivalence_rule": "For identical evaluator stimuli, retirement order, instruction effects, register effects, memory effects, traps, and timer-interrupt effects match the pinned baseline."
+  },
+  "cycle_visible_preservation": {
+    "exact_trace_required": true,
+    "new_pipeline_stage_allowed": false,
+    "new_request_buffer_allowed": false,
+    "latency_shift_allowed": false,
+    "normalization_status": "private_evaluator_not_implemented"
+  },
+  "preservation_requirements": [
+    "Preserve every listed top-level port, width, direction, and frozen parameter.",
+    "Preserve module names needed by the projected serv.core build.",
+    "Preserve reset, instruction bus, data bus, serial register-file, CSR, and timer-interrupt behavior.",
+    "Do not add, delete, or rename repository files.",
+    "Do not modify LICENSE, README.md, data/params.tcl, or serv.core."
+  ]
+}

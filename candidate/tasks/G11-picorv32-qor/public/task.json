@@ -1,0 +1,36 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G11-picorv32-qor",
+  "title": "Function-preserving PicoRV32 timing/area optimization",
+  "family": "qor_optimization",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "picorv32",
+  "language": "verilog_2005",
+  "required_submission_files": [
+    "picorv32.v"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/cpu_interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": true,
+  "non_cpu_interface_projection": "not_applicable_cpu_qor_task",
+  "claims": [
+    "The workflow receives a content-addressed PicoRV32 baseline and an independently worded function-preserving QoR contract for one frozen configuration.",
+    "Functional, architectural, and externally cycle-visible equivalence are mandatory gates before any timing or area observation can become score eligible."
+  ],
+  "excluded_claims": [
+    "The public packet does not contain upstream firmware, Dhrystone harnesses, formal harnesses, physical-flow scripts, optimized references, human solutions, or hidden evaluator assets.",
+    "The repository projection, unified development runner, PPA environment, thresholds, scoring profile, public digest, and independent admission are not frozen.",
+    "The unified runner executes visible build/simulation, RISCV_FORMAL structural projection, generic full-state sequential equivalence for the frozen configuration, bounded differential, activation, content-locked upstream workload, and unscored ORFS physical measurement in evaluator-private order. The retained development result remains incomplete because hidden-campaign freeze, repeated candidate measurement, environment/scoring freeze, independent admission, and benchmark readiness remain unavailable; equivalence does not claim that the immutable baseline is ISA-correct."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "schema_version": "chipflow.golden12.budget.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "status": "provisional_not_frozen",
+  "limits": {
+    "wall_time_seconds": 1200,
+    "workflow_attempts": 1,
+    "maximum_changed_files": 1,
+    "maximum_submission_bytes": 65536,
+    "network_access": false,
+    "maximum_llm_calls": 8,
+    "maximum_human_interventions": 0,
+    "maximum_input_tokens": 524288,
+    "maximum_output_tokens": 32768,
+    "token_accounting_policy": "enforced_limits",
+    "missing_token_measurement_policy": "reject"
+  },
+  "eda_call_limits": {
+    "compile_or_lint": 20,
+    "simulation": 30,
+    "formal": 0,
+    "synthesis": 5
+  },
+  "measurement_status": "not_exercised",
+  "excluded_claims": [
+    "The provisional budget has not been calibrated on a runner.",
+    "This public budget reports no workflow runtime, token, EDA-call, performance, or PPA result; private development coverage is not a frozen threshold."
+  ]
+}

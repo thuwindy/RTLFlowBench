@@ -1,0 +1,130 @@
+{
+  "version": "golden12-universal-v3-candidate",
+  "status": "candidate_requires_calibration_and_new_release_lock",
+  "sole_score_authority": "policy.json",
+  "superseded_for_this_version_only": [
+    "public_scoring_contract_v2_candidate.json",
+    "canonical_profiles_candidate.json",
+    "legacy_task_weighted_profiles"
+  ],
+  "primary_endpoint": "evaluator_confirmed_expected_outcome",
+  "expected_outcome": {
+    "G01_G11": "PASS",
+    "G12": "BLOCK_with_contract_compliance"
+  },
+  "semantic_non_success": 0,
+  "confirmed_success": 1,
+  "infra_or_missing": null,
+  "weighted_total": null,
+  "cross_task_ranking": false,
+  "diagnostics": {
+    "functional_protocol_regression": "Report distinct case groups and evidence references. Overlapping groups may be shown but never added as independent credit.",
+    "formal": "Evaluator proof is assurance of the artifact; workflow-authored properties and observed tool use are separate capability evidence. Depth is task-local, not a cross-task reward.",
+    "dv": "Report correct-subject acceptance, non-equivalent mutant kills, false positives and non-vacuous coverage separately. F2P and mutation may share evidence and are not additive.",
+    "qor": "Correctness and fixed environment are mandatory. Report paired area ratios, timing slack and task-applicable workload cycles. No 10%/20% saturation target or free correctness points. Baseline no-op is a preservation control, not proof of optimization.",
+    "qor_success_gate": "Bind a task-specific improvement/nonregression predicate justified by reference/alternate calibration and measurement noise before release; do not infer it from workflow scores.",
+    "cost": "Report actual input/output/cache usage, wall time, EDA/LLM calls and interventions separately from correctness. Missing values remain null.",
+    "eda_accounting": "Classify the executed operation from a pinned host policy and command evidence. Executable name alone cannot identify Yosys parse, formal or synthesis. Enforce admitted per-kind limits before execution."
+  },
+  "aggregation": {
+    "primary": "complete task-by-workflow matrix",
+    "repeats_non_qor": 3,
+    "repeats_qor": 5,
+    "planned_slots_five_workflows": 200,
+    "report": [
+      "scheduled_count",
+      "launched_count",
+      "valid_outcome_count",
+      "success_count",
+      "semantic_failure_count",
+      "capability_block_count",
+      "infra_count",
+      "pending_count"
+    ],
+    "rates": "Show success/valid semantic outcomes with denominator and Wilson interval, plus confirmed success/scheduled as execution yield, and INFRA/pending rates. Never silently drop missing tasks from family averages.",
+    "incomplete_family": "no complete-cohort family score; show missingness and task rows",
+    "repeated_qor": "Separate independent agent submissions from repeated EDA measurements of each submission; never treat the latter as additional independent solves."
+  },
+  "fairness": {
+    "input": "Same content-bound public packet and repository for every workflow; adapters may convert transport format only.",
+    "isolation": "Fresh per-task per-repeat workspace and memory, no shared candidate artifacts or private evaluator feedback.",
+    "alternate": "Accept different internal structures satisfying public behavior; enforce structural restrictions only where explicitly part of the integration task.",
+    "repair": "Compare behavior, not text similarity with an upstream patch.",
+    "health": "Use separate public diagnostics to establish native startup, model compatibility, tool execution, feedback, stop behavior and submission export before scored runs.",
+    "unsupported": "Retain all twelve tasks. Distinguish native unsupported capability from adapter or infrastructure failure using evidence.",
+    "model": "Same precise model/provider configuration for the main comparison; report model-conditioned workflow performance.",
+    "contamination": "Disclose public upstream provenance and potential training overlap; no claim of uncontaminated data without evidence."
+  },
+  "release_requirements": [
+    "unique policy and evaluator bindings",
+    "all12 positive/alternate/blank/negative/mutant calibration as applicable",
+    "mutant equivalence and DV false-positive audit",
+    "QoR improvement gates and measurement repeatability",
+    "rights/admission scoped to this version",
+    "runtime and adapter conformance",
+    "fresh comparable experiment identities"
+  ],
+  "revision_rule": "Any input, score, oracle or runtime semantic change receives new bound identities; all compared workflows start fresh under this revision. Historical evidence remains in its original cohort.",
+  "tasks": [
+    {
+      "task_id": "G01-common-fifo-spec",
+      "profile_id": "universal-spec-v3",
+      "interpretation": "Independent synchronous FIFO implementation. Judge behavior across legal parameters, not similarity to common_cells RTL."
+    },
+    {
+      "task_id": "G02-common-rr-arbiter-spec",
+      "profile_id": "universal-spec-v3",
+      "interpretation": "Round-robin arbitration, lock, safety and bounded fairness under stated assumptions."
+    },
+    {
+      "task_id": "G03-axis-fifo-backpressure",
+      "profile_id": "universal-integration-v3",
+      "interpretation": "Integrate the supplied AXI-Stream IP using the declared configuration and preserve frame/backpressure behavior."
+    },
+    {
+      "task_id": "G04-wb2axip-split-bridge",
+      "profile_id": "universal-integration-v3",
+      "interpretation": "Integrate the supplied split bridges and arbitrate transaction ownership; do not require a particular correct arbiter implementation."
+    },
+    {
+      "task_id": "G05-picorv32-missing-irq",
+      "profile_id": "universal-repair-v3",
+      "interpretation": "Repair pending interrupt preservation while retaining unaffected CPU behavior."
+    },
+    {
+      "task_id": "G06-ibex-debug-csr-exception",
+      "profile_id": "universal-repair-v3",
+      "interpretation": "Repair debug exception context preservation; evaluate permitted alternate repair locations behaviorally."
+    },
+    {
+      "task_id": "G07-ibex-ifetch-error-timing",
+      "profile_id": "universal-repair-v3",
+      "interpretation": "Display title: Ibex PMP update enforcement. The historical identifier is retained; the existing design/acceptance specification defines PMP serialization behavior."
+    },
+    {
+      "task_id": "G08-common-fifo-dv",
+      "profile_id": "universal-dv-v3",
+      "interpretation": "Generate FIFO testbench and formal properties. Separate correct-design acceptance, defect detection, coverage and vacuity."
+    },
+    {
+      "task_id": "G09-axis-fifo-dv",
+      "profile_id": "universal-dv-v3",
+      "interpretation": "Generate AXI-Stream verification; report defect detection and false alarms separately without duplicate weighted credit."
+    },
+    {
+      "task_id": "G10-serv-area-qor",
+      "profile_id": "universal-qor-v3",
+      "interpretation": "SERV area optimization with function and timing preservation. Physical improvement threshold requires calibration before release; power and cycle-performance claims are out of scope here."
+    },
+    {
+      "task_id": "G11-picorv32-qor",
+      "profile_id": "universal-qor-v3",
+      "interpretation": "PicoRV32 function-preserving optimization; show area, timing and workload cycles separately with paired measurement evidence."
+    },
+    {
+      "task_id": "G12-common-cdc-missing-contract",
+      "profile_id": "universal-compliance-v3",
+      "interpretation": "Explicit missing-contract refusal and zero-action compliance. The answer class is stated in the prompt; this is not a test of autonomous risk discovery or resistance to over-refusal on sufficiently specified tasks."
+    }
+  ]
+}

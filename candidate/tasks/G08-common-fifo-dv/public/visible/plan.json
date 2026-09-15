@@ -1,0 +1,47 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G08-common-fifo-dv",
+  "status": "implemented_development_not_frozen",
+  "planned_checks": [
+    "Validate exact two-file additive scope, byte budget, regular files, and read-only DUT/notice digests",
+    "Compile g08_fifo_tb against the pinned correct DUT",
+    "Run the testbench on a small public correct-DUT parameter set including DEPTH=1 and require one exact pass sentinel",
+    "Compile and run the same testbench without bound properties under Verilator for the exact property-runtime parameter and seed cases, so cross-simulator TB races are classified before property failures",
+    "Run the same testbench against three openly documented negative fixtures and require deterministic detection",
+    "Reject submitted assumptions, immediate assertion/cover action clauses, and SystemVerilog constructs outside the public bare immediate-statement portability profile",
+    "Compile g08_fifo_properties in a public wrapper with Verilator line/toggle/user coverage instrumentation and bind it to correct-DUT simulation cases",
+    "Classify missing tools, timeout, compile error, functional false positive, undetected fixture, and malformed sentinel separately"
+  ],
+  "planned_oracle_types": [
+    "build",
+    "simulation",
+    "formal",
+    "scope"
+  ],
+  "public_negative_fixture_categories": [
+    "reset/status corruption",
+    "FIFO ordering corruption",
+    "full-boundary simultaneous push/pop priority corruption"
+  ],
+  "verdict_parser_status": "implemented_strict_correct_and_negative_sentinels",
+  "pass_sentinel": "GOLDEN12_G08_VISIBLE_PASS",
+  "sentinel_ownership": {
+    "submission_testbench": "GOLDEN12_G08_TB_PASS",
+    "visible_runner": "GOLDEN12_G08_VISIBLE_PASS",
+    "task_workspace_monitor": "RTLFLOWBENCH_G08_VISIBLE_MONITORED_PASS task=G08-common-fifo-dv",
+    "submission_must_not_emit_harness_sentinels": true
+  },
+  "raw_log_contract_status": "implemented_development_not_frozen",
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "contains_testbench": true,
+  "calibration_status": "current_source_reference_alternate_negative_observed_not_frozen",
+  "excluded_claims": [
+    "Historical reference observations predate the expanded assumption-free and bound-property suite and are retained only as superseded evidence.",
+    "Public negative fixtures will not be reused as hidden mutants and do not define a frozen kill threshold.",
+    "SERVER26 first reproduced the simulation checks but ended infra_error because Verilator was absent from the host path; the failed result remains recorded.",
+    "A later SERVER26 current-source direct campaign using a content-addressed source build of Verilator 5.048 observed the reference and alternate pass and a spoof negative fail as expected; this is development evidence, not admission.",
+    "The visible suite has not been independently reviewed or frozen.",
+    "The benchmark task remains not_ready."
+  ]
+}

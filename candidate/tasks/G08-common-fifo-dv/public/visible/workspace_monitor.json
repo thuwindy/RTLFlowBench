@@ -1,0 +1,51 @@
+{
+  "schema_version": "rtlflowbench.task_workspace_monitor_profile.v1",
+  "task_id": "G08-common-fifo-dv",
+  "suite_id": null,
+  "required_public_assets": [
+    "runner.py",
+    "verdict.py",
+    "g08_property_compile_top.sv",
+    "g08_property_bind.sv",
+    "fixtures/reset_status_corrupt.sv",
+    "fixtures/ordering_corrupt.sv",
+    "fixtures/full_simultaneous_priority_corrupt.sv"
+  ],
+  "repository_files": [
+    "src/fifo_v3.sv",
+    "LICENSE"
+  ],
+  "submission_files": [
+    "verification/g08_fifo_tb.sv",
+    "verification/g08_fifo_properties.sv"
+  ],
+  "runner_argv": [
+    "{python}",
+    "{visible}/runner.py",
+    "--repository-root",
+    "{repository}",
+    "--submission-root",
+    "{submission}",
+    "--output-dir",
+    "{runner_output}",
+    "--iverilog",
+    "{iverilog}",
+    "--vvp",
+    "{vvp}",
+    "--verilator",
+    "{verilator}",
+    "--command-timeout-seconds",
+    "{command_timeout_seconds}"
+  ],
+  "result_filename": "runner/result.json",
+  "pass_sentinel": "RTLFLOWBENCH_G08_VISIBLE_MONITORED_PASS task=G08-common-fifo-dv",
+  "tool_requirements": [
+    {
+      "name": "verilator",
+      "executable": "bin/verilator",
+      "environment_relative_paths": {
+        "VERILATOR_ROOT": "share/verilator"
+      }
+    }
+  ]
+}

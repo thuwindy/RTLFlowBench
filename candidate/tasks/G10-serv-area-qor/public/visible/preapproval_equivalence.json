@@ -1,0 +1,34 @@
+{
+  "schema_version": "rtlflowbench.yosys_equivalence_contract.v1",
+  "task_id": "G10-serv-area-qor",
+  "top_module": "serv_synth_wrapper",
+  "language": "verilog_2005",
+  "source_paths": [
+    "rtl/serv_aligner.v",
+    "rtl/serv_alu.v",
+    "rtl/serv_bufreg.v",
+    "rtl/serv_bufreg2.v",
+    "rtl/serv_compdec.v",
+    "rtl/serv_csr.v",
+    "rtl/serv_ctrl.v",
+    "rtl/serv_decode.v",
+    "rtl/serv_immdec.v",
+    "rtl/serv_mem_if.v",
+    "rtl/serv_rf_if.v",
+    "rtl/serv_rf_ram.v",
+    "rtl/serv_rf_ram_if.v",
+    "rtl/serv_rf_top.v",
+    "rtl/serv_state.v",
+    "rtl/serv_synth_wrapper.v",
+    "rtl/serv_top.v"
+  ],
+  "parameters": {
+    "PRE_REGISTER": 1,
+    "RESET_STRATEGY": "MINI",
+    "WITH_CSR": 1,
+    "RF_WIDTH": 2,
+    "RF_L2D": 10
+  },
+  "sequential_depth": 32,
+  "max_source_bytes": 1048576
+}

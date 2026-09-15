@@ -1,0 +1,94 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "status": "development_candidate_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G07-A01",
+      "statement": "The submitted rtl/ibex_id_stage.sv preserves the pinned module interface and legal parameterization.",
+      "acceptance_rule": "The evaluator can elaborate the affected design unit and its pinned integration without a submission-induced interface or compile error.",
+      "verification_intent": "Planned visible build and lint checks."
+    },
+    {
+      "requirement_id": "G07-A02",
+      "statement": "A successful non-read operation on an implemented PMP configuration CSR serializes the subsequent instruction stream.",
+      "acceptance_rule": "No later instruction produces an architectural side effect using an execute-permission decision that predates the PMP configuration operation.",
+      "verification_intent": "Planned hidden differential sequence and bounded property."
+    },
+    {
+      "requirement_id": "G07-A03",
+      "statement": "A successful non-read operation on an implemented PMP address CSR receives the same stale-decision protection.",
+      "acceptance_rule": "The first affected following instruction is re-evaluated against the updated PMP address state before architectural execution.",
+      "verification_intent": "Planned hidden address-update sequence and bounded property."
+    },
+    {
+      "requirement_id": "G07-A04",
+      "statement": "An instruction newly denied by the updated PMP state does not execute with stale permission.",
+      "acceptance_rule": "The existing instruction-access fault path is observed and the denied instruction has no prohibited architectural side effect.",
+      "verification_intent": "Planned evaluator-private F2P differential trace."
+    },
+    {
+      "requirement_id": "G07-A05",
+      "statement": "An instruction permitted by the updated PMP state resumes through the existing pipeline.",
+      "acceptance_rule": "The allowed instruction completes without a repair-induced exception, deadlock, duplicate retirement, or permanent fetch suppression.",
+      "verification_intent": "Planned visible smoke and hidden P2P trace."
+    },
+    {
+      "requirement_id": "G07-A06",
+      "statement": "Read-only, illegal, unimplemented, and non-PMP CSR behavior is preserved.",
+      "acceptance_rule": "The repair neither legalizes invalid accesses nor changes architectural results outside the defined PMP non-read operation class.",
+      "verification_intent": "Planned hidden P2P CSR matrix."
+    },
+    {
+      "requirement_id": "G07-A07",
+      "statement": "Existing fetch, branch, exception, interrupt, debug, WFI, and pipeline-flush behavior is preserved.",
+      "acceptance_rule": "Pinned regression and differential scenarios remain equivalent except for the specified stale-PMP correction.",
+      "verification_intent": "Planned hidden integration regression."
+    },
+    {
+      "requirement_id": "G07-A08",
+      "statement": "Reset behavior is unchanged.",
+      "acceptance_rule": "Asserting active-low reset retains the pinned asynchronous reset semantics and does not retain a repair-specific pending action across reset.",
+      "verification_intent": "Planned reset-directed simulation and formal reset property."
+    },
+    {
+      "requirement_id": "G07-A09",
+      "statement": "The change remains within the single editable RTL file.",
+      "acceptance_rule": "Only rtl/ibex_id_stage.sv differs from the projected base; no file is added, removed, renamed, or symlinked and read-only file hashes remain unchanged.",
+      "verification_intent": "Planned strict scope and projection-digest checks."
+    },
+    {
+      "requirement_id": "G07-A10",
+      "statement": "The repair is self-contained and offline.",
+      "acceptance_rule": "Evaluation requires no network access and the submission does not depend on hidden or evaluator-private assets.",
+      "verification_intent": "Planned hermetic runner and workspace-isolation checks."
+    }
+  ],
+  "operation_table": [
+    {
+      "condition": "accepted CSR write, set, or clear targets an implemented PMP configuration CSR",
+      "required_effect": "serialize before any following instruction can use the prior PMP execute decision"
+    },
+    {
+      "condition": "accepted CSR write, set, or clear targets an implemented PMP address CSR",
+      "required_effect": "serialize and re-evaluate the following instruction through the updated PMP state"
+    },
+    {
+      "condition": "CSR access is read-only, illegal, unimplemented, or outside the PMP CSR class",
+      "required_effect": "preserve the pinned architectural behavior; do not invent a successful PMP update"
+    },
+    {
+      "condition": "active-low reset is asserted while a serialization action could be pending",
+      "required_effect": "reset wins according to the pinned asynchronous reset behavior"
+    }
+  ],
+  "visible_verification_status": "development_scope_and_partial_lint_calibrated_behavior_smokes_not_implemented",
+  "evaluator_verification_status": "development_composed_private_calibrated_not_frozen",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "This draft does not disclose or encode the upstream repair diff.",
+    "No exact bubble count or performance guarantee is frozen.",
+    "Development private behavioral, formal, differential, mutation, alternate-positive, and repeatability observations are not a frozen evaluator or benchmark PASS.",
+    "No environment, scoring profile, projection digest, benchmark admission, or adapter admission is frozen."
+  ]
+}

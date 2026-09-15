@@ -1,0 +1,152 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G01-common-fifo-spec",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G01-A01",
+      "statement": "The submitted file defines top module golden12_fifo with the public parameter and port contract.",
+      "acceptance_rule": "Compilation must bind the exact module, parameter names, port names, directions, and widths.",
+      "verification_intent": "Visible compile and lint check; later hidden elaboration checks."
+    },
+    {
+      "requirement_id": "G01-A02",
+      "statement": "Reset is active-low and synchronous to the rising edge.",
+      "acceptance_rule": "A reset edge clears occupancy and validity; a reset transition between edges has no asynchronous state effect.",
+      "verification_intent": "Directed reset and between-edge observation."
+    },
+    {
+      "requirement_id": "G01-A03",
+      "statement": "After reset the FIFO is empty, not full, has zero fill level, and has no valid output.",
+      "acceptance_rule": "The four public status outputs match the reset-state values.",
+      "verification_intent": "Directed post-reset check."
+    },
+    {
+      "requirement_id": "G01-A04",
+      "statement": "An enqueue occurs exactly on an accepted input handshake.",
+      "acceptance_rule": "Only in_valid_i && in_ready_o may increase occupancy or append data.",
+      "verification_intent": "Directed handshake matrix and queue-model comparison."
+    },
+    {
+      "requirement_id": "G01-A05",
+      "statement": "A dequeue occurs exactly on an accepted output handshake.",
+      "acceptance_rule": "Only out_valid_o && out_ready_i may decrease occupancy or remove the head.",
+      "verification_intent": "Directed handshake matrix and queue-model comparison."
+    },
+    {
+      "requirement_id": "G01-A06",
+      "statement": "Accepted data is returned exactly once and in acceptance order.",
+      "acceptance_rule": "The observed output sequence equals the accepted input sequence after accounting for unconsumed items.",
+      "verification_intent": "Queue-model differential sequence test."
+    },
+    {
+      "requirement_id": "G01-A07",
+      "statement": "A stalled valid output remains stable.",
+      "acceptance_rule": "out_valid_o and out_data_o do not change while out_valid_o && !out_ready_i, absent reset.",
+      "verification_intent": "Directed backpressure test and stability assertion."
+    },
+    {
+      "requirement_id": "G01-A08",
+      "statement": "Empty, full, and fill level exactly reflect occupancy.",
+      "acceptance_rule": "empty_o iff count=0, full_o iff count=DEPTH, and fill_level_o=count.",
+      "verification_intent": "Boundary and running occupancy checks."
+    },
+    {
+      "requirement_id": "G01-A09",
+      "statement": "Simultaneous accepted enqueue and dequeue preserve occupancy and ordering.",
+      "acceptance_rule": "The old head is returned and the new input is appended; fill level is unchanged.",
+      "verification_intent": "Directed partially-full and full simultaneous-transfer tests."
+    },
+    {
+      "requirement_id": "G01-A10",
+      "statement": "Overflow and underflow attempts have no state effect.",
+      "acceptance_rule": "A nonaccepted request cannot change occupancy, stored ordering, or output validity.",
+      "verification_intent": "Directed full-input and empty-output attempts."
+    },
+    {
+      "requirement_id": "G01-A11",
+      "statement": "The FIFO is registered and non-fall-through.",
+      "acceptance_rule": "Input accepted while empty cannot be consumed through a combinational same-cycle bypass.",
+      "verification_intent": "Empty enqueue with output ready asserted."
+    },
+    {
+      "requirement_id": "G01-A12",
+      "statement": "Legal non-power-of-two depths have full usable capacity and correct wraparound.",
+      "acceptance_rule": "Depths 3, 5, and 7 accept exactly DEPTH words and preserve order across repeated wraps.",
+      "verification_intent": "Planned parameter sweep and wraparound sequences."
+    },
+    {
+      "requirement_id": "G01-A13",
+      "statement": "All DATA_WIDTH >= 1 and DEPTH >= 2 parameterizations are semantically supported.",
+      "acceptance_rule": "Representative legal widths and depths elaborate and satisfy the same contract.",
+      "verification_intent": "Planned legal parameter sweep."
+    },
+    {
+      "requirement_id": "G01-A14",
+      "statement": "Invalid parameterizations fail statically.",
+      "acceptance_rule": "DATA_WIDTH < 1 or DEPTH < 2 must cause elaboration or an equivalent static failure.",
+      "verification_intent": "Planned negative elaboration checks."
+    },
+    {
+      "requirement_id": "G01-A15",
+      "statement": "The submission stays inside the declared editable scope.",
+      "acceptance_rule": "Only rtl/golden12_fifo.sv is added or modified within the submission.",
+      "verification_intent": "Runner path and patch-scope validation."
+    }
+  ],
+  "simultaneous_operation_table": [
+    {
+      "pre_state": "empty",
+      "input_request": true,
+      "output_request": true,
+      "accepted_enqueue": true,
+      "accepted_dequeue": false,
+      "occupancy_delta": 1,
+      "note": "Registered non-fall-through: the new item is visible after the edge."
+    },
+    {
+      "pre_state": "partially_full",
+      "input_request": true,
+      "output_request": true,
+      "accepted_enqueue": true,
+      "accepted_dequeue": true,
+      "occupancy_delta": 0,
+      "note": "Remove the old head and append the new input."
+    },
+    {
+      "pre_state": "full",
+      "input_request": true,
+      "output_request": true,
+      "accepted_enqueue": true,
+      "accepted_dequeue": true,
+      "occupancy_delta": 0,
+      "note": "Full throughput is allowed when the dequeue is accepted."
+    },
+    {
+      "pre_state": "full",
+      "input_request": true,
+      "output_request": false,
+      "accepted_enqueue": false,
+      "accepted_dequeue": false,
+      "occupancy_delta": 0,
+      "note": "Overflow attempt has no state effect."
+    },
+    {
+      "pre_state": "empty",
+      "input_request": false,
+      "output_request": true,
+      "accepted_enqueue": false,
+      "accepted_dequeue": false,
+      "occupancy_delta": 0,
+      "note": "Underflow attempt has no state effect."
+    }
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "Development evaluator calibration does not convert a workflow run into a frozen benchmark PASS.",
+    "No baseline, performance, timing, area, power, or PPA result exists.",
+    "Independent alternative-implementation review, environment freeze, scoring freeze, and admission remain future gates."
+  ]
+}

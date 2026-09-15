@@ -1,0 +1,41 @@
+{
+  "schema_version": "rtlflowbench.interface_spec.v1",
+  "task_id": "G02-common-rr-arbiter-spec",
+  "interface_kind": "non_cpu_round_robin_arbiter",
+  "top_module": "golden12_rr_arbiter",
+  "language": "systemverilog",
+  "parameters": [
+    {
+      "name": "NUM_REQUESTERS",
+      "type": "int unsigned",
+      "default": 4,
+      "validity": "NUM_REQUESTERS >= 1",
+      "invalid_behavior": "explicit elaboration or time-zero fatal rejection"
+    }
+  ],
+  "derived_widths": {
+    "INDEX_WIDTH": "(NUM_REQUESTERS <= 1) ? 1 : $clog2(NUM_REQUESTERS)"
+  },
+  "ports": [
+    {"name": "clk_i", "direction": "input", "type": "logic", "width": "1"},
+    {"name": "rst_ni", "direction": "input", "type": "logic", "width": "1"},
+    {"name": "req_i", "direction": "input", "type": "logic", "width": "NUM_REQUESTERS"},
+    {"name": "grant_accept_i", "direction": "input", "type": "logic", "width": "1"},
+    {"name": "lock_i", "direction": "input", "type": "logic", "width": "1"},
+    {"name": "grant_o", "direction": "output", "type": "logic", "width": "NUM_REQUESTERS"},
+    {"name": "grant_valid_o", "direction": "output", "type": "logic", "width": "1"},
+    {"name": "grant_index_o", "direction": "output", "type": "logic", "width": "INDEX_WIDTH"}
+  ],
+  "clocking": {"clock": "clk_i", "active_edge": "rising"},
+  "reset": {
+    "signal": "rst_ni",
+    "polarity": "active_low",
+    "timing": "asynchronous_assertion_and_asynchronous_state_reset",
+    "outputs_while_asserted": "all_zero",
+    "first_search_index_after_release": 0
+  },
+  "combinational_outputs": ["grant_o", "grant_valid_o", "grant_index_o"],
+  "sequential_state": ["round_robin_search_position", "held_lock_winner"],
+  "cpu_interface_spec_required": false,
+  "reference_rtl_required": false
+}

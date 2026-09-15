@@ -1,0 +1,22 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "source_id": "ibex-pr475-base",
+  "license_spdx": "Apache-2.0",
+  "license_evidence_url": "https://github.com/lowRISC/ibex/blob/aefbcdceb327a7af47e8c9af710a5110aab5a0eb/LICENSE",
+  "license_file_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest and repo lock pin the repository, base commit, source archive, SPDX identifier, and license evidence URL.",
+    "The verified content-addressed base contains LICENSE and the projected RTL files retain upstream headers.",
+    "The public contract is independently authored and does not redistribute a historical repaired revision or repair diff."
+  ],
+  "blockers": [
+    "An independent reviewer has not approved redistribution and benchmark use of the planned seven-file projection.",
+    "Projection materialization and required-notice retention have not been independently frozen.",
+    "No signed rights attestation targets a content-locked G06 candidate."
+  ]
+}

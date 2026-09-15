@@ -1,0 +1,34 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "title": "Generate backpressure-focused AXI-Stream FIFO verification",
+  "family": "dv_mutation",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "axis_fifo",
+  "language": "systemverilog",
+  "required_submission_files": ["verification/test_axis_fifo_backpressure.py"],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_non_cpu_interface_spec",
+  "claims": [
+    "This draft asks for one independently authored cocotb/pytest verification asset for the pinned read-only axis_fifo DUT.",
+    "The public visible runner evaluates the same submission against the correct DUT and two openly classified mutants without trusting a submission sentinel."
+  ],
+  "excluded_claims": [
+    "The upstream test suite, hidden mutants, private evaluator, reference verification asset, and hidden seeds are not public inputs.",
+    "A runnable public packet is not a frozen benchmark, an AIRTL workflow PASS, a mutation score, or independent admission.",
+    "No frozen environment, official score, PPA result, or benchmark readiness is claimed."
+  ]
+}

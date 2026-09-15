@@ -1,0 +1,29 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {"requirement_id": "G09-A01", "statement": "The submission contains exactly one portable Python verification asset.", "acceptance_rule": "Only verification/test_axis_fifo_backpressure.py is supplied, with no symlink, path escape, DUT modification, or byte-budget violation.", "verification_intent": "Strict scope and content checks."},
+    {"requirement_id": "G09-A02", "statement": "The test accepts the correct pinned AXI-Stream FIFO.", "acceptance_rule": "All frozen correct-DUT parameter and seed points complete successfully with no false failure.", "verification_intent": "Visible correct smoke and hidden P2P matrix."},
+    {"requirement_id": "G09-A03", "statement": "The test detects valid suppression and output instability under backpressure.", "acceptance_rule": "A stalled output retains valid, data, keep, last, id, destination, and user until acceptance; calibrated violations fail.", "verification_intent": "Public valid-suppression fixture and hidden stability mutants."},
+    {"requirement_id": "G09-A04", "statement": "The test detects payload loss, duplication, corruption, and reordering.", "acceptance_rule": "Accepted input and output beat sequences match exactly for all non-dropped frames.", "verification_intent": "Seeded differential queues and hidden semantic mutants."},
+    {"requirement_id": "G09-A05", "statement": "The test checks tlast and tkeep frame alignment.", "acceptance_rule": "Single/multi-beat and partial-last-beat frames preserve boundaries and byte-valid masks.", "verification_intent": "Public inverted-last fixture and hidden keep/boundary mutants."},
+    {"requirement_id": "G09-A06", "statement": "The test checks bad and oversized frame policy without prefix leakage.", "acceptance_rule": "Configured dropped frames produce no accepted output prefix and the corresponding status indication is observed.", "verification_intent": "Hidden overflow/bad-frame scenarios and mutants."},
+    {"requirement_id": "G09-A07", "statement": "The verification is deterministic and terminates under randomized stalls.", "acceptance_rule": "A supplied seed reproduces the case schedule and every wait has a finite bound.", "verification_intent": "Repeatability and timeout calibration."},
+    {"requirement_id": "G09-A08", "statement": "The verification demonstrates non-vacuous stimulus and measured coverage evidence.", "acceptance_rule": "Frozen minimum transaction/frame/stall event counts and a reviewed coverage threshold are met.", "verification_intent": "Planned event/coverage parser and weak-positive controls."}
+  ],
+  "simultaneous_operation_table": [
+    {"condition": "source valid and sink ready with no stall", "required_effect": "The accepted beat is eventually emitted exactly once in order."},
+    {"condition": "output valid and sink ready is low", "required_effect": "All enabled output payload and metadata remain stable until a later accepting edge."},
+    {"condition": "tlast is accepted", "required_effect": "The corresponding emitted frame terminates on the matching beat with the matching tkeep."},
+    {"condition": "synchronous reset is sampled", "required_effect": "No pre-reset partial or complete transaction is emitted after reset release."}
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "Public fixture classes do not disclose hidden transformations, seeds, schedules, event thresholds, or coverage thresholds.",
+    "SERVER26 development evidence records reference/alternate positives, five hidden semantic-mutant classes, coverage controls, and repeatability; these are not frozen calibration or AIRTL workflow results.",
+    "No hidden F2P/P2P, coverage, repeatability, environment, scoring, or admission result is frozen."
+  ]
+}

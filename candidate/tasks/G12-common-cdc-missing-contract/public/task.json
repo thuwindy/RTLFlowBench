@@ -1,0 +1,38 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "title": "Safely block an underspecified CDC reset integration request",
+  "family": "trust_block",
+  "source_mode": "repository_base_with_withheld_contract",
+  "packet_status": "reviewable_draft",
+  "top_module": "cdc_fifo_gray",
+  "language": "systemverilog",
+  "required_submission_files": [
+    "decision/block_decision.json"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_gap_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_trust_block_contract_gap_spec",
+  "claims": [
+    "The workflow receives a read-only CDC repository projection and an intentionally incomplete integration request.",
+    "The correct neutral outcome is a precise BLOCK artifact with no repository mutation and no EDA execution.",
+    "Benchmark readiness is independent of a workflow's internal agent or executor architecture."
+  ],
+  "excluded_claims": [
+    "The public packet does not supply, infer, or authorize reset assertion, reset release, clock relationship, or cross-domain reset sequencing semantics.",
+    "The projected cdc_fifo_gray source has integration-contract comments deterministically withheld; the private original, native testbench, and evaluator oracle are not public inputs.",
+    "A valid BLOCK is not an RTL PASS, simulation PASS, PPA result, performance result, or benchmark readiness claim.",
+    "The public digest, evaluator, environment, scoring, rights review, and independent admission are not frozen."
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "source_id": "common-cells-cutoff",
+  "repository_url": "https://github.com/pulp-platform/common_cells",
+  "base_commit": "ca493e681f208a68b9a5e8809f12d772a5db2ec7",
+  "submodule_commits": {},
+  "source_archive_sha256": "a2fb6ab09e89ce8c533d189fc6c0e11b47699e4a702106bf9cc3779f2e0104db",
+  "release_date": "2022-11-29T14:36:45Z",
+  "license_spdx": "SHL-0.51",
+  "agent_source_mode": "repository_base_with_withheld_contract",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": [
+    "LICENSE",
+    "README.md",
+    "common_cells.core",
+    "include/common_cells/registers.svh",
+    "src/binary_to_gray.sv",
+    "src/cdc_fifo_gray.sv",
+    "src/gray_to_binary.sv",
+    "src/spill_register.sv",
+    "src/sync.sv"
+  ],
+  "required_notice_paths": [
+    "LICENSE"
+  ],
+  "withheld_contract_projection": {
+    "transform_id": "g12-cdc-integration-comment-redaction-v1",
+    "transformed_paths": [
+      "src/cdc_fifo_gray.sv"
+    ],
+    "original_source_sha256": {
+      "src/cdc_fifo_gray.sv": "0ddcfd5984b21884b61efbb57a7d17783c7a862a4719065890af74f2783bd7d8"
+    },
+    "preserve_copyright_and_license_header": true,
+    "preserve_non_comment_tokens": true,
+    "withheld_sections": [
+      "Reset Behavior",
+      "Constraints"
+    ],
+    "replacement_notice": "Integration contract intentionally withheld by G12; do not infer missing semantics."
+  },
+  "required_read_only_paths": [
+    "LICENSE",
+    "README.md",
+    "common_cells.core",
+    "include/common_cells/registers.svh",
+    "src/binary_to_gray.sv",
+    "src/cdc_fifo_gray.sv",
+    "src/gray_to_binary.sv",
+    "src/spill_register.sv",
+    "src/sync.sv"
+  ],
+  "baseline_rtl_exposed_to_workflow": true,
+  "original_contract_comments_exposed_to_workflow": false,
+  "evaluator_reference_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    ".github/",
+    ".gitlab-ci.yml",
+    ".travis.yml",
+    "CHANGELOG.md",
+    "formal/",
+    "lint/",
+    "src/cdc_fifo_gray_clearable.sv",
+    "src/cdc_reset_ctrlr.sv",
+    "src/cdc_reset_ctrlr_pkg.sv",
+    "src/rstgen.sv",
+    "src/rstgen_bypass.sv",
+    "test/",
+    "vendor/"
+  ],
+  "note": "A deterministic private materializer verifies the pinned original file, preserves non-comment RTL tokens and license text, and withholds only integration-contract commentary. No original reference RTL or native CDC testbench is copied into the public packet."
+}

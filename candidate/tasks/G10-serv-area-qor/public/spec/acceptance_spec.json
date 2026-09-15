@@ -1,0 +1,79 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G10-serv-area-qor",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G10-A01",
+      "statement": "The complete submitted RTL bundle elaborates the pinned serv_synth_wrapper top as Verilog 2005.",
+      "acceptance_rule": "All seventeen required RTL files exist, no unexpected file is present, and the frozen top and parameter configuration elaborate without a submission-induced compile error.",
+      "verification_intent": "Development visible completeness/interface check, synthesis dry run, and public preapproval Yosys equivalence gate; not independently calibrated or frozen."
+    },
+    {
+      "requirement_id": "G10-A02",
+      "statement": "The public wrapper signature and frozen parameter values are preserved.",
+      "acceptance_rule": "The wrapper ports, widths, directions, parameter names, and frozen evaluator values match the CPUInterfaceSpec.",
+      "verification_intent": "Development visible structural contract check plus a planned hidden elaboration matrix."
+    },
+    {
+      "requirement_id": "G10-A03",
+      "statement": "RV32I architectural behavior for the frozen configuration remains equivalent to the pinned baseline.",
+      "acceptance_rule": "The hidden compliance subset and architectural differential traces match the immutable baseline for all evaluated cases.",
+      "verification_intent": "Planned hidden F2P and architectural-trace comparison; the observed development suite is only a bounded external-output cycle differential."
+    },
+    {
+      "requirement_id": "G10-A04",
+      "statement": "Instruction bus, data bus, register-file, reset, and timer-interrupt behavior remains cycle-visible equivalent.",
+      "acceptance_rule": "For identical evaluator inputs, the normalized output and state-observation sequence has no additional, removed, or shifted externally visible event.",
+      "verification_intent": "A development four-profile cycle differential covers always-ack, deterministic stalls, mid-run reset, and timer interrupt, but the suite and coverage are incomplete and not frozen."
+    },
+    {
+      "requirement_id": "G10-A05",
+      "statement": "The submission changes only allowlisted RTL files and preserves repository structure and notices.",
+      "acceptance_rule": "No file is added, deleted, or renamed; read-only projected files are byte-identical; no evaluator path is present; network access remains disabled.",
+      "verification_intent": "Development visible and private runners enforce the seventeen-file manifest, digests, no symlinks, and size/scope limits; calibration and freeze remain pending."
+    },
+    {
+      "requirement_id": "G10-A06",
+      "statement": "Baseline and submission both complete the same frozen synthesis and timing flow before QoR comparison.",
+      "acceptance_rule": "A QoR metric is valid only when both subjects use matching content-addressed environment, library, constraints, script, seeds, limits, and parser with no unresolved warning classified as blocking.",
+      "verification_intent": "Development generic-proxy extraction has been reproduced separately with Yosys 0.65 and 0.33; no frozen physical synthesis/STA environment exists."
+    },
+    {
+      "requirement_id": "G10-A07",
+      "statement": "Area is reported only in the frozen flow's declared unit and provenance.",
+      "acceptance_rule": "The result records raw baseline and submission area, units, library digest, run seeds, per-run values, aggregation rule, and parser evidence; missing or non-finite data is not scored.",
+      "verification_intent": "Development evidence now includes five same-server baseline/official-alternate physical area and STA pairs with exact selected-metric repeatability; the policy, environment, cross-host result, thresholds, and independent review remain unfrozen."
+    },
+    {
+      "requirement_id": "G10-A08",
+      "statement": "Timing and performance non-regression gates precede any area reward.",
+      "acceptance_rule": "A submission that violates the frozen timing or cycle-visible performance limits is fail_ppa or functionally failed and receives no area-improvement score.",
+      "verification_intent": "Planned private timing parser and differential cycle checks."
+    },
+    {
+      "requirement_id": "G10-A09",
+      "statement": "False improvements are rejected.",
+      "acceptance_rule": "Empty, truncated, unmapped, constant-output, interface-pruned, timeout, parser-spoof, and functionally incorrect subjects cannot produce an eligible QoR result.",
+      "verification_intent": "One behavior mutant is blocked by the bounded functional gate before synthesis; the full false-improvement mutation campaign remains planned."
+    },
+    {
+      "requirement_id": "G10-A10",
+      "statement": "Scoring and benchmark admission remain unavailable until independent freeze.",
+      "acceptance_rule": "Before environment, thresholds, repeat policy, scoring, rights, packet digest, and independent admission are frozen, raw observations remain explicitly development-only and unscored.",
+      "verification_intent": "Admission and scoring fail-closed checks."
+    }
+  ],
+  "correctness_before_qor": true,
+  "visible_verification_status": "development_structural_public_equivalence_and_four_instruction_software_smoke_observed_not_frozen",
+  "evaluator_verification_status": "development_bounded_p2p_baseline_one_mutant_and_syntax_distinct_positive_cross_environment_observed_not_frozen",
+  "qor_measurement_status": "development_five_pair_same_server_physical_area_sta_repeatability_observed_not_frozen_or_qor_positive",
+  "scoring_status": "not_frozen",
+  "excluded_claims": [
+    "A bounded four-case cycle differential ran for the baseline, one killed mutant, and one syntax-equivalent positive; this is not hidden F2P, complete P2P, compliance, or formal-equivalence calibration.",
+    "The public preapproval Yosys gate passes baseline identity and one equivalent positive and kills one behavior mutant across two Yosys versions; this does not freeze the gate or establish complete formal, ISA, F2P, or hidden P2P coverage.",
+    "The public four-instruction software smoke passes the baseline and rejects one known false-improvement functional mutant; controlled syntax, scope, missing-tool, and timeout cases remain development calibration, not ISA compliance or hidden F2P/P2P.",
+    "Five same-server physical area and STA pairs were observed for the baseline and official upstream structural alternate with exact selected-metric repeatability; power activity, workload performance, cross-host reproduction, policy freeze, and a positive physical QoR reference remain unavailable, and the alternate was larger in every pair.",
+    "No environment, threshold, repeatability policy, physical PPA flow, scoring profile, projection digest, or benchmark admission is frozen."
+  ]
+}

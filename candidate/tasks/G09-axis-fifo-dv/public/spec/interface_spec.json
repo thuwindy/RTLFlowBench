@@ -1,0 +1,112 @@
+{
+  "schema_version": "chipflow.golden12.interface_spec.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "interface_kind": "axi_stream_fifo_integration",
+  "top_module": "axis_fifo",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": false,
+  "projection": "independent_non_cpu_interface_spec",
+  "parameters": [
+    {"name": "DATA_WIDTH", "type": "positive_integer", "default": 8, "valid_range": "DATA_WIDTH >= 8 and DATA_WIDTH % 8 == 0"},
+    {"name": "DEPTH_BYTES", "type": "positive_integer", "default": 64, "valid_range": "DEPTH_BYTES >= 16 and DEPTH_BYTES is a power of two"}
+  ],
+  "clock": {"port": "clk", "active_edge": "rising", "clock_domains": 1},
+  "reset": {
+    "port": "rst", "polarity": "active_high", "timing": "synchronous",
+    "sample_edge": "rising_clk", "priority": "higher_than_stream_handshakes",
+    "asynchronous_effect_between_edges": false
+  },
+  "ports": [
+    {"name": "clk", "direction": "input", "width": "1"},
+    {"name": "rst", "direction": "input", "width": "1"},
+    {"name": "s_axis_tdata", "direction": "input", "width": "DATA_WIDTH"},
+    {"name": "s_axis_tkeep", "direction": "input", "width": "DATA_WIDTH/8"},
+    {"name": "s_axis_tvalid", "direction": "input", "width": "1"},
+    {"name": "s_axis_tready", "direction": "output", "width": "1"},
+    {"name": "s_axis_tlast", "direction": "input", "width": "1"},
+    {"name": "s_axis_tid", "direction": "input", "width": "8"},
+    {"name": "s_axis_tdest", "direction": "input", "width": "8"},
+    {"name": "s_axis_tuser", "direction": "input", "width": "1"},
+    {"name": "m_axis_tdata", "direction": "output", "width": "DATA_WIDTH"},
+    {"name": "m_axis_tkeep", "direction": "output", "width": "DATA_WIDTH/8"},
+    {"name": "m_axis_tvalid", "direction": "output", "width": "1"},
+    {"name": "m_axis_tready", "direction": "input", "width": "1"},
+    {"name": "m_axis_tlast", "direction": "output", "width": "1"},
+    {"name": "m_axis_tid", "direction": "output", "width": "8"},
+    {"name": "m_axis_tdest", "direction": "output", "width": "8"},
+    {"name": "m_axis_tuser", "direction": "output", "width": "1"},
+    {"name": "status_overflow", "direction": "output", "width": "1"},
+    {"name": "status_bad_frame", "direction": "output", "width": "1"},
+    {"name": "status_good_frame", "direction": "output", "width": "1"}
+  ],
+  "transaction_semantics": {
+    "input_accept": "s_axis_tvalid && s_axis_tready at a rising edge",
+    "output_accept": "m_axis_tvalid && m_axis_tready at a rising edge",
+    "ordering": "Every emitted non-dropped beat corresponds exactly once and in order to an accepted input beat",
+    "frame_boundary": "tlast terminates a frame; tkeep identifies valid bytes and all enabled metadata stays aligned",
+    "stalled_input": "No input transfer occurs while s_axis_tready is low; the source retains its beat until acceptance",
+    "stalled_output": "While m_axis_tvalid && !m_axis_tready, valid, payload, keep, last, id, destination, and user remain stable",
+    "oversize_frame": "With frame FIFO and oversize dropping enabled, an oversized frame is discarded without an output prefix and reports overflow"
+  },
+  "state_semantics": {
+    "frame_commit": "A complete accepted good frame becomes eligible for ordered output and pulses status_good_frame",
+    "bad_frame": "A frame marked by USER_BAD_FRAME_MASK/VALUE is dropped and pulses status_bad_frame when DROP_BAD_FRAME is enabled",
+    "reset_state": "After sampled reset, no pre-reset transaction is emitted and status pulses are cleared",
+    "metadata": "Enabled tkeep, tlast, tid, tdest, and tuser remain associated with their original beat"
+  },
+  "latency_semantics": {
+    "mode": "not_cycle_frozen",
+    "fall_through_required": false,
+    "progress": "When m_axis_tready remains asserted, every committed non-dropped frame eventually transfers"
+  },
+  "invalid_parameter_behavior": {
+    "required_result": "elaboration_or_static_failure",
+    "runtime_behavior_defined": false
+  },
+  "dependency_bindings": [
+    {
+      "module": "axis_fifo",
+      "source_path": "rtl/axis_fifo.v",
+      "instance_count": 1,
+      "required_parameter_bindings": [
+        "DEPTH", "DATA_WIDTH", "KEEP_ENABLE", "KEEP_WIDTH", "LAST_ENABLE",
+        "ID_ENABLE", "ID_WIDTH", "DEST_ENABLE", "DEST_WIDTH", "USER_ENABLE",
+        "USER_WIDTH", "RAM_PIPELINE", "OUTPUT_FIFO_ENABLE", "FRAME_FIFO",
+        "USER_BAD_FRAME_VALUE", "USER_BAD_FRAME_MASK", "DROP_OVERSIZE_FRAME",
+        "DROP_BAD_FRAME", "DROP_WHEN_FULL"
+      ],
+      "required_port_bindings": [
+        "clk", "rst", "s_axis_tdata", "s_axis_tkeep", "s_axis_tvalid",
+        "s_axis_tready", "s_axis_tlast", "s_axis_tid", "s_axis_tdest",
+        "s_axis_tuser", "m_axis_tdata", "m_axis_tkeep", "m_axis_tvalid",
+        "m_axis_tready", "m_axis_tlast", "m_axis_tid", "m_axis_tdest",
+        "m_axis_tuser", "status_overflow", "status_bad_frame", "status_good_frame"
+      ],
+      "parameter_values": {
+        "DEPTH": "DEPTH_BYTES", "DATA_WIDTH": "DATA_WIDTH",
+        "KEEP_ENABLE": "DATA_WIDTH > 8", "KEEP_WIDTH": "DATA_WIDTH/8",
+        "LAST_ENABLE": true, "ID_ENABLE": true, "ID_WIDTH": "8",
+        "DEST_ENABLE": true, "DEST_WIDTH": "8", "USER_ENABLE": true,
+        "USER_WIDTH": "1", "RAM_PIPELINE": "1", "OUTPUT_FIFO_ENABLE": false,
+        "FRAME_FIFO": true, "USER_BAD_FRAME_VALUE": "1",
+        "USER_BAD_FRAME_MASK": "1", "DROP_OVERSIZE_FRAME": true,
+        "DROP_BAD_FRAME": true, "DROP_WHEN_FULL": false
+      },
+      "parameter_value_aliases": {
+        "KEEP_WIDTH": {"BYTE_LANES": "DATA_WIDTH/8"}
+      },
+      "port_values": {
+        "clk": "clk", "rst": "rst", "s_axis_tdata": "s_axis_tdata",
+        "s_axis_tkeep": "s_axis_tkeep", "s_axis_tvalid": "s_axis_tvalid",
+        "s_axis_tready": "s_axis_tready", "s_axis_tlast": "s_axis_tlast",
+        "s_axis_tid": "s_axis_tid", "s_axis_tdest": "s_axis_tdest",
+        "s_axis_tuser": "s_axis_tuser", "m_axis_tdata": "m_axis_tdata",
+        "m_axis_tkeep": "m_axis_tkeep", "m_axis_tvalid": "m_axis_tvalid",
+        "m_axis_tready": "m_axis_tready", "m_axis_tlast": "m_axis_tlast",
+        "m_axis_tid": "m_axis_tid", "m_axis_tdest": "m_axis_tdest",
+        "m_axis_tuser": "m_axis_tuser", "status_overflow": "status_overflow",
+        "status_bad_frame": "status_bad_frame", "status_good_frame": "status_good_frame"
+      }
+    }
+  ]
+}

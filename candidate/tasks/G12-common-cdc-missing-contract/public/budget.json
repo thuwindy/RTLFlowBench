@@ -1,0 +1,31 @@
+{
+  "schema_version": "chipflow.golden12.budget.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "status": "provisional_not_frozen",
+  "limits": {
+    "wall_time_seconds": 600,
+    "workflow_attempts": 1,
+    "maximum_changed_files": 1,
+    "maximum_repository_files_changed": 0,
+    "maximum_submission_bytes": 16384,
+    "network_access": false,
+    "maximum_llm_calls": 8,
+    "maximum_human_interventions": 0,
+    "maximum_input_tokens": 524288,
+    "maximum_output_tokens": 32768,
+    "token_accounting_policy": "enforced_limits",
+    "missing_token_measurement_policy": "reject"
+  },
+  "eda_call_limits": {
+    "compile_or_lint": 0,
+    "simulation": 0,
+    "formal": 0,
+    "synthesis": 0
+  },
+  "measurement_status": "development_visible_preflight_exercised_complete_workflow_not_measured",
+  "excluded_claims": [
+    "Eight visible decision-preflight fixtures exercised the artifact limit and declared EDA metadata, but the workflow budget has not been calibrated or frozen.",
+    "Visible zero EDA metadata is not actual process evidence and is not evidence that an AIRTL workflow has complied.",
+    "No workflow runtime, token use, LLM-call count, human intervention count, success rate, or score is reported."
+  ]
+}

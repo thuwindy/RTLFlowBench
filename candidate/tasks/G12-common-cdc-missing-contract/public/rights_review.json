@@ -1,0 +1,21 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "source_id": "common-cells-cutoff",
+  "license_spdx": "SHL-0.51",
+  "license_evidence_url": "https://github.com/pulp-platform/common_cells/blob/ca493e681f208a68b9a5e8809f12d772a5db2ec7/LICENSE",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the common_cells repository, cutoff commit, archive SHA256, SPDX identifier, release date, and license-evidence URL.",
+    "The content-addressed archive contains LICENSE with SHA256 6527a46225891b976fa94f634f6ee0cd22e1c7129d6f11c5c98c997627625fc7.",
+    "The planned projection retains LICENSE and copyright/license headers while applying a deterministic comment-only withheld-contract transform to one source file.",
+    "This receipt is evidence for independent review, not legal advice or an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not approved redistribution and benchmark use of the projected files.",
+    "The exact comment-only transform, notice retention, attribution, and public/private release boundary have not received independent rights review or freeze."
+  ]
+}

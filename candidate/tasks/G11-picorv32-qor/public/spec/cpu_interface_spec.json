@@ -1,0 +1,140 @@
+{
+  "schema_version": "chipflow.golden12.cpu_interface_spec.v1",
+  "task_id": "G11-picorv32-qor",
+  "interface_kind": "picorv32_cycle_visible_qor",
+  "top_module": "picorv32",
+  "language": "verilog_2005",
+  "cpu_interface_spec_required": true,
+  "projection": "frozen_top_large_feature_configuration_and_exact_external_trace",
+  "parameter_source": "The feature choices BARREL_SHIFTER=1, COMPRESSED_ISA=1, ENABLE_PCPI=1, ENABLE_MUL=1, and ENABLE_IRQ=1 are taken from upstream scripts/quartus/synth_area_top.v top_large; every other value is the pinned picorv32 module default at the cutoff commit.",
+  "parameters": [
+    {"name": "ENABLE_COUNTERS", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_COUNTERS64", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_REGS_16_31", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_REGS_DUALPORT", "type": "bit", "frozen_value": 1},
+    {"name": "LATCHED_MEM_RDATA", "type": "bit", "frozen_value": 0},
+    {"name": "TWO_STAGE_SHIFT", "type": "bit", "frozen_value": 1},
+    {"name": "BARREL_SHIFTER", "type": "bit", "frozen_value": 1},
+    {"name": "TWO_CYCLE_COMPARE", "type": "bit", "frozen_value": 0},
+    {"name": "TWO_CYCLE_ALU", "type": "bit", "frozen_value": 0},
+    {"name": "COMPRESSED_ISA", "type": "bit", "frozen_value": 1},
+    {"name": "CATCH_MISALIGN", "type": "bit", "frozen_value": 1},
+    {"name": "CATCH_ILLINSN", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_PCPI", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_MUL", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_FAST_MUL", "type": "bit", "frozen_value": 0},
+    {"name": "ENABLE_DIV", "type": "bit", "frozen_value": 0},
+    {"name": "ENABLE_IRQ", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_IRQ_QREGS", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_IRQ_TIMER", "type": "bit", "frozen_value": 1},
+    {"name": "ENABLE_TRACE", "type": "bit", "frozen_value": 0},
+    {"name": "REGS_INIT_ZERO", "type": "bit", "frozen_value": 0},
+    {"name": "MASKED_IRQ", "type": "word", "frozen_value": "32'h0000_0000"},
+    {"name": "LATCHED_IRQ", "type": "word", "frozen_value": "32'hffff_ffff"},
+    {"name": "PROGADDR_RESET", "type": "word", "frozen_value": "32'h0000_0000"},
+    {"name": "PROGADDR_IRQ", "type": "word", "frozen_value": "32'h0000_0010"},
+    {"name": "STACKADDR", "type": "word", "frozen_value": "32'hffff_ffff"}
+  ],
+  "clock": {
+    "port": "clk",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "resetn",
+    "polarity": "active_low",
+    "state_update_timing": "synchronous_rising_edge",
+    "asynchronous_effect_between_edges": false,
+    "restart_pc": "32'h0000_0000"
+  },
+  "ports": [
+    {"name": "clk", "direction": "input", "width": "1"},
+    {"name": "resetn", "direction": "input", "width": "1"},
+    {"name": "trap", "direction": "output", "width": "1"},
+    {"name": "mem_valid", "direction": "output", "width": "1"},
+    {"name": "mem_instr", "direction": "output", "width": "1"},
+    {"name": "mem_ready", "direction": "input", "width": "1"},
+    {"name": "mem_addr", "direction": "output", "width": "32"},
+    {"name": "mem_wdata", "direction": "output", "width": "32"},
+    {"name": "mem_wstrb", "direction": "output", "width": "4"},
+    {"name": "mem_rdata", "direction": "input", "width": "32"},
+    {"name": "mem_la_read", "direction": "output", "width": "1"},
+    {"name": "mem_la_write", "direction": "output", "width": "1"},
+    {"name": "mem_la_addr", "direction": "output", "width": "32"},
+    {"name": "mem_la_wdata", "direction": "output", "width": "32"},
+    {"name": "mem_la_wstrb", "direction": "output", "width": "4"},
+    {"name": "pcpi_valid", "direction": "output", "width": "1"},
+    {"name": "pcpi_insn", "direction": "output", "width": "32"},
+    {"name": "pcpi_rs1", "direction": "output", "width": "32"},
+    {"name": "pcpi_rs2", "direction": "output", "width": "32"},
+    {"name": "pcpi_wr", "direction": "input", "width": "1"},
+    {"name": "pcpi_rd", "direction": "input", "width": "32"},
+    {"name": "pcpi_wait", "direction": "input", "width": "1"},
+    {"name": "pcpi_ready", "direction": "input", "width": "1"},
+    {"name": "irq", "direction": "input", "width": "32"},
+    {"name": "eoi", "direction": "output", "width": "32"},
+    {"name": "trace_valid", "direction": "output", "width": "1"},
+    {"name": "trace_data", "direction": "output", "width": "36"}
+  ],
+  "native_memory_interface": {
+    "request": "mem_valid",
+    "instruction_tag": "mem_instr",
+    "ready": "mem_ready",
+    "address": "mem_addr",
+    "write_data": "mem_wdata",
+    "write_strobes": "mem_wstrb",
+    "read_data": "mem_rdata",
+    "preservation_rule": "For identical evaluator stimuli, request stability under backpressure, transaction ordering, instruction tagging, addresses, data, byte strobes, and read-data consumption match the pinned baseline cycle for cycle."
+  },
+  "look_ahead_interface": {
+    "signals": ["mem_la_read", "mem_la_write", "mem_la_addr", "mem_la_wdata", "mem_la_wstrb"],
+    "preservation_rule": "Every look-ahead value is evaluator-visible and must match the pinned baseline for identical stimuli."
+  },
+  "pcpi_interface": {
+    "request_signals": ["pcpi_valid", "pcpi_insn", "pcpi_rs1", "pcpi_rs2"],
+    "response_signals": ["pcpi_wr", "pcpi_rd", "pcpi_wait", "pcpi_ready"],
+    "internal_multiplier_enabled": true,
+    "external_pcpi_enabled": true,
+    "division_enabled": false,
+    "preservation_rule": "Request timing and values, response hold/wait/ready handling, writeback, illegal-instruction timeout behavior, and internal-multiplier versus external-responder behavior match the pinned baseline."
+  },
+  "interrupt_interface": {
+    "request": "irq",
+    "acknowledge": "eoi",
+    "timer_enabled": true,
+    "preservation_rule": "IRQ sampling, masking, latching, timer events, simultaneous sources, entry/return, eoi, and interaction with stalls and PCPI match the pinned baseline."
+  },
+  "architectural_contract": {
+    "base_isa": "RV32I",
+    "compressed_extension": true,
+    "internal_multiply_support": true,
+    "divide_support": false,
+    "misaligned_access_traps": true,
+    "illegal_instruction_traps": true,
+    "equivalence_rule": "For identical evaluator stimuli, retirement order, instruction effects, register effects, memory effects, traps, IRQ effects, PCPI effects, counters, and control-flow outcomes match the pinned baseline."
+  },
+  "formal_projection": {
+    "compile_define": "RISCV_FORMAL",
+    "rvfi_port_set_preserved": true,
+    "observation_semantics_preserved": true,
+    "contract_path": "visible/riscv_formal_projection.json",
+    "ordinary_port_count": 27,
+    "rvfi_port_count": 29,
+    "expected_total_top_port_count": 56,
+    "status": "development_structural_projection_server_calibrated_not_frozen"
+  },
+  "cycle_visible_preservation": {
+    "exact_trace_required": true,
+    "new_pipeline_stage_allowed": false,
+    "new_request_buffer_allowed": false,
+    "latency_shift_allowed": false,
+    "normalization_status": "development_unified_evaluator_executable_not_frozen"
+  },
+  "preservation_requirements": [
+    "Preserve every listed ordinary-build top-level port, width, direction, parameter declaration, and frozen evaluator value.",
+    "Preserve native memory, look-ahead, PCPI, IRQ, reset, trap, trace, counter, compressed-instruction, multiply, and RVFI semantics.",
+    "Preserve the auxiliary modules and preprocessor modes defined in picorv32.v that are required to elaborate the frozen top and planned evaluator configurations.",
+    "Do not add, delete, or rename repository files.",
+    "Do not modify COPYING or README.md, and retain the notice embedded in picorv32.v."
+  ]
+}

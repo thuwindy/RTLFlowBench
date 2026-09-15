@@ -1,0 +1,51 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G10-serv-area-qor",
+  "status": "development_structural_public_equivalence_and_software_smoke_implemented_not_frozen",
+  "checks": [
+    {
+      "check_id": "submission_scope",
+      "oracle_class": "scope",
+      "status": "development_cross_environment_observed_not_frozen",
+      "description": "Require the complete RTL bundle and reject additions, deletions, renames, read-only drift, or evaluator paths."
+    },
+    {
+      "check_id": "interface_contract",
+      "oracle_class": "build",
+      "status": "development_cross_environment_observed_not_frozen",
+      "description": "Validate the frozen wrapper parameters, ports, widths, directions, and required module names."
+    },
+    {
+      "check_id": "elaboration_lint",
+      "oracle_class": "lint",
+      "status": "development_cross_environment_observed_not_frozen",
+      "description": "Elaborate and lint the frozen serv_synth_wrapper configuration."
+    },
+    {
+      "check_id": "public_preapproval_equivalence",
+      "oracle_class": "formal",
+      "status": "development_cross_environment_identity_positive_and_mutant_observed_not_frozen",
+      "description": "Before mutation approval, compare the exposed immutable baseline and candidate with the task-neutral Yosys equiv_simple plus equiv_induct runner; fail closed on any unproven equivalence cell."
+    },
+    {
+      "check_id": "short_software_smoke",
+      "oracle_class": "simulation",
+      "status": "development_server_positive_negative_timeout_and_infra_observed_not_frozen",
+      "description": "Run an independently written four-instruction RV32I program and require its exact word-store observation plus one exact pass sentinel."
+    },
+    {
+      "check_id": "generic_synthesis_dry_run",
+      "oracle_class": "synthesis",
+      "status": "development_diagnostic_cross_environment_observed_not_frozen",
+      "description": "Confirm generic synthesis completes and report diagnostic structural statistics without a PPA or improvement claim."
+    }
+  ],
+  "canonical_verdict_parser_status": "development_server_software_smoke_calibrated_not_frozen",
+  "negative_calibration_status": "development_server_seven_negative_cases_zero_false_pass_not_frozen",
+  "excluded_claims": [
+    "The public software smoke covers one four-instruction path only; it does not establish hidden F2P/P2P, ISA compliance, timing, PPA, QoR, score, or benchmark PASS.",
+    "The public preapproval proof discharges one configured Yosys obligation only; it is not a frozen hidden oracle, complete formal equivalence, ISA compliance, F2P, or complete P2P.",
+    "No generic synthesis statistic is treated as area or an optimization result.",
+    "Hidden functional and PPA oracles are not exposed."
+  ]
+}

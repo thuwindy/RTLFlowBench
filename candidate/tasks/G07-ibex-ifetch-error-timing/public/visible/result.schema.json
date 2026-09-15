@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.invalid/schemas/g07-visible-result-v1.json",
+  "title": "G07 Visible Runner Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "suite_status",
+    "observed_at",
+    "verdict",
+    "pass",
+    "reason",
+    "wall_time_seconds",
+    "scope",
+    "tool",
+    "lint",
+    "raw_artifacts",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g07_visible_result.v1"},
+    "task_id": {"const": "G07-ibex-ifetch-error-timing"},
+    "suite_status": {"const": "development_not_frozen"},
+    "observed_at": {"type": "string", "minLength": 1},
+    "verdict": {
+      "enum": ["scope_violation", "invalid_submission", "infra_error", "timeout", "compile_error", "pass"]
+    },
+    "pass": {"type": "boolean"},
+    "reason": {"type": "string", "minLength": 1},
+    "wall_time_seconds": {"type": "number", "minimum": 0},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "projected_file_count", "editable_path", "editable_bytes", "editable_sha256", "issues"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "projected_file_count": {"type": ["integer", "null"], "minimum": 0},
+        "editable_path": {"const": "rtl/ibex_id_stage.sv"},
+        "editable_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "editable_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "issues": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "name", "version", "executable_sha256"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "name": {"const": "verilator"},
+        "version": {"type": ["string", "null"]},
+        "executable_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "lint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "process_status", "exit_code", "timeout_seconds", "warning_count", "output_limit_bytes", "stdout_sha256", "stderr_sha256", "stdout_bytes", "stderr_bytes"],
+      "properties": {
+        "status": {"enum": ["pass", "fail", "not_run"]},
+        "process_status": {"enum": ["completed", "timeout", "output_limit", "error", "not_run"]},
+        "exit_code": {"type": ["integer", "null"]},
+        "timeout_seconds": {"type": "number", "minimum": 0},
+        "warning_count": {"type": ["integer", "null"], "minimum": 0},
+        "output_limit_bytes": {"type": "integer", "minimum": 1},
+        "stdout_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "stderr_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "stdout_bytes": {"type": ["integer", "null"], "minimum": 0},
+        "stderr_bytes": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "raw_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "sha256", "bytes"],
+        "properties": {
+          "name": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}, "required": ["verdict"]},
+      "then": {"properties": {"pass": {"const": true}}},
+      "else": {"properties": {"pass": {"const": false}}}
+    }
+  ]
+}

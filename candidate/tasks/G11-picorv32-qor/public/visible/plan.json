@@ -1,0 +1,56 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G11-picorv32-qor",
+  "status": "development_partial_implementation_calibrated_not_frozen",
+  "checks": [
+    {
+      "check_id": "submission_scope",
+      "oracle_class": "scope",
+      "status": "implemented_server_calibrated_not_frozen",
+      "description": "Require exactly picorv32.v and reject additions, deletions, renames, read-only drift, symlinks, oversized files, evaluator paths, and generated artifacts."
+    },
+    {
+      "check_id": "interface_and_configuration",
+      "oracle_class": "build",
+      "status": "ordinary_and_riscv_formal_implemented_server_calibrated_not_frozen",
+      "description": "Validate the picorv32 module, frozen values, ordinary ports, required auxiliary module declarations, and the exact 29-port RISCV_FORMAL projection; the structural gate does not prove RVFI semantics."
+    },
+    {
+      "check_id": "elaboration_lint",
+      "oracle_class": "lint",
+      "status": "implemented_server_calibrated_not_frozen",
+      "description": "Elaborate and lint the frozen top_large-derived configuration with content-addressed open tools."
+    },
+    {
+      "check_id": "public_preapproval_equivalence",
+      "oracle_class": "formal",
+      "status": "shared_runner_depth4_calibrated_not_frozen",
+      "description": "The shared task-neutral Yosys internal-name runner remains a conservative diagnostic: identity passes and one functional mutant fails equivalence on SERVER26, while a retained 32-step mutant probe timed out. It is not sufficient as the sole QoR gate because legal implementation-private rewrites can change matched internal signals."
+    },
+    {
+      "check_id": "public_top_output_bmc",
+      "oracle_class": "formal",
+      "status": "development_depth10_partial_calibration_not_frozen",
+      "description": "Compare only top-level outputs for ten symbolic steps under the declared one-cycle active-low reset and zero-state projection. Identity and one structurally changed correct candidate pass; four of five behavior mutants are killed and compile, missing-tool, and timeout controls fail closed, while the retained IRQ mutant false-pass keeps this bounded gate explicitly partial and unfrozen."
+    },
+    {
+      "check_id": "short_firmware_smoke",
+      "oracle_class": "simulation",
+      "status": "implemented_basic_server_calibrated_not_frozen",
+      "description": "Run a small independently written four-instruction program covering reset, native instruction fetch, arithmetic, and one full-word data store with an exact pass sentinel; compressed, multiply, IRQ, and PCPI coverage remains planned."
+    },
+    {
+      "check_id": "generic_synthesis_dry_run",
+      "oracle_class": "synthesis",
+      "status": "implemented_diagnostic_server_calibrated_not_frozen",
+      "description": "Confirm generic synthesis completes and emit diagnostic structural statistics without a physical PPA or improvement claim."
+    }
+  ],
+  "canonical_verdict_parser_status": "development_calibrated_not_frozen",
+  "negative_calibration_status": "ordinary_12_case_and_riscv_formal_5_case_server_pass_not_frozen",
+  "excluded_claims": [
+    "The visible runner, parser, and result schema remain development artifacts; its ordinary-build suite records one baseline positive and eleven fail-closed controls, while the separate RISCV_FORMAL structural suite records one baseline positive and four fail-closed controls, but no structurally distinct correct alternate or independent freeze exists.",
+    "No visible check establishes hidden F2P/P2P, ISA compliance, complete formal equivalence, physical timing, physical area, power, performance, QoR, score, or benchmark PASS.",
+    "Hidden evaluator and PPA assets are not exposed."
+  ]
+}

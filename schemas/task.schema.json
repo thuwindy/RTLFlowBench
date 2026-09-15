@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/task.v1.json",
+  "title": "RTLFlowBench public task descriptor",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "benchmark_id",
+    "benchmark_version",
+    "task_id",
+    "family",
+    "packet_status",
+    "rights",
+    "public_packet",
+    "submission_contract",
+    "budget",
+    "evaluation_contract",
+    "scoring_contract"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.task.v1"},
+    "benchmark_id": {"const": "chipflow-golden12"},
+    "benchmark_version": {"type": "string", "minLength": 1},
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "family": {
+      "enum": [
+        "spec_to_rtl",
+        "protocol_integration",
+        "repo_repair",
+        "dv_mutation",
+        "qor_optimization",
+        "trust_block"
+      ]
+    },
+    "packet_status": {"enum": ["draft", "frozen"]},
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "redistribution_review_complete",
+        "receipt_path"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pending_independent_review",
+            "approved",
+            "blocked"
+          ]
+        },
+        "redistribution_review_complete": {"type": "boolean"},
+        "receipt_path": {"$ref": "#/$defs/relativePath"}
+      }
+    },
+    "public_packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root",
+        "digest_status",
+        "sha256",
+        "contains_evaluator_assets",
+        "network_access"
+      ],
+      "properties": {
+        "root": {"$ref": "#/$defs/relativePath"},
+        "digest_status": {"enum": ["not_frozen", "frozen"]},
+        "sha256": {
+          "description": "SHA256 of the canonical public-content manifest: every regular public-packet file except external_task.json, sorted by POSIX path and represented as compact canonical JSON. The transport archive digest is recorded separately in its packaging receipt.",
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/sha256"}
+          ]
+        },
+        "contains_evaluator_assets": {"const": false},
+        "network_access": {
+          "description": "Whether processes inside the evaluated task workspace may access any non-loopback network. Golden-12 v1 requires false. Declared model-provider communication belongs to the out-of-workspace workflow control plane, is governed separately, and must be recorded through workflow identity, LLM-call, token, and attempt-control evidence.",
+          "const": false
+        }
+      }
+    },
+    "submission_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_format",
+        "required_files",
+        "editable_paths",
+        "max_files_changed",
+        "max_submission_bytes"
+      ],
+      "properties": {
+        "artifact_format": {"const": "file_bundle"},
+        "required_files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/relativePath"}
+        },
+        "editable_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/relativePath"}
+        },
+        "max_files_changed": {"type": "integer", "minimum": 0},
+        "max_submission_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "wall_time_seconds",
+        "workflow_attempts",
+        "network_access",
+        "eda_call_limits",
+        "llm_calls",
+        "human_interventions",
+        "tokens"
+      ],
+      "properties": {
+        "status": {"enum": ["provisional_not_frozen", "frozen"]},
+        "wall_time_seconds": {"type": "integer", "minimum": 1},
+        "workflow_attempts": {"type": "integer", "minimum": 1},
+        "network_access": {
+          "description": "Whether processes inside the evaluated task workspace may access any non-loopback network. Golden-12 v1 requires false. Declared model-provider communication belongs to the out-of-workspace workflow control plane, is governed separately, and must be recorded through workflow identity, LLM-call, token, and attempt-control evidence.",
+          "const": false
+        },
+        "eda_call_limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {"type": "integer", "minimum": 0},
+            "simulation": {"type": "integer", "minimum": 0},
+            "formal": {"type": "integer", "minimum": 0},
+            "synthesis": {"type": "integer", "minimum": 0}
+          }
+        },
+        "llm_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maximum"],
+          "properties": {
+            "maximum": {"$ref": "#/$defs/nullableCount"}
+          }
+        },
+        "human_interventions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maximum"],
+          "properties": {
+            "maximum": {"$ref": "#/$defs/nullableCount"}
+          }
+        },
+        "tokens": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "accounting_policy",
+            "maximum_input_tokens",
+            "maximum_output_tokens",
+            "missing_measurement_policy"
+          ],
+          "properties": {
+            "accounting_policy": {
+              "enum": [
+                "provisional_not_frozen",
+                "enforced_limits",
+                "report_only_separate_cohort"
+              ]
+            },
+            "maximum_input_tokens": {"$ref": "#/$defs/nullableCount"},
+            "maximum_output_tokens": {"$ref": "#/$defs/nullableCount"},
+            "missing_measurement_policy": {
+              "enum": ["reject", "separate_noncomparable_cohort"]
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "provisional_not_frozen"}},
+            "required": ["status"]
+          },
+          "then": {
+            "oneOf": [
+              {
+                "properties": {
+                  "llm_calls": {
+                    "properties": {"maximum": {"type": "null"}}
+                  },
+                  "human_interventions": {
+                    "properties": {"maximum": {"type": "null"}}
+                  },
+                  "tokens": {
+                    "properties": {
+                      "accounting_policy": {
+                        "const": "provisional_not_frozen"
+                      },
+                      "maximum_input_tokens": {"type": "null"},
+                      "maximum_output_tokens": {"type": "null"},
+                      "missing_measurement_policy": {
+                        "const": "separate_noncomparable_cohort"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "llm_calls": {
+                    "properties": {
+                      "maximum": {"type": "integer", "minimum": 1}
+                    }
+                  },
+                  "human_interventions": {
+                    "properties": {
+                      "maximum": {"type": "integer", "minimum": 0}
+                    }
+                  },
+                  "tokens": {
+                    "properties": {
+                      "accounting_policy": {"const": "enforced_limits"},
+                      "maximum_input_tokens": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "maximum_output_tokens": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "missing_measurement_policy": {"const": "reject"}
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {"status": {"const": "frozen"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "llm_calls": {
+                "properties": {"maximum": {"type": "integer"}}
+              },
+              "human_interventions": {
+                "properties": {"maximum": {"type": "integer"}}
+              },
+              "tokens": {
+                "properties": {
+                  "accounting_policy": {
+                    "enum": [
+                      "enforced_limits",
+                      "report_only_separate_cohort"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tokens": {
+                "properties": {
+                  "accounting_policy": {"const": "enforced_limits"}
+                },
+                "required": ["accounting_policy"]
+              }
+            },
+            "required": ["tokens"]
+          },
+          "then": {
+            "properties": {
+              "tokens": {
+                "properties": {
+                  "maximum_input_tokens": {"type": "integer"},
+                  "maximum_output_tokens": {"type": "integer"},
+                  "missing_measurement_policy": {"const": "reject"}
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tokens": {
+                "properties": {
+                  "accounting_policy": {
+                    "const": "report_only_separate_cohort"
+                  }
+                },
+                "required": ["accounting_policy"]
+              }
+            },
+            "required": ["tokens"]
+          },
+          "then": {
+            "properties": {
+              "tokens": {
+                "properties": {
+                  "maximum_input_tokens": {"type": "null"},
+                  "maximum_output_tokens": {"type": "null"},
+                  "missing_measurement_policy": {
+                    "const": "separate_noncomparable_cohort"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "evaluation_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runner_protocol_version",
+        "evaluator_status",
+        "required_oracle_classes",
+        "hidden_evaluator_isolated",
+        "canonical_verdicts"
+      ],
+      "properties": {
+        "runner_protocol_version": {"const": "rtlflowbench.runner.v1"},
+        "evaluator_status": {
+          "enum": [
+            "not_implemented",
+            "development",
+            "calibrated",
+            "frozen"
+          ]
+        },
+        "required_oracle_classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/oracleClass"}
+        },
+        "hidden_evaluator_isolated": {"const": true},
+        "canonical_verdicts": {
+          "const": [
+            "invalid_instance",
+            "infra_error",
+            "invalid_submission",
+            "scope_violation",
+            "blocked",
+            "timeout",
+            "compile_error",
+            "fail_f2p",
+            "fail_p2p",
+            "fail_formal",
+            "fail_ppa",
+            "pass"
+          ]
+        }
+      }
+    },
+    "scoring_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile_id", "raw_metric_ids"],
+      "properties": {
+        "profile_id": {"type": "string", "minLength": 1},
+        "raw_metric_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/metricId"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableCount": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "oracleClass": {
+      "enum": [
+        "build",
+        "lint",
+        "simulation",
+        "formal",
+        "differential",
+        "coverage",
+        "synthesis",
+        "ppa",
+        "scope",
+        "trust"
+      ]
+    },
+    "metricId": {
+      "enum": [
+        "functional_correctness",
+        "protocol_correctness",
+        "f2p",
+        "p2p",
+        "formal_depth",
+        "simulation_coverage",
+        "mutation_kill_rate",
+        "false_positive_rate",
+        "area",
+        "timing",
+        "performance",
+        "scope_violation_count",
+        "trust_event_count",
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"packet_status": {"const": "frozen"}},
+        "required": ["packet_status"]
+      },
+      "then": {
+        "properties": {
+          "rights": {
+            "properties": {
+              "status": {"const": "approved"},
+              "redistribution_review_complete": {"const": true}
+            }
+          },
+          "public_packet": {
+            "properties": {
+              "digest_status": {"const": "frozen"},
+              "sha256": {"$ref": "#/$defs/sha256"}
+            }
+          },
+          "budget": {
+            "properties": {
+              "status": {"const": "frozen"}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

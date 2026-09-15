@@ -1,0 +1,110 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G08-common-fifo-dv",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G08-A01",
+      "statement": "The submission contains exactly the two required independently authored SystemVerilog verification assets.",
+      "acceptance_rule": "No path other than verification/g08_fifo_tb.sv and verification/g08_fifo_properties.sv is supplied, and the combined size is within budget.",
+      "verification_intent": "Strict scope, path, regular-file, symlink, and byte-budget checks."
+    },
+    {
+      "requirement_id": "G08-A02",
+      "statement": "The simulation testbench builds and accepts the correct pinned DUT.",
+      "acceptance_rule": "g08_fifo_tb compiles against the projected fifo_v3 and emits exactly one required pass sentinel for every calibrated public P2P configuration.",
+      "verification_intent": "Visible correct-DUT build/run and planned hidden multi-parameter, multi-seed P2P."
+    },
+    {
+      "requirement_id": "G08-A03",
+      "statement": "The testbench detects FIFO ordering, pointer-wrap, and occupancy defects.",
+      "acceptance_rule": "Calibrated semantic mutants cause a deterministic non-pass verdict without relying on mutant filenames or evaluator internals.",
+      "verification_intent": "Two planned public negative fixtures and hidden semantic-mutant F2P."
+    },
+    {
+      "requirement_id": "G08-A04",
+      "statement": "The testbench checks reset and synchronous flush semantics.",
+      "acceptance_rule": "Incorrect control-state retention or status after reset/flush is detected while correct behavior is accepted.",
+      "verification_intent": "Directed visible scenarios and hidden reset/flush mutants."
+    },
+    {
+      "requirement_id": "G08-A05",
+      "statement": "The testbench distinguishes legal simultaneous operations at interior, empty fall-through, and full boundaries.",
+      "acceptance_rule": "It accepts the public boundary semantics and detects a calibrated simultaneous-operation priority defect.",
+      "verification_intent": "Directed visible operation matrix and hidden mutant/P2P traces."
+    },
+    {
+      "requirement_id": "G08-A06",
+      "statement": "The testbench validates flags and the width-limited usage encoding.",
+      "acceptance_rule": "empty_o, full_o, and usage_o match the abstract occupancy including non-power-of-two depths and power-of-two full-count truncation.",
+      "verification_intent": "Parameter sweep and hidden fill-count-width mutant."
+    },
+    {
+      "requirement_id": "G08-A07",
+      "statement": "The formal asset is executable and asserts state, transition, and tracked-data properties without private hierarchy.",
+      "acceptance_rule": "The property module elaborates in the frozen formal harness, proves on calibrated correct configurations to the frozen depth, and fails on targeted hidden mutants.",
+      "verification_intent": "Planned visible formal build and hidden bounded formal F2P/P2P."
+    },
+    {
+      "requirement_id": "G08-A08",
+      "statement": "Submitted verification assumptions cannot mask target defects or public boundary operations.",
+      "acceptance_rule": "The submitted property module contains no assume statements; evaluator-owned reset sequencing, vacuity, and assertion-activity checks meet frozen thresholds.",
+      "verification_intent": "Public source-policy and bound property-runtime checks, plus planned cover reachability and mutation calibration."
+    },
+    {
+      "requirement_id": "G08-A09",
+      "statement": "The assets are deterministic, hermetic, and terminate within the resource budget.",
+      "acceptance_rule": "Repeated evaluator runs with the same seed produce the same canonical verdict and detection signature without network access.",
+      "verification_intent": "Planned repeatability, timeout, raw-log, and environment checks."
+    },
+    {
+      "requirement_id": "G08-A10",
+      "statement": "Correct DUT configurations do not produce false failures.",
+      "acceptance_rule": "The frozen width/depth/fall-through/seed P2P matrix passes with zero calibrated false positives.",
+      "verification_intent": "Planned hidden P2P matrix including DEPTH 1, power-of-two, and non-power-of-two cases."
+    }
+  ],
+  "simultaneous_operation_table": [
+    {
+      "condition": "occupancy is between 1 and DEPTH-1 and push_i=1 and pop_i=1",
+      "required_effect": "Both operations are accepted, the pre-edge head is observed, the input is appended, and occupancy is unchanged."
+    },
+    {
+      "condition": "occupancy is DEPTH and pop_i=1 while push_i=0",
+      "required_effect": "The pop is accepted and occupancy becomes DEPTH-1."
+    },
+    {
+      "condition": "occupancy is DEPTH and push_i=1 while pop_i=0",
+      "required_effect": "The push is rejected and occupancy, ordering, and stored contents remain unchanged."
+    },
+    {
+      "condition": "occupancy is DEPTH and push_i=1 while pop_i=1",
+      "required_effect": "The push is rejected from the pre-edge full state, the pop is accepted, the pre-edge head is observed, and occupancy becomes DEPTH-1."
+    },
+    {
+      "condition": "occupancy is zero, FALL_THROUGH=0, push_i=0, and pop_i=1",
+      "required_effect": "The pop is rejected and occupancy, ordering, and status remain unchanged."
+    },
+    {
+      "condition": "occupancy is zero, FALL_THROUGH=0, push_i=1, and pop_i=1",
+      "required_effect": "The pop is rejected from the pre-edge empty state, the push is accepted, data_i becomes the stored head after the edge, and occupancy becomes one."
+    },
+    {
+      "condition": "occupancy is zero, FALL_THROUGH=1, push_i=1, and pop_i=1",
+      "required_effect": "data_o equals data_i combinationally, the transfer is accepted, and occupancy remains zero."
+    },
+    {
+      "condition": "flush_i=1 at a rising edge with transaction inputs also asserted",
+      "required_effect": "Flush wins, control state becomes empty, and no transaction is retained."
+    }
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "The public target categories do not disclose hidden mutant implementations, vectors, seeds, detection signatures, or thresholds.",
+    "Current-source development reference and alternate subjects passed while a pass-spoof negative failed as expected; this is not a workflow result or frozen admission.",
+    "No mutation kill rate, false-positive rate, coverage, proof depth, environment, scoring, or admission is frozen.",
+    "No PPA claim applies to this DV task."
+  ]
+}

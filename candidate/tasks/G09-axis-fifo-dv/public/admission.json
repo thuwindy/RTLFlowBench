@@ -1,0 +1,28 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G09-axis-fifo-dv",
+  "manifest_status": "source_selected",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent MIT rights and repository-projection review",
+    "Independent AXI-Stream DV plan and DUT interface freeze",
+    "Independent review and freeze of the observed SERVER26 visible correct/public-mutant and failure-taxonomy calibration",
+    "Independent review, breadth audit, and freeze of the observed five-class hidden semantic-mutant F2P calibration",
+    "Independent review and freeze of the observed reference/alternate four-point P2P matrix and three-run reference repeatability",
+    "Independent review and freeze of the private non-self-reported event probe, thresholds, and weak-coverage control",
+    "Independent structural audit and freeze of the cocotbext-axi alternate positive; its first public fail_f2p and corrected pass are both retained",
+    "Frozen runner environment, budget, scoring, public package, and candidate lock",
+    "Final independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

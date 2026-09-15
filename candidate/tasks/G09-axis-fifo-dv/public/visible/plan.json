@@ -1,0 +1,30 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G09-axis-fifo-dv",
+  "status": "implemented_server_calibrated_development_not_frozen",
+  "planned_checks": [
+    "Validate exact one-file additive scope, UTF-8 content, byte budget, and forbidden runner-sentinel spoofing",
+    "Validate content hashes of rtl/axis_fifo.v and COPYING",
+    "Execute the submitted pytest/cocotb asset against the correct pinned DUT",
+    "Require the same asset to fail against valid-suppression-under-stall and inverted-tlast public mutants",
+    "Classify missing tools, timeout, compile/import error, correct-DUT false positive, and undetected mutant separately"
+  ],
+  "planned_oracle_types": ["build", "simulation", "scope"],
+  "public_negative_fixture_categories": ["valid suppression under sink stall", "inverted frame termination"],
+  "verdict_parser_status": "implemented_fail_closed",
+  "pass_sentinel": "GOLDEN12_G09_VISIBLE_PASS",
+  "sentinel_ownership": {
+    "visible_runner": "GOLDEN12_G09_VISIBLE_PASS",
+    "submission_must_not_emit_harness_sentinels": true
+  },
+  "raw_log_contract_status": "implemented_development_not_frozen",
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "contains_testbench": false,
+  "calibration_status": "server_observed_reference_and_negative_controls",
+  "excluded_claims": [
+    "One SERVER26 development calibration observed a reference pass with two public mutant kills, a weak-positive fail_f2p, a compile_error control, and an infra_error control; it is not independently reviewed or frozen.",
+    "Public mutants are not hidden mutants and do not establish a frozen mutation threshold.",
+    "The benchmark task remains not_ready."
+  ]
+}

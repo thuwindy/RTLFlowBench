@@ -1,0 +1,179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/submission.v1.json",
+  "title": "RTLFlowBench neutral workflow submission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "submission_id",
+    "task_id",
+    "task_binding",
+    "workflow",
+    "attempt",
+    "artifact",
+    "resource_usage",
+    "network_access_observed",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.submission.v1"},
+    "submission_id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "task_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benchmark_id",
+        "benchmark_version",
+        "task_descriptor_sha256",
+        "public_packet_sha256"
+      ],
+      "properties": {
+        "benchmark_id": {"const": "chipflow-golden12"},
+        "benchmark_version": {"type": "string", "minLength": 1},
+        "task_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+        "public_packet_sha256": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/sha256"}
+          ]
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "adapter_name",
+        "adapter_version",
+        "model",
+        "config_sha256"
+      ],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "adapter_name": {"type": "string", "minLength": 1},
+        "adapter_version": {"type": "string", "minLength": 1},
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "name"],
+          "properties": {
+            "provider": {"type": ["string", "null"]},
+            "name": {"type": ["string", "null"]}
+          }
+        },
+        "config_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempt_id", "attempt_index", "repeat_group_id", "seed"],
+      "properties": {
+        "attempt_id": {"type": "string", "minLength": 1},
+        "attempt_index": {"type": "integer", "minimum": 1},
+        "repeat_group_id": {"type": "string", "minLength": 1},
+        "seed": {"type": ["integer", "null"]}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format", "files"],
+      "properties": {
+        "format": {"const": "file_bundle"},
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256", "bytes"],
+            "properties": {
+              "path": {"$ref": "#/$defs/relativePath"},
+              "sha256": {"$ref": "#/$defs/sha256"},
+              "bytes": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "resource_usage": {"$ref": "#/$defs/resourceUsage"},
+    "network_access_observed": {
+      "description": "True only when the evaluated task workspace or one of its tool subprocesses attempted network access. Do not set this solely because the out-of-workspace workflow control plane contacted the declared model-provider; provider calls must be recorded in workflow and resource-usage evidence. If an integrated workflow cannot distinguish provider egress from workspace/tool egress, the attempt lacks complete isolation evidence and is not publishable.",
+      "type": "boolean"
+    },
+    "claims": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableCount": {
+      "type": ["integer", "null"],
+      "minimum": 0
+    },
+    "resourceUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions",
+        "missing_measurements"
+      ],
+      "properties": {
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "input_tokens": {"$ref": "#/$defs/nullableCount"},
+        "output_tokens": {"$ref": "#/$defs/nullableCount"},
+        "llm_calls": {"type": "integer", "minimum": 0},
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {"type": "integer", "minimum": 0},
+            "simulation": {"type": "integer", "minimum": 0},
+            "formal": {"type": "integer", "minimum": 0},
+            "synthesis": {"type": "integer", "minimum": 0}
+          }
+        },
+        "human_interventions": {"type": "integer", "minimum": 0},
+        "missing_measurements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["input_tokens", "output_tokens"]
+          }
+        }
+      }
+    }
+  }
+}

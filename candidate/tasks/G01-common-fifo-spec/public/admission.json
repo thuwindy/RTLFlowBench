@@ -1,0 +1,26 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G01-common-fifo-spec",
+  "manifest_status": "oracle_development",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": true,
+  "hidden_p2p_calibrated": true,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent SHL-0.51 rights-review signature",
+    "Independent specification review and freeze",
+    "Visible and hidden runner freeze",
+    "Alternative correct implementation independent audit",
+    "Reproducible environment and toolchain freeze",
+    "Score-profile calibration and freeze",
+    "Independent benchmark admission review"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "scope_kind": "neutral_block_decision",
+  "editable_paths": [
+    "decision/block_decision.json"
+  ],
+  "submission_artifact_paths": [
+    "decision/block_decision.json"
+  ],
+  "repository_editable_paths": [],
+  "read_only_repository_paths": [
+    "LICENSE",
+    "README.md",
+    "common_cells.core",
+    "include/common_cells/registers.svh",
+    "src/binary_to_gray.sv",
+    "src/cdc_fifo_gray.sv",
+    "src/gray_to_binary.sv",
+    "src/spill_register.sv",
+    "src/sync.sv"
+  ],
+  "allowed_file_operations": [
+    "add_submission_artifact"
+  ],
+  "max_files_changed": 1,
+  "max_repository_files_changed": 0,
+  "forbidden_repository_mutations": [
+    "add",
+    "delete",
+    "rename",
+    "symlink",
+    "content_change",
+    "file_type_change",
+    "mode_change"
+  ],
+  "forbidden_paths": [
+    "LICENSE",
+    "README.md",
+    "common_cells.core",
+    "include/",
+    "src/",
+    "test/",
+    "formal/",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "network_access": false
+}

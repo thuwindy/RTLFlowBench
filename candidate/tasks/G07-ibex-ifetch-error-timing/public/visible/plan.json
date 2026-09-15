@@ -1,0 +1,34 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G07-ibex-ifetch-error-timing",
+  "status": "implemented_development_not_frozen",
+  "runner_status": "implemented_scope_and_partial_verilator_lint",
+  "strict_verdict_parser_status": "implemented_exit_result_unique_sentinel_agreement",
+  "planned_scenarios": [
+    "Ten-file projection and one-file submission scope validation",
+    "Affected ID-stage, decoder, controller, and package partial elaboration and lint",
+    "Read-only dependency hash and editable byte-budget enforcement",
+    "Hard timeout and combined stdout/stderr byte cap",
+    "Zero exit, absence of Verilator error markers, result schema, and unique sentinel agreement"
+  ],
+  "excluded_private_scenarios": [
+    "Cycle-sensitive newly denied instruction differential",
+    "Private preservation matrix",
+    "Bounded formal properties and non-vacuity probes",
+    "Mutation suite and alternate-solution oracle"
+  ],
+  "pass_sentinel": "GOLDEN12_G07_VISIBLE_PASS",
+  "timeout_seconds": 60,
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "verdict_parser_path": "visible/verdict.py",
+  "assertion_and_coverage_shim_scope": "public_lint_only",
+  "calibration_status": "server_reference_syntax_scope_and_infra_observed_not_frozen",
+  "excluded_claims": [
+    "The public runner does not check the stale-PMP behavioral repair.",
+    "The public lint shims disable assertion and functional-coverage instrumentation only for partial elaboration.",
+    "The runner, tool binary, sandbox, timeout, and result schema are development candidates and are not frozen.",
+    "A SERVER26 development calibration observed base pass, syntax compile_error, extra-file scope_violation, and missing-tool infra_error; this is not a frozen visible or benchmark PASS.",
+    "No behavioral visible smoke, hidden evaluation, formal proof, score, benchmark readiness, or adapter readiness is claimed by this plan."
+  ]
+}

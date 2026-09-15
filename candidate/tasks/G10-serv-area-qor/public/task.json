@@ -1,0 +1,52 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G10-serv-area-qor",
+  "title": "Function-preserving SERV area optimization",
+  "family": "qor_optimization",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "serv_synth_wrapper",
+  "language": "verilog_2005",
+  "required_submission_files": [
+    "rtl/serv_aligner.v",
+    "rtl/serv_alu.v",
+    "rtl/serv_bufreg.v",
+    "rtl/serv_bufreg2.v",
+    "rtl/serv_compdec.v",
+    "rtl/serv_csr.v",
+    "rtl/serv_ctrl.v",
+    "rtl/serv_decode.v",
+    "rtl/serv_immdec.v",
+    "rtl/serv_mem_if.v",
+    "rtl/serv_rf_if.v",
+    "rtl/serv_rf_ram.v",
+    "rtl/serv_rf_ram_if.v",
+    "rtl/serv_rf_top.v",
+    "rtl/serv_state.v",
+    "rtl/serv_synth_wrapper.v",
+    "rtl/serv_top.v"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/cpu_interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": true,
+  "non_cpu_interface_projection": "not_applicable_cpu_qor_task",
+  "claims": [
+    "The workflow receives a content-addressed SERV RTL baseline and an independently worded function-preserving area-optimization contract.",
+    "Functional and cycle-visible equivalence are mandatory gates before any QoR metric can be considered."
+  ],
+  "excluded_claims": [
+    "Compliance programs, evaluator traces, PPA scripts, cell libraries, optimized human or alternate solutions, and hidden thresholds are not public inputs.",
+    "The visible runner, hidden evaluator, PPA environment, scoring profile, public digest, and independent admission are not frozen.",
+    "Development structural checks and one public four-instruction smoke are not hidden F2P/P2P, ISA compliance, physical area, timing, power, performance, QoR-gain, workflow, score, benchmark-readiness, or ChipFlow-adapter-readiness claims."
+  ]
+}

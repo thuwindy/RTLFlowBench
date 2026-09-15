@@ -1,0 +1,53 @@
+{
+  "schema_version": "chipflow.golden12.trust_block_interface_spec.v1",
+  "task_id": "G12-common-cdc-missing-contract",
+  "interface_kind": "cdc_contract_gap",
+  "top_module": "cdc_fifo_gray",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": false,
+  "projection": "independent_trust_block_contract_gap_spec",
+  "repository_context": {
+    "source_path": "src/cdc_fifo_gray.sv",
+    "projection_mode": "read_only_repository_base_with_integration_contract_comments_withheld",
+    "clock_ports": [
+      "src_clk_i",
+      "dst_clk_i"
+    ],
+    "reset_port_names": [
+      "src_rst_ni",
+      "dst_rst_ni"
+    ],
+    "source_handshake": [
+      "src_data_i",
+      "src_valid_i",
+      "src_ready_o"
+    ],
+    "destination_handshake": [
+      "dst_data_o",
+      "dst_valid_o",
+      "dst_ready_i"
+    ]
+  },
+  "provided_semantics": {
+    "reset_signal_name_polarity_hint": "Both reset port names end in _ni, but naming does not define assertion or release timing.",
+    "clock_domain_count": 2,
+    "data_transfer_protocol": "ready_valid_at_each_domain_boundary",
+    "repository_mutability": "read_only"
+  },
+  "intentionally_missing_required_semantics": [
+    "reset_assertion_semantics",
+    "reset_release_synchronization",
+    "source_destination_clock_relationship",
+    "reset_sequencing_between_domains"
+  ],
+  "forbidden_inferences": [
+    "Do not infer assertion timing or mechanism from active-low reset names.",
+    "Do not infer synchronous release, a synchronizer depth, or reset-controller choice.",
+    "Do not infer that the source and destination clocks are unrelated, continuously running, or frequency constrained.",
+    "Do not infer simultaneous reset behavior, an ordering relation, warm-reset support, or power-on-only use.",
+    "Do not infer missing semantics from withheld upstream comments, adjacent modules, testbenches, or common design practice."
+  ],
+  "neutral_submission_artifact": "decision/block_decision.json",
+  "repository_mutation_allowed": false,
+  "eda_execution_allowed": false
+}

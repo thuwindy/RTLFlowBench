@@ -1,0 +1,27 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "scope_kind": "neutral_submission",
+  "editable_paths": [
+    "rtl/golden12_axis_fifo.sv"
+  ],
+  "read_only_repository_paths": [
+    "rtl/axis_fifo.v",
+    "COPYING"
+  ],
+  "allowed_file_operations": [
+    "add_file"
+  ],
+  "max_files_changed": 1,
+  "forbidden_paths": [
+    "rtl/axis_fifo.v",
+    "tb/",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "network_access": false
+}

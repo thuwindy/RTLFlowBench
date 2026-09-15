@@ -1,0 +1,106 @@
+{
+  "benchmark_id": "chipflow-golden12",
+  "benchmark_version": "golden12-universal-v3-candidate",
+  "budget": {
+    "eda_call_limits": {
+      "compile_or_lint": 20,
+      "formal": 10,
+      "simulation": 20,
+      "synthesis": 5
+    },
+    "human_interventions": {
+      "maximum": 0
+    },
+    "llm_calls": {
+      "maximum": 8
+    },
+    "network_access": false,
+    "status": "provisional_not_frozen",
+    "tokens": {
+      "accounting_policy": "enforced_limits",
+      "maximum_input_tokens": 524288,
+      "maximum_output_tokens": 32768,
+      "missing_measurement_policy": "reject"
+    },
+    "wall_time_seconds": 900,
+    "workflow_attempts": 1
+  },
+  "evaluation_contract": {
+    "canonical_verdicts": [
+      "invalid_instance",
+      "infra_error",
+      "invalid_submission",
+      "scope_violation",
+      "blocked",
+      "timeout",
+      "compile_error",
+      "fail_f2p",
+      "fail_p2p",
+      "fail_formal",
+      "fail_ppa",
+      "pass"
+    ],
+    "evaluator_status": "development",
+    "hidden_evaluator_isolated": true,
+    "required_oracle_classes": [
+      "build",
+      "lint",
+      "simulation",
+      "formal",
+      "synthesis",
+      "scope"
+    ],
+    "runner_protocol_version": "rtlflowbench.runner.v1"
+  },
+  "family": "spec_to_rtl",
+  "packet_status": "draft",
+  "public_packet": {
+    "contains_evaluator_assets": false,
+    "digest_status": "not_frozen",
+    "network_access": false,
+    "root": ".",
+    "sha256": null
+  },
+  "rights": {
+    "receipt_path": "rights_review.json",
+    "redistribution_review_complete": false,
+    "status": "pending_independent_review"
+  },
+  "schema_version": "rtlflowbench.task.v1",
+  "scoring_contract": {
+    "profile_id": "universal-spec-v3",
+    "raw_metric_ids": [
+      "functional_correctness",
+      "protocol_correctness",
+      "f2p",
+      "p2p",
+      "formal_depth",
+      "simulation_coverage",
+      "mutation_kill_rate",
+      "false_positive_rate",
+      "area",
+      "timing",
+      "performance",
+      "scope_violation_count",
+      "trust_event_count",
+      "wall_time_seconds",
+      "input_tokens",
+      "output_tokens",
+      "llm_calls",
+      "eda_calls",
+      "human_interventions"
+    ]
+  },
+  "submission_contract": {
+    "artifact_format": "file_bundle",
+    "editable_paths": [
+      "rtl/golden12_fifo.sv"
+    ],
+    "max_files_changed": 1,
+    "max_submission_bytes": 65536,
+    "required_files": [
+      "rtl/golden12_fifo.sv"
+    ]
+  },
+  "task_id": "G01-common-fifo-spec"
+}

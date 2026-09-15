@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/g09-visible-result.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "verdict", "pass", "checks", "metrics", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g09_visible_result.v1"},
+    "task_id": {"const": "G09-axis-fifo-dv"},
+    "verdict": {"enum": ["pass", "infra_error", "invalid_instance", "invalid_submission", "scope_violation", "timeout", "compile_error", "fail_p2p", "fail_f2p"]},
+    "pass": {"type": "boolean"},
+    "checks": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["check_id", "subject_kind", "verdict", "exit_code", "log_path"],
+        "properties": {
+          "check_id": {"type": "string", "minLength": 1},
+          "subject_kind": {"enum": ["environment", "scope", "correct", "public_mutant"]},
+          "verdict": {"type": "string", "minLength": 1},
+          "exit_code": {"type": ["integer", "null"]},
+          "log_path": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["correct_subject_count", "correct_subject_pass_count", "public_mutant_count", "public_mutant_kill_count"],
+      "properties": {
+        "correct_subject_count": {"const": 1},
+        "correct_subject_pass_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "public_mutant_count": {"const": 2},
+        "public_mutant_kill_count": {"type": "integer", "minimum": 0, "maximum": 2}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 3, "items": {"type": "string"}}
+  }
+}
