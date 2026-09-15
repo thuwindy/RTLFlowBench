@@ -11,6 +11,9 @@ The name refers to **RTL workflows**, not to one model or to ChipFlow alone.
 
 ## Quick start
 
+中文导航：[Benchmark 介绍](docs/BENCHMARKS.md) · [五个工作流](docs/WORKFLOWS.md) ·
+[协作开发](CONTRIBUTING.md) · [多人实验](docs/EXPERIMENTS.md) · [进展与待办](docs/STATUS.md)。
+
 Python 3.10+; no model account or ChipFlow installation is needed for these commands.
 
 ```sh
@@ -20,6 +23,7 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python rtlflowbench.py verify
 .venv/bin/python rtlflowbench.py list
+.venv/bin/python rtlflowbench.py describe --task G01-common-fifo-spec
 .venv/bin/python rtlflowbench.py export-public \
   --task G01-common-fifo-spec --output ../g01-public
 .venv/bin/python -m unittest discover -s tests -v
@@ -70,6 +74,11 @@ model configuration and budget. Adapter code may translate transport, not solve
 tasks. Semantic changes require a new identity and fresh comparable runs.
 
 ## Status and repository layout
+
+New collaborator? Start with [the Chinese contributor guide](CONTRIBUTING.md),
+then use [the experiment operator checklist](docs/EXPERIMENTS.md).
+The public repository and the controlled evaluator workspace serve different
+roles; cloning this preview does not install the private scoring service.
 
 - `candidate/tasks/*/public/`: twelve content-bound draft public packets.
 - `candidate/candidate-lock.json`: exact public packet file hashes and known gaps.

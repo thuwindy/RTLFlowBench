@@ -67,11 +67,35 @@ def export(task_id, output, root=ROOT):
             'repository_projection_included': False, 'benchmark_ready': False}
 
 
+def describe(task_id, root=ROOT):
+    """Read existing public declarations; infer no interfaces or scoring rules."""
+    verify(root)
+    tasks = {p.name: p for p in (root / 'candidate/tasks').iterdir() if p.is_dir()}
+    if task_id not in tasks:
+        raise ValueError('unknown exact task id')
+    public = tasks[task_id] / 'public'
+    task = json.loads((public / 'external_task.json').read_text())
+    return {
+        'task_id': task['task_id'], 'family': task['family'],
+        'benchmark_version': task['benchmark_version'],
+        'packet_status': task['packet_status'],
+        'public_files': sorted(inventory(public)),
+        'submission_contract': task['submission_contract'],
+        'budget': task['budget'],
+        'evaluation_contract': task['evaluation_contract'],
+        'scoring_contract': task['scoring_contract'],
+        'repository_projection_included': False,
+        'benchmark_ready': False,
+        'note': 'Public declarations only. Read specs and repo.lock; no private evaluator or admission is implied.'}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('verify')
     sub.add_parser('list')
+    info = sub.add_parser('describe', help='Inspect one task without running a model or EDA')
+    info.add_argument('--task', required=True)
     ex = sub.add_parser('export-public')
     ex.add_argument('--task', required=True)
     ex.add_argument('--output', type=Path, required=True)
@@ -87,6 +111,8 @@ def main():
                       for p in sorted((ROOT / 'candidate/tasks').glob('*/public/external_task.json'))]
         elif args.command == 'export-public':
             result = export(args.task, args.output)
+        elif args.command == 'describe':
+            result = describe(args.task)
         else:
             print(json.dumps({'status': 'BLOCK', 'reason': 'v3 private evaluator, environment and admission bindings pending', 'score': None}))
             return 2

@@ -1,9 +1,12 @@
 {
   "benchmark_ready": false,
+  "change_classification": "public_introductions_and_collaboration_docs_no_task_or_evaluator_change",
   "files": {
+    ".github/ISSUE_TEMPLATE/benchmark-defect.md": "26987cbb8e6364c2293245f629853691fa9f89355569efdea53e5c1b3eb815e1",
     ".gitignore": "008c3eb3b94b6a846441e5bf51ee70265a0ec43eb32a77d81b456d79cb8029f4",
+    "CONTRIBUTING.md": "4e21063bfacdfd86c0a2bee50f904dc7de897ab6e32bdbfdca4c4de5ae135609",
     "NOTICE.md": "dc31139e96da8e1a90ae00b47a920d96a45b83dc2e4026b2f3f5a656d4df3fb5",
-    "README.md": "358ab9f7db24d6a44921d674d0deddf86fcce9fa5bdcacf84634a17781b7c84b",
+    "README.md": "6f68b31c806dcaaa88141a652f2d8720d9b13e1ae62ef5c9f20e8717edf55a02",
     "TOOLS_LICENSE.txt": "f7393a91b86d612fd4a785af4ccab010de654c440a77e05081d8d90cae5ebeb4",
     "candidate/candidate-lock.json": "7966ea541061f574ac9c840f86f5a37f9a6869cda7922862c409dcea7a4574f2",
     "candidate/policy.json": "d2a6fcf0f807b5461afa625bc7c52b83c36d5d579464ec80b5a14919589397f7",
@@ -266,10 +269,14 @@
     "candidate/tasks/G12-common-cdc-missing-contract/public/visible/runner.py": "8dd4812ee27857c4e5eeab2c473da42e900fde575a1afbf77fe1469e3cfba141",
     "candidate/tasks/G12-common-cdc-missing-contract/public/visible/runner_contract.json": "9e17cf88e4fb973065ed342d4a6a639c5f5e2f66a8c9d27a034ab76afaae014e",
     "candidate/tasks/G12-common-cdc-missing-contract/public/visible/verdict.py": "d2338af12f7296bff7a324ac8d11b9c6cafa668a64dadf75714798cf8d8fab38",
+    "docs/BENCHMARKS.md": "2f5a9eefc70f60d768314b0816660f23de4a16387915906efb268c462a1a1f72",
+    "docs/EXPERIMENTS.md": "991c56bd3dee749ee0625bc623597ad1ae83c15eca599c456b9503f046a344fb",
     "docs/READINESS.md": "46d1076c29aaf02ff499cf5eb22e959b70f2da88c06720b4966bd93944457b6a",
+    "docs/STATUS.md": "99372a2e068055f7c3a0eeed6748c2e27818ecf359f8dd8affa9bf407618f5ce",
     "docs/USAGE.md": "6f7cb5e719bb4a2fef61b01a0c97626cb219d61261e7523d17710b833cbfee55",
+    "docs/WORKFLOWS.md": "8d1603e94fbd4494e0e3f016b34bd470e71c1c4460852bd2bb56b1c70e570b65",
     "requirements.txt": "24b4647db6d42c951e570cdabf3ed20adc184ba943de364593ae365b32a9497d",
-    "rtlflowbench.py": "3587c9ee5decf22b6008764678f20c8d67cd1113fe4129973bd24449ca4e970b",
+    "rtlflowbench.py": "37b602c3a831c2258f295dd52bfbabcd3c5d3e02095fd6072bbbf35b9ec44d38",
     "schemas/README.md": "0d107f277207cbceb6d8257c4d283b8bd7ec9e4f43a9574e016b4c421e89fc21",
     "schemas/public_suite_descriptor.schema.json": "09d77b114f78455cdb4a884acff286300fb8cd135b71592f6db34dda4db9bd43",
     "schemas/public_suite_manifest.schema.json": "e8eac0ce95bfdb4bb924a600cd17f90241530c8ce5814f2f6e3d7e2fbfd85ebf",
@@ -278,10 +285,11 @@
     "schemas/task.schema.json": "eb551050fdbc15cb4542e83776d332a8dbe229b04ed8053fe79611e789e69370",
     "schemas/task_public_archive_receipt.schema.json": "e7e05128876673e35a355e8eda61ba904e95f3aeaf6cfa5cf50e3811305a592b",
     "schemas/visible_runner_contract.schema.json": "38bdadef2ba345124fc0a62a1c46252d7821908373e4dd9fec7dbfe77bd5f2d4",
-    "tests/test_public_preview.py": "9a6c6432d1720820f09bd1ddcdb7f3de58784bb29973a44eb906f40cdd3a823c",
+    "tests/test_public_preview.py": "b06802979b984243dea1962c5e06d7dc9e0c8d347833bd1f35f9662ffbf404bc",
     "tools/package_submission.py": "817134cf39a8d2de00b7b9e6f25a05e655cb19a5e0ef0e6f9457207028065c44"
   },
   "official_v1": false,
   "schema_version": "rtlflowbench.public_preview_distribution.v1",
-  "version": "golden12-universal-v3-public-preview-20260915"
+  "supersedes_distribution_sha256": "3be438551e2f6d2092b97936bcabb5e4916a52774d90ea5e0b8c484090e2ccc2",
+  "version": "golden12-universal-v3-public-preview-docs-20260915b"
 }

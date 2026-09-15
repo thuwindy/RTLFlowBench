@@ -44,6 +44,26 @@ class PreviewTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 cli.export('../..', Path(temp) / 'out')
 
+    def test_describe_all_tasks_preserves_contracts(self):
+        for path in sorted((ROOT / 'candidate/tasks').glob('*/public/external_task.json')):
+            task = json.loads(path.read_text())
+            report = cli.describe(task['task_id'])
+            for key in ('submission_contract', 'budget', 'scoring_contract', 'evaluation_contract'):
+                self.assertEqual(report[key], task[key])
+            self.assertFalse(report['benchmark_ready'])
+            self.assertFalse(report['repository_projection_included'])
+            self.assertIn('spec/design_spec.md', report['public_files'])
+
+    def test_describe_rejects_unknown_or_traversal(self):
+        for task in ('../..', 'G99-unknown', 'G01'):
+            with self.assertRaises(ValueError):
+                cli.describe(task)
+
+    def test_describe_is_read_only(self):
+        before = cli.inventory(ROOT)
+        cli.describe('G01-common-fifo-spec')
+        self.assertEqual(before, cli.inventory(ROOT))
+
     def test_tamper_detected(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / 'repo'
