@@ -3,6 +3,18 @@
 欢迎参与 RTLFlowBench。目标是比较不同 **RTL 工作流** 的能力，而不是帮助某个工作流做对题。
 本仓库仍是 research preview；可以读题、改进公共工具、做可见测试开发，但不能据此宣称完整判分或正式排名。
 
+## 冻结快照与日常开发
+
+`paper-source-20261013` tag 和 [`paper/iscas2027/`](paper/iscas2027/README.md)
+是论文来源快照。日常协作从 `main` 开始，在新分支修改公共预览工具、测试、文档和开发辅助脚本；
+不要修改、移动或重建论文快照，也不要移动 tag。历史源码缺陷可登记 issue，
+在快照外提供明确标识的新实现或勘误，并保留原始来源和哈希。
+
+`candidate/` 是早期十二题 draft public preview，与论文输入不是同一版本。
+既有 task ID、packet 内容和 `candidate/candidate-lock.json` 在普通工具/文档 PR 中保持不变。
+题目变更须单独评审新版本及身份，不能覆盖旧题后沿用旧成绩。
+近期工作从 [开发计划](docs/DEVELOPMENT_PLAN.md) 选择一项；其中均为待交付工作，不代表已完成结果。
+
 ## 第一次上手
 
 先读 [题目介绍](docs/BENCHMARKS.md)、[五个工作流](docs/WORKFLOWS.md) 和 [待办](docs/STATUS.md)，
@@ -11,15 +23,23 @@
 ```sh
 git clone https://github.com/thuwindy/RTLFlowBench.git
 cd RTLFlowBench
+git switch -c feature/public-preview-fix
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python rtlflowbench.py verify
 .venv/bin/python rtlflowbench.py list
 .venv/bin/python rtlflowbench.py describe --task G01-common-fifo-spec
 .venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python paper/iscas2027/verify.py
+.venv/bin/python scripts/check_paper_snapshot.py
 ```
 
-`verify` 检查分发内容和 schema，测试检查工具行为；两者都不启动模型或 EDA，也不证明 RTL 正确。
+创建环境和安装依赖是准备步骤，可能需要网络；依赖安装后，上述 Python 检查均可离线执行。
+`verify` 检查分发内容和 schema，测试检查工具行为；不启动模型或 EDA，也不证明 RTL 正确。
+`paper/iscas2027/verify.py` 校验声明的论文源码；`scripts/check_paper_snapshot.py`
+额外核对完整论文目录相对冻结 tag 的字节和成员身份。保留该 tag，不用浅克隆遗漏它。
+分发锁失配会使 `verify`、`list`、`describe`、导出及部分单测失败；提交修改后这是待处理证据，
+不是跳过检查的理由。维护者完成审查并显式更新分发锁后，合并版本必须重新通过这些检查。
 `describe` 直接展示已声明的输入文件、输出范围、预算、oracle 类别和原始指标，不补猜接口或评分规则。
 具体命令是否已在当前 GitHub 版本发布，以该版本 README/CLI 为准。
 
@@ -84,7 +104,27 @@ python3 -m venv .venv
 
 ## 交回改动
 
-在自己的 clone/fork 创建独立分支，一次 PR 解决一个问题。写清任务 ID/版本、复现、原因、
-diff、真实测试和版本影响。公共问题可使用 benchmark-defect issue 模板；私有 oracle 走受控渠道。
-不公开服务器私有路径、原始日志或凭证。改动后旧分发锁失配是保护机制；
-由维护者审计并重锁，不删除校验来恢复绿色状态。
+有写权限时，在上面的 feature 分支提交并推送到自己的远端分支；无写权限时先在 GitHub fork，
+将 clone URL 换为自己的 fork，并把 `thuwindy/RTLFlowBench` 配为 `upstream`。
+从最新 `main` 创建分支，避免把实验输出或其他人的工作混入一次 PR。示例只列明确的文件，
+按自己的修改替换文件名：
+
+```sh
+git diff --check
+git diff -- docs/DEVELOPMENT_PLAN.md
+git add docs/DEVELOPMENT_PLAN.md
+git commit -m "docs: clarify development work package"
+git push -u origin feature/public-preview-fix
+```
+
+然后在 GitHub 打开指向 `thuwindy/RTLFlowBench:main` 的 PR，填写
+[PR 模板](.github/PULL_REQUEST_TEMPLATE.md)。公共缺陷使用
+[benchmark-defect](.github/ISSUE_TEMPLATE/benchmark-defect.md)，协作任务使用
+[development-task](.github/ISSUE_TEMPLATE/development-task.md)。写明实际执行的命令、结果、
+尚未执行的检查与原因。不要把计划检查写成已经通过。
+
+检查日志放仓库外，保留源码 commit/hash、命令、工具版本和原始结果；PR 只附可公开的摘要与脱敏证据。
+原始受控实验日志保留在其授权存储，不公开私有路径、provider 原始对话或凭证。
+维护者审查 diff 后才能显式重新生成 `public-release-lock.json`，记录被替代锁的身份和变更原因；
+不得自动重锁、删除校验或修改候选锁来恢复绿色。既有 receipt 的执行哈希保留不变，
+仅展示变化按 `post_run_source_changes` 记录执行哈希、当前哈希及不影响执行语义的分类。

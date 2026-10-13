@@ -44,3 +44,11 @@ the preview helper's limited license to the imported task corpus, schemas or
 upstream RTL, nor establish new rights/admission approvals. The existing task
 preview and its candidate hashes are unchanged. No hidden evaluator fixture
 package, full upstream repository or raw model/execution log is distributed.
+
+## Collaboration helpers
+
+The newly authored `scripts/check_paper_snapshot.py` and
+`tests/collaboration/test_paper_snapshot.py` are covered by the limited MIT grant
+in `TOOLS_LICENSE.txt`, alongside the original preview CLI and its test file.
+This extends the grant only to those two new files; task packets, imported
+schemas and third-party source keep their existing licensing scope.

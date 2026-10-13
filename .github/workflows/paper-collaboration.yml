@@ -1,0 +1,36 @@
+name: Paper collaboration checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  paper-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Enforce frozen published snapshot
+        run: python scripts/check_paper_snapshot.py
+      - name: Exercise snapshot guard failure cases
+        run: python -m unittest discover -s tests/collaboration -v
+      - name: Verify declared paper source bytes
+        run: python paper/iscas2027/verify.py
+      - name: Install public preview validation dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Verify distribution lock and draft schemas
+        run: python rtlflowbench.py verify
+      - name: Test public preview tools
+        run: python -m unittest discover -s tests -v

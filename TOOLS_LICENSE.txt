@@ -1,4 +1,5 @@
-MIT License — applies only to rtlflowbench.py and tests/test_public_preview.py
+MIT License — applies only to rtlflowbench.py, tests/test_public_preview.py,
+scripts/check_paper_snapshot.py, and tests/collaboration/test_paper_snapshot.py
 
 Copyright (c) 2026 RTLFlowBench contributors
 

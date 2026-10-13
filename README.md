@@ -29,6 +29,24 @@ interpret a file-integrity check as an RTL acceptance result. Hidden evaluator
 assets are kept separate from workflow-visible inputs; this source update does
 not publish a turnkey scored benchmark service or assert a fresh experiment replay.
 
+## Joint development / 协作开发
+
+开发者从 [CONTRIBUTING.md](CONTRIBUTING.md) 和
+[开发任务清单](docs/DEVELOPMENT_PLAN.md) 开始。可在独立分支改进公共工具、
+输入契约和后续版本的执行接入；通过 PR 记录复现、验证和版本影响。
+`paper/iscas2027/` 固定在 `paper-source-20261013` 标签，作为论文引用基线。
+
+```sh
+git switch -c codex/my-topic
+python3 scripts/check_paper_snapshot.py
+python3 paper/iscas2027/verify.py
+python3 -m unittest discover -s tests/collaboration -v
+```
+
+协作 CI 同时检查论文快照、公开分发锁和公共工具测试。修改后锁不匹配时，
+维护者应审阅差异并记录新的分发身份；不要关闭校验或改写历史执行哈希。
+下面的预览工具安装步骤仍适用，所有上述检查均无需模型额度或 EDA。
+
 ## Public task preview
 
 The original twelve draft public packets, neutral submission schemas and offline

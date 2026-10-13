@@ -1,15 +1,19 @@
 {
   "benchmark_ready": false,
-  "change_classification": "additive_paper_source_companion_and_navigation_original_preview_task_bytes_unchanged",
+  "change_classification": "collaboration_guides_templates_and_offline_snapshot_guard_no_paper_task_or_evaluator_semantics_changed",
   "files": {
     ".github/ISSUE_TEMPLATE/benchmark-defect.md": "26987cbb8e6364c2293245f629853691fa9f89355569efdea53e5c1b3eb815e1",
+    ".github/ISSUE_TEMPLATE/development-task.md": "d0b757523d8b83abc9ea9921a1d2466105b4869e0b512407a6f96f565c027c3d",
+    ".github/PULL_REQUEST_TEMPLATE.md": "aac6df7e822fe12cb1f317950be75a0e0a364af4499ab1fab39c9a33f935d394",
+    ".github/workflows/paper-collaboration.yml": "a55ad6fdc10ca89711ab8e56089c44b70309ef7ea6e6d48ccd1bc977a5ab4730",
     ".gitignore": "008c3eb3b94b6a846441e5bf51ee70265a0ec43eb32a77d81b456d79cb8029f4",
+    "AGENTS.md": "cbfbfb146b1ccfe629ef01c11edb3b368817b12f2f144f0a4f885b80f58c1747",
     "CITATION.cff": "73d48df2611b57e7c7dded000690f05b6c39ea71a0c4fb4dfef15c6a7942fef3",
-    "CONTRIBUTING.md": "4e21063bfacdfd86c0a2bee50f904dc7de897ab6e32bdbfdca4c4de5ae135609",
-    "NOTICE.md": "ff3b83f1c3aec0b51f0ac4553596d375cd163ce49de99bc8ef283be772c68d6f",
-    "README.md": "65279c249076494934045445f784e0acd0b01fceee344cebe27381814db2b775",
+    "CONTRIBUTING.md": "2ef84fdbeb790394c8e95680ae1b4f4dfc78900265b01eaa2c96eb08d710a537",
+    "NOTICE.md": "e88b5924f0f766ebd968dada286c308aaafb09541a94741b3450a0e7dbd3df0a",
+    "README.md": "5506eb6fd4a6ec9e7bc8539bbac049043a33a5e88cfbc705c4edcf6639f98697",
     "README.preview-20260915.md": "6f68b31c806dcaaa88141a652f2d8720d9b13e1ae62ef5c9f20e8717edf55a02",
-    "TOOLS_LICENSE.txt": "f7393a91b86d612fd4a785af4ccab010de654c440a77e05081d8d90cae5ebeb4",
+    "TOOLS_LICENSE.txt": "7f2b2c86fa6b31162ef9af2f79d6431878cfbcae57e2909f2af96df0b5ba64c7",
     "candidate/candidate-lock.json": "7966ea541061f574ac9c840f86f5a37f9a6869cda7922862c409dcea7a4574f2",
     "candidate/policy.json": "d2a6fcf0f807b5461afa625bc7c52b83c36d5d579464ec80b5a14919589397f7",
     "candidate/tasks/G01-common-fifo-spec/public/EVALUATION_POLICY.md": "8fd99fcaf53690af7745dfa1ed3cfb5b748c26d5ca06556484d9c098aa164fd8",
@@ -272,6 +276,7 @@
     "candidate/tasks/G12-common-cdc-missing-contract/public/visible/runner_contract.json": "9e17cf88e4fb973065ed342d4a6a639c5f5e2f66a8c9d27a034ab76afaae014e",
     "candidate/tasks/G12-common-cdc-missing-contract/public/visible/verdict.py": "d2338af12f7296bff7a324ac8d11b9c6cafa668a64dadf75714798cf8d8fab38",
     "docs/BENCHMARKS.md": "2f5a9eefc70f60d768314b0816660f23de4a16387915906efb268c462a1a1f72",
+    "docs/DEVELOPMENT_PLAN.md": "92b7927c1016e408f2f5a8aa40c66b20283ae27903c82c53cc20d55fb31ad7dc",
     "docs/EXPERIMENTS.md": "991c56bd3dee749ee0625bc623597ad1ae83c15eca599c456b9503f046a344fb",
     "docs/READINESS.md": "46d1076c29aaf02ff499cf5eb22e959b70f2da88c06720b4966bd93944457b6a",
     "docs/STATUS.md": "99372a2e068055f7c3a0eeed6748c2e27818ecf359f8dd8affa9bf407618f5ce",
@@ -673,11 +678,13 @@
     "schemas/task.schema.json": "eb551050fdbc15cb4542e83776d332a8dbe229b04ed8053fe79611e789e69370",
     "schemas/task_public_archive_receipt.schema.json": "e7e05128876673e35a355e8eda61ba904e95f3aeaf6cfa5cf50e3811305a592b",
     "schemas/visible_runner_contract.schema.json": "38bdadef2ba345124fc0a62a1c46252d7821908373e4dd9fec7dbfe77bd5f2d4",
+    "scripts/check_paper_snapshot.py": "c7e533017002fd5807f66666eed7a698735d91136d7221cb5fe09f15158fa416",
+    "tests/collaboration/test_paper_snapshot.py": "bd80f2cd98561b249ad6ac4b0f9a09875c0c39359f03e6fad51cdefa43923554",
     "tests/test_public_preview.py": "b06802979b984243dea1962c5e06d7dc9e0c8d347833bd1f35f9662ffbf404bc",
     "tools/package_submission.py": "817134cf39a8d2de00b7b9e6f25a05e655cb19a5e0ef0e6f9457207028065c44"
   },
   "official_v1": false,
   "schema_version": "rtlflowbench.public_preview_distribution.v1",
-  "supersedes_distribution_sha256": "345b37fb696f173e4318f8876459b50177cc732f9704c01b38cfcf58ce009a91",
-  "version": "g12-rtl-paper-source-20261013"
+  "supersedes_distribution_sha256": "ad61693627dc0773ded0b85e9e064ebf44e93bd2aa11f30f1d2b3f8125cc0f2d",
+  "version": "g12-rtl-collaboration-20261014"
 }
