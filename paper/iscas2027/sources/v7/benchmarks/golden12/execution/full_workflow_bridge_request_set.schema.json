@@ -1,0 +1,329 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-bridge-request-set.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "scope", "input_sha256",
+    "requests", "summary", "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.full_workflow_bridge_request_set.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "bridge_inputs_materialized_execution_blocked"},
+    "scope": {
+      "const": "five_workflows_all_twelve_tasks_all_planned_resource_runs"
+    },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_workspace_set", "resource_request_set",
+        "chipflow_workflow_binding", "vanilla_workflow_binding",
+        "common_model_candidate", "workspace_set_builder",
+        "chipflow_request_builder", "vanilla_request_builder", "mage_bridge",
+        "public_spec_bridge", "builder", "schema"
+      ],
+      "properties": {
+        "public_workspace_set": {"$ref": "#/$defs/sha256"},
+        "resource_request_set": {"$ref": "#/$defs/sha256"},
+        "chipflow_workflow_binding": {"$ref": "#/$defs/sha256"},
+        "vanilla_workflow_binding": {"$ref": "#/$defs/sha256"},
+        "common_model_candidate": {"$ref": "#/$defs/sha256"},
+        "workspace_set_builder": {"$ref": "#/$defs/sha256"},
+        "chipflow_request_builder": {"$ref": "#/$defs/sha256"},
+        "vanilla_request_builder": {"$ref": "#/$defs/sha256"},
+        "mage_bridge": {"$ref": "#/$defs/sha256"},
+        "public_spec_bridge": {"$ref": "#/$defs/sha256"},
+        "builder": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "requests": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "items": {"$ref": "#/$defs/request"}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_count", "task_count", "planned_run_count",
+        "launch_request_materialized_count",
+        "controller_block_preclassified_count", "public_workspace_count",
+        "provider_call_count", "eda_call_count",
+        "private_evaluator_call_count", "official_attempt_count",
+        "per_workflow_slot"
+      ],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "task_count": {"const": 12},
+        "planned_run_count": {"const": 200},
+        "launch_request_materialized_count": {"const": 98},
+        "controller_block_preclassified_count": {"const": 102},
+        "public_workspace_count": {"const": 12},
+        "provider_call_count": {"const": 0},
+        "eda_call_count": {"const": 0},
+        "private_evaluator_call_count": {"const": 0},
+        "official_attempt_count": {"const": 0},
+        "per_workflow_slot": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "prefixItems": [
+            {"$ref": "#/$defs/chipflowSummary"},
+            {"$ref": "#/$defs/vanillaSummary"},
+            {"$ref": "#/$defs/mageSummary"},
+            {"$ref": "#/$defs/verilogcoderSummary"},
+            {"$ref": "#/$defs/hdlagentSummary"}
+          ],
+          "items": false
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_200_inputs_or_fail_closed_dispositions_materialized",
+        "all_public_workspaces_bound", "task_solution_knowledge_included",
+        "private_evaluator_reachable", "controller_envelope_bound",
+        "common_provider_preflight_passed", "resource_campaign_permitted",
+        "official_attempts_permitted"
+      ],
+      "properties": {
+        "all_200_inputs_or_fail_closed_dispositions_materialized": {
+          "const": true
+        },
+        "all_public_workspaces_bound": {"const": true},
+        "task_solution_knowledge_included": {"const": false},
+        "private_evaluator_reachable": {"const": false},
+        "controller_envelope_bound": {"const": false},
+        "common_provider_preflight_passed": {"const": false},
+        "resource_campaign_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "blockers": {
+      "const": [
+        "controller_aware_measurement_envelope_not_bound",
+        "common_provider_preflight_not_passed"
+      ]
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "supportClassification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported", "reason_code", "reason"],
+      "properties": {
+        "supported": {"type": "boolean"},
+        "reason_code": {
+          "type": ["string", "null"],
+          "enum": [
+            null, "unsupported_capability", "security_policy_block",
+            "missing_required_public_contract", "unsupported_submission_shape"
+          ]
+        },
+        "reason": {"type": ["string", "null"]},
+        "target_output_path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._/-]{0,255}$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"supported": {"const": false}},
+            "required": ["supported"]
+          },
+          "then": {
+            "properties": {
+              "reason_code": {"type": "string"},
+              "reason": {"type": "string", "minLength": 1}
+            }
+          },
+          "else": {
+            "properties": {
+              "reason_code": {"const": null},
+              "reason": {"const": null}
+            }
+          }
+        }
+      ]
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measurement_id", "workflow_slot_id", "workflow_id", "task_id",
+        "calibration_run_index", "resource_request_sha256",
+        "public_workspace_set_sha256", "public_workspace_receipt_sha256",
+        "public_workspace_payload_sha256", "bridge_kind",
+        "support_classification", "disposition", "request_relative_root",
+        "request_file_count", "request_payload_sha256", "provider_calls",
+        "eda_calls", "private_evaluator_calls",
+        "official_semantic_attempt_consumed"
+      ],
+      "properties": {
+        "measurement_id": {
+          "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,255}$"
+        },
+        "workflow_slot_id": {
+          "enum": [
+            "chipflow", "same_model_vanilla_agent", "external_airtl_1",
+            "external_airtl_2", "external_airtl_3"
+          ]
+        },
+        "workflow_id": {
+          "enum": [
+            "chipflow", "same_model_vanilla_agent", "mage", "verilogcoder",
+            "hdlagent"
+          ]
+        },
+        "task_id": {
+          "type": "string", "pattern": "^G(0[1-9]|1[0-2])-[A-Za-z0-9._-]+$"
+        },
+        "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+        "resource_request_sha256": {"$ref": "#/$defs/sha256"},
+        "public_workspace_set_sha256": {"$ref": "#/$defs/sha256"},
+        "public_workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "public_workspace_payload_sha256": {"$ref": "#/$defs/sha256"},
+        "bridge_kind": {
+          "type": "string", "pattern": "^[a-z0-9][a-z0-9_]{0,127}$"
+        },
+        "support_classification": {"$ref": "#/$defs/supportClassification"},
+        "disposition": {
+          "enum": [
+            "launch_request_materialized_not_run",
+            "controller_block_preclassified_not_run"
+          ]
+        },
+        "request_relative_root": {
+          "type": ["string", "null"],
+          "pattern": "^requests/(chipflow|same_model_vanilla_agent|external_airtl_[123])/G(0[1-9]|1[0-2])-[A-Za-z0-9._-]+/run-[1-5]$"
+        },
+        "request_file_count": {
+          "type": ["integer", "null"], "minimum": 1
+        },
+        "request_payload_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "official_semantic_attempt_consumed": {"const": false}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {"const": "launch_request_materialized_not_run"}
+            },
+            "required": ["disposition"]
+          },
+          "then": {
+            "properties": {
+              "support_classification": {
+                "properties": {"supported": {"const": true}}
+              },
+              "request_relative_root": {"type": "string"},
+              "request_file_count": {"type": "integer", "minimum": 1},
+              "request_payload_sha256": {"$ref": "#/$defs/sha256"}
+            }
+          },
+          "else": {
+            "properties": {
+              "support_classification": {
+                "properties": {"supported": {"const": false}}
+              },
+              "request_relative_root": {"const": null},
+              "request_file_count": {"const": null},
+              "request_payload_sha256": {"const": null}
+            }
+          }
+        }
+      ]
+    },
+    "slotSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_slot_id", "workflow_id",
+        "launch_request_materialized_count",
+        "controller_block_preclassified_count"
+      ],
+      "properties": {
+        "workflow_slot_id": {"type": "string"},
+        "workflow_id": {"type": "string"},
+        "launch_request_materialized_count": {"type": "integer"},
+        "controller_block_preclassified_count": {"type": "integer"}
+      }
+    },
+    "chipflowSummary": {
+      "allOf": [
+        {"$ref": "#/$defs/slotSummary"},
+        {"properties": {
+          "workflow_slot_id": {"const": "chipflow"},
+          "workflow_id": {"const": "chipflow"},
+          "launch_request_materialized_count": {"const": 40},
+          "controller_block_preclassified_count": {"const": 0}
+        }}
+      ]
+    },
+    "vanillaSummary": {
+      "allOf": [
+        {"$ref": "#/$defs/slotSummary"},
+        {"properties": {
+          "workflow_slot_id": {"const": "same_model_vanilla_agent"},
+          "workflow_id": {"const": "same_model_vanilla_agent"},
+          "launch_request_materialized_count": {"const": 40},
+          "controller_block_preclassified_count": {"const": 0}
+        }}
+      ]
+    },
+    "mageSummary": {
+      "allOf": [
+        {"$ref": "#/$defs/slotSummary"},
+        {"properties": {
+          "workflow_slot_id": {"const": "external_airtl_1"},
+          "workflow_id": {"const": "mage"},
+          "launch_request_materialized_count": {"const": 6},
+          "controller_block_preclassified_count": {"const": 34}
+        }}
+      ]
+    },
+    "verilogcoderSummary": {
+      "allOf": [
+        {"$ref": "#/$defs/slotSummary"},
+        {"properties": {
+          "workflow_slot_id": {"const": "external_airtl_2"},
+          "workflow_id": {"const": "verilogcoder"},
+          "launch_request_materialized_count": {"const": 6},
+          "controller_block_preclassified_count": {"const": 34}
+        }}
+      ]
+    },
+    "hdlagentSummary": {
+      "allOf": [
+        {"$ref": "#/$defs/slotSummary"},
+        {"properties": {
+          "workflow_slot_id": {"const": "external_airtl_3"},
+          "workflow_id": {"const": "hdlagent"},
+          "launch_request_materialized_count": {"const": 6},
+          "controller_block_preclassified_count": {"const": 34}
+        }}
+      ]
+    }
+  }
+}

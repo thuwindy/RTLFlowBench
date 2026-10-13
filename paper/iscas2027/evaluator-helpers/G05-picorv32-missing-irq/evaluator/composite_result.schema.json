@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/g05-composite-result.v1.json",
+  "title": "G05 evaluator-private composite result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "observed_at",
+    "status",
+    "classification",
+    "workflow_workspace_exposed",
+    "verdict",
+    "pass",
+    "submission_sha256",
+    "scope_receipt",
+    "checks",
+    "evidence",
+    "raw_metrics",
+    "score",
+    "readiness",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g05_composite_result.v1"},
+    "task_id": {"const": "G05-picorv32-missing-irq"},
+    "observed_at": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["development_evaluated_not_frozen", "fail"]
+    },
+    "classification": {"const": "evaluator_private"},
+    "workflow_workspace_exposed": {"const": false},
+    "verdict": {
+      "enum": [
+        "invalid_instance",
+        "infra_error",
+        "invalid_submission",
+        "scope_violation",
+        "blocked",
+        "incomplete",
+        "timeout",
+        "compile_error",
+        "invalid_evidence",
+        "fail_f2p",
+        "fail_p2p",
+        "fail_formal",
+        "fail_ppa",
+        "pass"
+      ]
+    },
+    "pass": {"type": "boolean"},
+    "submission_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "scope_receipt": {
+      "type": "object",
+      "required": [
+        "status",
+        "submission_sha256",
+        "submission_files",
+        "layer_scope_receipts"
+      ]
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "required": ["layer", "verdict"]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "path",
+          "sha256",
+          "schema_version",
+          "verdict"
+        ],
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "raw_metrics": {"type": "object"},
+    "score": {"type": "object"},
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benchmark_ready",
+        "chipflow_adapter_ready",
+        "independent_review_complete",
+        "environment_frozen",
+        "scoring_frozen"
+      ],
+      "properties": {
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false},
+        "independent_review_complete": {"const": false},
+        "environment_frozen": {"const": false},
+        "scoring_frozen": {"const": false}
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["composer", "score"],
+      "properties": {
+        "composer": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "score": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}},
+      "then": {
+        "properties": {
+          "status": {"const": "development_evaluated_not_frozen"},
+          "pass": {"const": true}
+        }
+      },
+      "else": {
+        "properties": {
+          "status": {"const": "fail"},
+          "pass": {"const": false}
+        }
+      }
+    }
+  ]
+}

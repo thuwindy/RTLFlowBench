@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/guarded-resource-batch-receipt.v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "batch_id", "plan_sha256",
+    "status", "balance_checks", "slot_results", "summary",
+    "attempt_accounting", "readiness", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.guarded_resource_batch_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "batch_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "plan_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"enum": [
+      "completed_batch_boundary_review_required",
+      "blocked_before_launch_balance_unavailable",
+      "stopped_after_slot_error",
+      "stopped_after_anomalous_consumption",
+      "stopped_after_batch_balance_unavailable"
+    ]},
+    "balance_checks": {
+      "type": "object", "additionalProperties": false,
+      "required": ["before", "after"],
+      "properties": {
+        "before": {"$ref": "#/$defs/balance"},
+        "after": {"anyOf": [{"$ref": "#/$defs/balance"}, {"type": "null"}]}
+      }
+    },
+    "slot_results": {"type": "array", "maxItems": 3, "items": {"$ref": "#/$defs/slotResult"}},
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "planned_slot_count", "executed_slot_count", "launch_slot_count",
+        "not_launched_slot_count", "input_tokens", "output_tokens",
+        "total_tokens", "cache_hit_input_tokens", "cache_miss_input_tokens",
+        "token_measurement_complete", "cache_measurement_complete",
+        "finish_reason_measurement_complete", "finish_reason_counts",
+        "output_cap_reached_call_count", "output_cap_with_length_finish_count",
+        "anomaly_codes", "next_batch_permitted"
+      ],
+      "properties": {
+        "planned_slot_count": {"type": "integer", "minimum": 1, "maximum": 3},
+        "executed_slot_count": {"type": "integer", "minimum": 0, "maximum": 3},
+        "launch_slot_count": {"type": "integer", "minimum": 0, "maximum": 3},
+        "not_launched_slot_count": {"type": "integer", "minimum": 0, "maximum": 3},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "total_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cache_hit_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cache_miss_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "token_measurement_complete": {"type": "boolean"},
+        "cache_measurement_complete": {"type": "boolean"},
+        "finish_reason_measurement_complete": {"type": "boolean"},
+        "finish_reason_counts": {"anyOf": [{"$ref": "#/$defs/finishReasonCounts"}, {"type": "null"}]},
+        "output_cap_reached_call_count": {"type": ["integer", "null"], "minimum": 0},
+        "output_cap_with_length_finish_count": {"type": ["integer", "null"], "minimum": 0},
+        "anomaly_codes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}},
+        "next_batch_permitted": {"const": false}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "benchmark_results_created"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["batch_boundary_reached", "manual_next_batch_launch_required", "official_attempts_permitted"],
+      "properties": {
+        "batch_boundary_reached": {"type": "boolean"},
+        "manual_next_batch_launch_required": {"const": true},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "balance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["credential_present", "http_status", "is_available", "positive_total_balance_present", "balance_entry_count", "error_classification", "raw_response_persisted", "exact_balance_persisted"],
+      "properties": {
+        "credential_present": {"type": "boolean"},
+        "http_status": {"type": ["integer", "null"], "minimum": 100, "maximum": 599},
+        "is_available": {"type": "boolean"},
+        "positive_total_balance_present": {"type": ["boolean", "null"]},
+        "balance_entry_count": {"type": ["integer", "null"], "minimum": 0},
+        "error_classification": {"type": ["string", "null"], "pattern": "^[a-z0-9_]+$"},
+        "raw_response_persisted": {"const": false},
+        "exact_balance_persisted": {"const": false}
+      }
+    },
+    "tokenUsage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["measurement_complete", "cache_measurement_complete", "input_tokens", "output_tokens", "total_tokens", "cache_hit_input_tokens", "cache_miss_input_tokens", "finish_reason_measurement_complete", "finish_reason_observed_call_count", "finish_reason_unobserved_call_count", "finish_reason_counts", "output_cap_reached_call_count", "output_cap_with_length_finish_count"],
+      "properties": {
+        "measurement_complete": {"type": "boolean"},
+        "cache_measurement_complete": {"type": "boolean"},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "total_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cache_hit_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "cache_miss_input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "finish_reason_measurement_complete": {"type": ["boolean", "null"]},
+        "finish_reason_observed_call_count": {"type": ["integer", "null"], "minimum": 0},
+        "finish_reason_unobserved_call_count": {"type": ["integer", "null"], "minimum": 0},
+        "finish_reason_counts": {"anyOf": [{"$ref": "#/$defs/finishReasonCounts"}, {"type": "null"}]},
+        "output_cap_reached_call_count": {"type": ["integer", "null"], "minimum": 0},
+        "output_cap_with_length_finish_count": {"type": ["integer", "null"], "minimum": 0}
+      }
+    },
+    "finishReasonCounts": {
+      "type": "object", "additionalProperties": false,
+      "required": ["stop", "length", "tool_calls", "content_filter", "function_call", "unknown"],
+      "properties": {
+        "stop": {"type": "integer", "minimum": 0},
+        "length": {"type": "integer", "minimum": 0},
+        "tool_calls": {"type": "integer", "minimum": 0},
+        "content_filter": {"type": "integer", "minimum": 0},
+        "function_call": {"type": "integer", "minimum": 0},
+        "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "slotResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["slot_id", "outcome", "receipt_sha256", "token_usage", "provider_budget_exhausted", "anomaly_codes", "error_class"],
+      "properties": {
+        "slot_id": {"type": "string", "pattern": "^[a-z0-9][A-Za-z0-9._:-]{0,239}$"},
+        "outcome": {"enum": ["resource_receipt_created", "not_launched", "runner_error"]},
+        "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "token_usage": {"anyOf": [{"$ref": "#/$defs/tokenUsage"}, {"type": "null"}]},
+        "provider_budget_exhausted": {"type": ["boolean", "null"]},
+        "anomaly_codes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}},
+        "error_class": {"type": ["string", "null"], "pattern": "^[A-Za-z][A-Za-z0-9_]{0,127}$"}
+      }
+    }
+  }
+}

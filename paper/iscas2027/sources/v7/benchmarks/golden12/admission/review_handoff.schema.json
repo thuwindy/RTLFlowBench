@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-review-handoff.v1.json",
+  "title": "Golden-12 unsigned reviewer handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "task_count",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "protocol_ready",
+    "task_review_item_count",
+    "protocol_review_item_count",
+    "total_review_item_count",
+    "approved_review_item_count",
+    "independent_review_complete",
+    "suite_ready",
+    "workflow_workspace_exposure_permitted",
+    "source_sha256",
+    "protocol",
+    "tasks",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_review_handoff.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "verified_unsigned_handoff_pending_independent_review"
+    },
+    "classification": {"const": "evaluator_private_reviewer_only"},
+    "task_count": {"const": 12},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "protocol_ready": {"const": false},
+    "task_review_item_count": {"type": "integer", "minimum": 12},
+    "protocol_review_item_count": {"type": "integer", "minimum": 1},
+    "total_review_item_count": {"type": "integer", "minimum": 13},
+    "approved_review_item_count": {"const": 0},
+    "independent_review_complete": {"const": false},
+    "suite_ready": {"const": false},
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 16,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "protocol": {"$ref": "#/$defs/protocol"},
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "status",
+        "bundle_build_status",
+        "bundle_archive_path",
+        "bundle_archive_sha256",
+        "bundle_archive_bytes",
+        "bundle_manifest_sha256",
+        "bundle_receipt_sha256",
+        "candidate_lock_sha256",
+        "review_packet_sha256",
+        "locked_component_count",
+        "review_item_count",
+        "approved_review_item_count",
+        "review_workspace_path",
+        "review_workspace_receipt_sha256",
+        "unsigned_review_checklist_sha256",
+        "independent_review_complete",
+        "benchmark_ready",
+        "chipflow_adapter_ready",
+        "workflow_workspace_exposure_permitted"
+      ],
+      "properties": {
+        "task_id": {
+          "enum": [
+            "G01-common-fifo-spec",
+            "G02-common-rr-arbiter-spec",
+            "G03-axis-fifo-backpressure",
+            "G04-wb2axip-split-bridge",
+            "G05-picorv32-missing-irq",
+            "G06-ibex-debug-csr-exception",
+            "G07-ibex-ifetch-error-timing",
+            "G08-common-fifo-dv",
+            "G09-axis-fifo-dv",
+            "G10-serv-area-qor",
+            "G11-picorv32-qor",
+            "G12-common-cdc-missing-contract"
+          ]
+        },
+        "status": {"const": "verified_unsigned_review_workspace"},
+        "bundle_build_status": {
+          "enum": [
+            "pending_independent_review",
+            "built_pending_reproduction_check"
+          ]
+        },
+        "bundle_archive_path": {"type": "string", "pattern": "^bundles/"},
+        "bundle_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_archive_bytes": {"type": "integer", "minimum": 1},
+        "bundle_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "locked_component_count": {"type": "integer", "minimum": 1},
+        "review_item_count": {"type": "integer", "minimum": 1},
+        "approved_review_item_count": {"const": 0},
+        "review_workspace_path": {"type": "string", "pattern": "^workspaces/"},
+        "review_workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "unsigned_review_checklist_sha256": {"$ref": "#/$defs/sha256"},
+        "independent_review_complete": {"const": false},
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false},
+        "workflow_workspace_exposure_permitted": {"const": false}
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_release",
+        "status",
+        "bundle_archive_path",
+        "bundle_archive_sha256",
+        "bundle_archive_bytes",
+        "bundle_manifest_sha256",
+        "bundle_receipt_sha256",
+        "candidate_lock_sha256",
+        "review_packet_sha256",
+        "locked_component_count",
+        "review_item_count",
+        "approved_review_item_count",
+        "review_workspace_path",
+        "review_workspace_receipt_sha256",
+        "unsigned_review_checklist_sha256",
+        "contains_hidden_evaluator_assets",
+        "independent_review_complete",
+        "protocol_ready",
+        "workflow_workspace_exposure_permitted"
+      ],
+      "properties": {
+        "candidate_release": {"const": "rtlflowbench-protocol-v1"},
+        "status": {"const": "verified_unsigned_review_workspace"},
+        "bundle_archive_path": {"type": "string", "pattern": "^protocol/bundle/"},
+        "bundle_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_archive_bytes": {"type": "integer", "minimum": 1},
+        "bundle_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "bundle_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "locked_component_count": {"type": "integer", "minimum": 1},
+        "review_item_count": {"type": "integer", "minimum": 1},
+        "approved_review_item_count": {"const": 0},
+        "review_workspace_path": {"type": "string", "pattern": "^protocol/workspace$"},
+        "review_workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "unsigned_review_checklist_sha256": {"$ref": "#/$defs/sha256"},
+        "contains_hidden_evaluator_assets": {"const": false},
+        "independent_review_complete": {"const": false},
+        "protocol_ready": {"const": false},
+        "workflow_workspace_exposure_permitted": {"const": false}
+      }
+    }
+  }
+}

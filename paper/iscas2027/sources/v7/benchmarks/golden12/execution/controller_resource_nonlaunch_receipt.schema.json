@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/controller-resource-nonlaunch-receipt.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "measurement_id",
+    "workflow_slot_id", "workflow_id", "task_id", "attempt_id",
+    "input_sha256", "controller_disposition", "metrics",
+    "attempt_accounting", "readiness", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.controller_resource_nonlaunch_receipt.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "not_available_not_launched"},
+    "measurement_id": {
+      "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"
+    },
+    "workflow_slot_id": {
+      "enum": ["external_airtl_1", "external_airtl_2", "external_airtl_3"]
+    },
+    "workflow_id": {"enum": ["mage", "verilogcoder", "hdlagent"]},
+    "task_id": {
+      "type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "attempt_id": {"type": "string", "minLength": 1, "maxLength": 240},
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resource_request", "bridge_request_set", "runner", "schema"],
+      "properties": {
+        "resource_request": {"$ref": "#/$defs/sha256"},
+        "bridge_request_set": {"$ref": "#/$defs/sha256"},
+        "resource_campaign_authorization": {"$ref": "#/$defs/sha256"},
+        "runner": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "controller_disposition": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "reason_code", "reason_sha256", "raw_reason_embedded",
+        "workflow_process_started", "workflow_block_verdict_created"
+      ],
+      "properties": {
+        "reason_code": {
+          "enum": [
+            "unsupported_capability", "security_policy_block",
+            "missing_required_public_contract", "unsupported_submission_shape"
+          ]
+        },
+        "reason_sha256": {"$ref": "#/$defs/sha256"},
+        "raw_reason_embedded": {"const": false},
+        "workflow_process_started": {"const": false},
+        "workflow_block_verdict_created": {"const": false}
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "wall_time_seconds", "cpu_time_seconds", "peak_memory_bytes",
+        "peak_scratch_bytes", "peak_process_count", "peak_eda_concurrency",
+        "peak_llm_concurrency", "llm_call_count", "eda_call_count"
+      ],
+      "properties": {
+        "wall_time_seconds": {"type": "null"},
+        "cpu_time_seconds": {"type": "null"},
+        "peak_memory_bytes": {"type": "null"},
+        "peak_scratch_bytes": {"type": "null"},
+        "peak_process_count": {"type": "null"},
+        "peak_eda_concurrency": {"type": "null"},
+        "peak_llm_concurrency": {"type": "null"},
+        "llm_call_count": {"type": "null"},
+        "eda_call_count": {"type": "null"}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "resource_calibration_attempt_consumed", "official_attempt_started",
+        "official_semantic_attempt_consumed", "benchmark_result_created",
+        "private_evaluator_calls"
+      ],
+      "properties": {
+        "resource_calibration_attempt_consumed": {"const": false},
+        "official_attempt_started": {"const": false},
+        "official_semantic_attempt_consumed": {"const": false},
+        "benchmark_result_created": {"const": false},
+        "private_evaluator_calls": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "resource_sample_created", "resource_sample_eligible",
+        "host_capacity_policy_derivation_permitted", "official_attempts_permitted"
+      ],
+      "properties": {
+        "resource_sample_created": {"const": false},
+        "resource_sample_eligible": {"const": false},
+        "host_capacity_policy_derivation_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "excluded_claims": {
+      "type": "array", "minItems": 4, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}}},
+      "then": {"properties": {"workflow_id": {"const": "mage"}}}
+    },
+    {
+      "if": {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}}},
+      "then": {"properties": {"workflow_id": {"const": "verilogcoder"}}}
+    },
+    {
+      "if": {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}}},
+      "then": {"properties": {"workflow_id": {"const": "hdlagent"}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

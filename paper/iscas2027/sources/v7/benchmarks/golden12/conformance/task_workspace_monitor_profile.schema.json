@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chipflow.local/schemas/task_workspace_monitor_profile.schema.json",
+  "title": "RTLFlowBench task-workspace monitor profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "suite_id",
+    "required_public_assets",
+    "repository_files",
+    "submission_files",
+    "runner_argv",
+    "result_filename",
+    "pass_sentinel"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.task_workspace_monitor_profile.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "suite_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "required_public_assets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relative_path"
+      }
+    },
+    "repository_files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relative_path"
+      }
+    },
+    "submission_files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/relative_path"
+      }
+    },
+    "runner_argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "result_filename": {
+      "$ref": "#/$defs/relative_path"
+    },
+    "pass_sentinel": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_requirements": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "executable",
+          "environment_relative_paths"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "executable": {
+            "$ref": "#/$defs/relative_path"
+          },
+          "environment_relative_paths": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[A-Z][A-Z0-9_]*$"
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/relative_path"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "relative_path": {
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "pattern": "(^/|(^|/)\\.\\.(/|$))"
+      }
+    }
+  }
+}

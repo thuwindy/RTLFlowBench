@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schemas/mage_provider_eda_isolation_candidate.schema.json",
+  "title": "RTLFlowBench MAGE provider/EDA isolation candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "candidate_status",
+    "source_assets",
+    "deterministic_provider_image",
+    "offline_eda_image",
+    "provider_probe",
+    "transport_preflight",
+    "post_run_source_changes",
+    "readiness",
+    "gaps"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.mage_provider_eda_isolation_candidate.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "candidate_status": {
+      "const": "transport_preflight_passed_actual_provider_integration_not_ready"
+    },
+    "source_assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["broker", "containerfile", "fixture_rtl", "fixture_tb", "probe", "shim"],
+      "properties": {
+        "broker": {"$ref": "#/$defs/sourceAsset"},
+        "containerfile": {"$ref": "#/$defs/sourceAsset"},
+        "fixture_rtl": {"$ref": "#/$defs/sourceAsset"},
+        "fixture_tb": {"$ref": "#/$defs/sourceAsset"},
+        "probe": {"$ref": "#/$defs/sourceAsset"},
+        "shim": {"$ref": "#/$defs/sourceAsset"}
+      }
+    },
+    "deterministic_provider_image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_image_digest",
+        "image_digest",
+        "image_id",
+        "size_bytes",
+        "build_exit_codes",
+        "two_build_identity_equal",
+        "build_policy"
+      ],
+      "properties": {
+        "base_image_digest": {"$ref": "#/$defs/digest"},
+        "image_digest": {"$ref": "#/$defs/digest"},
+        "image_id": {"$ref": "#/$defs/hex64"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "build_exit_codes": {
+          "type": "array",
+          "prefixItems": [{"const": 0}, {"const": 0}],
+          "items": false
+        },
+        "two_build_identity_equal": {"const": true},
+        "build_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["network", "no_cache", "omit_history", "timestamp"],
+          "properties": {
+            "network": {"const": "none"},
+            "no_cache": {"const": true},
+            "omit_history": {"const": true},
+            "timestamp": {"const": 0}
+          }
+        }
+      }
+    },
+    "offline_eda_image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_digest", "network", "root_filesystem_read_only"],
+      "properties": {
+        "image_digest": {"$ref": "#/$defs/digest"},
+        "network": {"const": "none"},
+        "root_filesystem_read_only": {"const": true}
+      }
+    },
+    "provider_probe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "receipt_sha256", "checks"],
+      "properties": {
+        "status": {"const": "pass"},
+        "receipt_sha256": {"$ref": "#/$defs/hex64"},
+        "checks": {
+          "type": "object",
+          "minProperties": 7,
+          "additionalProperties": {"const": true}
+        }
+      }
+    },
+    "transport_preflight": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "evidence_id",
+        "exit_codes",
+        "calls",
+        "transport_marker_observed",
+        "provider_eda_process_separation_observed",
+        "actual_networked_provider_call_with_offline_eda_observed",
+        "airtl_run_observed",
+        "provider_call_observed",
+        "private_evaluator_mounted",
+        "benchmark_verdict_produced"
+      ],
+      "properties": {
+        "status": {"const": "pass"},
+        "evidence_id": {"type": "string", "minLength": 1},
+        "exit_codes": {
+          "type": "object",
+          "minProperties": 4,
+          "additionalProperties": {"const": 0}
+        },
+        "calls": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {"$ref": "#/$defs/call"}
+        },
+        "transport_marker_observed": {"const": true},
+        "provider_eda_process_separation_observed": {"const": true},
+        "actual_networked_provider_call_with_offline_eda_observed": {"const": false},
+        "airtl_run_observed": {"const": false},
+        "provider_call_observed": {"const": false},
+        "private_evaluator_mounted": {"const": false},
+        "benchmark_verdict_produced": {"const": false}
+      }
+    },
+    "post_run_source_changes": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "execution_sha256",
+          "current_sha256",
+          "classification",
+          "actual_run_receipt_path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+          },
+          "execution_sha256": {
+            "oneOf": [
+              {"$ref": "#/$defs/hex64"},
+              {"type": "null"}
+            ]
+          },
+          "current_sha256": {"$ref": "#/$defs/hex64"},
+          "classification": {
+            "enum": [
+              "execution_semantics_changed_and_revalidated_by_actual_run",
+              "added_after_transport_preflight_and_revalidated_by_actual_run",
+              "controller_observation_extension_requires_future_revalidation",
+              "provider_response_decoding_changed_after_actual_run_requires_future_revalidation"
+            ]
+          },
+          "actual_run_receipt_path": {
+            "const": "benchmarks/golden12/conformance/external_workflows/mage_g01_development_run_receipt.json"
+          }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actual_airtl_run_observed",
+        "provider_egress_isolation_observed_during_real_run",
+        "cross_host_reproduced",
+        "independent_review_complete",
+        "adapter_ready",
+        "benchmark_ready"
+      ],
+      "properties": {
+        "actual_airtl_run_observed": {"const": false},
+        "provider_egress_isolation_observed_during_real_run": {"const": false},
+        "cross_host_reproduced": {"const": false},
+        "independent_review_complete": {"const": false},
+        "adapter_ready": {"const": false},
+        "benchmark_ready": {"const": false}
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "hex64": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/hex64"}
+      }
+    },
+    "call": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "receipt_id",
+        "receipt_sha256",
+        "request_sha256",
+        "snapshot_manifest_sha256",
+        "snapshot_copy_equal",
+        "exit_code",
+        "process_status",
+        "provider_environment_forwarded",
+        "private_evaluator_mounted",
+        "rtl_verdict_produced"
+      ],
+      "properties": {
+        "tool": {"enum": ["iverilog", "vvp"]},
+        "receipt_id": {"type": "string", "minLength": 1},
+        "receipt_sha256": {"$ref": "#/$defs/hex64"},
+        "request_sha256": {"$ref": "#/$defs/hex64"},
+        "snapshot_manifest_sha256": {"$ref": "#/$defs/hex64"},
+        "snapshot_copy_equal": {"const": true},
+        "exit_code": {"const": 0},
+        "process_status": {"const": "completed"},
+        "provider_environment_forwarded": {"const": false},
+        "private_evaluator_mounted": {"const": false},
+        "rtl_verdict_produced": {"const": false}
+      }
+    }
+  }
+}

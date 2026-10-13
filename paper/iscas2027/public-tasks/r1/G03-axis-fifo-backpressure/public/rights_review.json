@@ -1,0 +1,20 @@
+{
+  "schema_version": "chipflow.golden12.rights_review.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "source_id": "verilog-axis-cutoff",
+  "license_spdx": "MIT",
+  "license_evidence_url": "https://github.com/alexforencich/verilog-axis/blob/ed6130575df11b48a20c9e39b83d9a37011a3723/COPYING",
+  "status": "pending_independent_review",
+  "rights_review_complete": false,
+  "independent_reviewer": null,
+  "signed_at": null,
+  "evidence_notes": [
+    "The manifest pins the repository, commit, archive digest, SPDX identifier, and license URL.",
+    "The planned public repository projection contains the dependency and its license but excludes upstream tests.",
+    "This receipt is not legal advice and is not an approval signature."
+  ],
+  "blockers": [
+    "An independent human reviewer has not signed the MIT redistribution and benchmark-use review.",
+    "The exact public repository projection archive and included notice have not been frozen."
+  ]
+}

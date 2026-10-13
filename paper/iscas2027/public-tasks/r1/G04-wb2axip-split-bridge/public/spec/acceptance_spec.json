@@ -1,0 +1,33 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {"requirement_id": "G04-A01", "statement": "The submission defines the exact top-level parameter and port contract.", "acceptance_rule": "The two projected dependencies and submitted wrapper elaborate together without modifying existing files.", "verification_intent": "Visible compile and scope checks."},
+    {"requirement_id": "G04-A02", "statement": "The wrapper structurally instantiates exactly one read and one write dependency with matching public parameter bindings.", "acceptance_rule": "Elaborated hierarchy contains both required instances and no replacement implementation.", "verification_intent": "Planned hierarchy/synthesis inspection."},
+    {"requirement_id": "G04-A03", "statement": "AW and W remain independent and pair correctly in either arrival order.", "acceptance_rule": "AW-before-W, W-before-AW, and same-cycle requests each produce one matching Wishbone write and one AXI response.", "verification_intent": "Directed visible and hidden differential simulation."},
+    {"requirement_id": "G04-A04", "statement": "AXI reads preserve address, returned data, order, and response count.", "acceptance_rule": "Each accepted AR produces one Wishbone read and exactly one ordered R response with matching data.", "verification_intent": "Directed visible and hidden randomized simulation."},
+    {"requirement_id": "G04-A05", "statement": "Wishbone write address, data, byte select, and WE are preserved.", "acceptance_rule": "Each accepted AXI write pair produces one corresponding Wishbone write beat.", "verification_intent": "Visible directed comparison and hidden scoreboard."},
+    {"requirement_id": "G04-A06", "statement": "A granted owner retains the external Wishbone bus for its complete internal CYC.", "acceptance_rule": "A waiting other requester cannot change external ownership until the selected internal CYC deasserts.", "verification_intent": "Stalled and multi-outstanding hidden schedules plus bounded safety assertions."},
+    {"requirement_id": "G04-A07", "statement": "Wishbone backpressure preserves a request and cannot corrupt the non-owner.", "acceptance_rule": "While stalled, external request fields stay stable; only the selected owner observes acceptance/completion.", "verification_intent": "Visible stall stability and hidden independent stall schedules."},
+    {"requirement_id": "G04-A08", "statement": "Simultaneous idle requests follow deterministic cycle-level round robin.", "acceptance_rule": "Read wins after reset; after each completed owner cycle, the other master wins the next simultaneous idle request.", "verification_intent": "Visible reset preference and hidden alternating contention."},
+    {"requirement_id": "G04-A09", "statement": "Wishbone errors are routed only to the owner and map to AXI SLVERR.", "acceptance_rule": "ERR produces exactly one SLVERR on the matching AXI channel and cannot create a response on the other channel.", "verification_intent": "Visible single-channel errors and hidden simultaneous error schedules."},
+    {"requirement_id": "G04-A10", "statement": "Synchronous active-low reset clears ownership and pre-reset work.", "acceptance_rule": "A sampled low reset suppresses Wishbone requests and no pre-reset AXI response appears later.", "verification_intent": "Visible reset smoke and hidden reset-at-stall/outstanding regression."},
+    {"requirement_id": "G04-A11", "statement": "Representative legal address/FIFO parameters preserve the contract and unsupported data widths fail statically.", "acceptance_rule": "C_AXI_DATA_WIDTH=32 with multiple legal address widths and LGFIFO values elaborates and behaves consistently; any other data width, an insufficient address width, or LGFIFO below one is rejected.", "verification_intent": "Hidden address-width/LGFIFO P2P sweep and public invalid-parameter probe."},
+    {"requirement_id": "G04-A12", "statement": "The submission remains within one-file additive scope and preserves public/private isolation.", "acceptance_rule": "Only rtl/golden12_axil_wb_split_bridge.sv is added; dependencies and notices remain byte-identical and no evaluator asset enters the submission.", "verification_intent": "Manifest, digest, path, and symlink checks."}
+  ],
+  "simultaneous_operation_table": [
+    {"condition": "read and write internal CYC first assert together after reset", "required_effect": "read owns the complete first cycle; write remains stalled"},
+    {"condition": "both request after a completed read-owned cycle", "required_effect": "write owns the next complete cycle"},
+    {"condition": "external ACK or ERR while no owner is active", "required_effect": "neither dependency receives completion and no AXI response is created"},
+    {"condition": "sampled reset coincides with AXI or Wishbone handshake expressions", "required_effect": "reset wins and the coincident work is not retained"}
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "One development reference visible run passed on SERVER26; this is not a benchmark PASS or a frozen calibration.",
+    "Private development calibration exists, but no formal, coverage, synthesis, environment, scoring, public digest, or admission freeze exists.",
+    "No workflow, timing, area, power, throughput, or PPA claim exists."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G04-wb2axip-split-bridge",
+  "manifest_status": "source_selected",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": false,
+  "hidden_p2p_calibrated": false,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent Apache-2.0 rights and public-projection review",
+    "Independent bridge contract and specification freeze",
+    "Visible runner negative calibration, independent review, and freeze; one SERVER26 reference run is retained as development evidence",
+    "Randomized hidden F2P stall/error/ordering schedules and additional negative fault classes; current ownership/fairness development calibration is not frozen",
+    "Independent review and freeze of the development P2P/formal/reset calibration",
+    "Independent structural audit of the passing hash-derived alternate and broader negative mutant calibration",
+    "Frozen repository projection, OCI environment, resource budget, scoring, and repeatability evidence",
+    "Independent benchmark admission and atomic manifest projection"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": false
+}

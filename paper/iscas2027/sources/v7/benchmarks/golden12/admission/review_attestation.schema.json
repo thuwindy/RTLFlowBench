@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/task-review-attestation.v1.json",
+  "title": "Golden-12 task independent-review attestation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "candidate_release",
+    "candidate_lock_sha256",
+    "review_id",
+    "decision",
+    "reviewer",
+    "conflict_of_interest_declared",
+    "reviewed_at",
+    "findings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.task_review_attestation.v1"
+    },
+    "task_id": {"type": "string"},
+    "candidate_release": {"type": "string"},
+    "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "review_id": {"type": "string"},
+    "decision": {"enum": ["approve", "reject"]},
+    "reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "organization", "trusted_key_id"],
+      "properties": {
+        "identity": {"type": "string", "minLength": 1},
+        "organization": {"type": ["string", "null"]},
+        "trusted_key_id": {"type": "string", "minLength": 1}
+      }
+    },
+    "conflict_of_interest_declared": {"const": true},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "task_id": {"const": "G02-common-rr-arbiter-spec"},
+        "candidate_release": {"const": "G02-ready-v1"},
+        "review_id": {"enum": ["rights_review", "spec_freeze", "alternative_solution_audit", "hidden_formal_coverage_audit", "runner_environment_freeze", "scoring_budget_freeze", "public_packet_freeze", "final_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G03-axis-fifo-backpressure"},
+        "candidate_release": {"const": "G03-ready-v1"},
+        "review_id": {"enum": ["rights_projection_review", "spec_projection_freeze", "alternative_solution_audit", "hidden_oracle_mutation_audit", "runner_environment_coverage_freeze", "scoring_repeatability_freeze", "public_packet_freeze", "final_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G04-wb2axip-split-bridge"},
+        "candidate_release": {"const": "G04-ready-v1-candidate"},
+        "review_id": {"enum": ["rights_projection_review", "specification_freeze", "alternate_solution_audit", "evaluator_review", "environment_budget_freeze", "scoring_freeze", "manifest_projection", "final_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G05-picorv32-missing-irq"},
+        "candidate_release": {"const": "G05-ready-v1"},
+        "review_id": {"enum": ["rights_projection_review", "spec_repository_freeze", "alternative_solution_audit", "hidden_oracle_mutation_formal_audit", "firmware_environment_freeze", "scoring_budget_freeze", "public_packet_freeze", "final_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G06-ibex-debug-csr-exception"},
+        "candidate_release": {"const": "G06-ready-v1"},
+        "review_id": {"enum": ["rights_and_redistribution", "public_specification", "public_packet_and_projection", "hidden_oracle_and_calibration", "reference_and_alternates", "environment_and_resource_policy", "scoring_and_release_digest", "final_benchmark_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G07-ibex-ifetch-error-timing"},
+        "candidate_release": {"const": "G07-ready-v1"},
+        "review_id": {"enum": ["rights_and_redistribution", "public_specification", "public_packet_and_projection", "hidden_oracle_and_calibration", "reference_and_alternates", "environment_and_resource_policy", "scoring_and_release_digest", "final_benchmark_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G10-serv-area-qor"},
+        "candidate_release": {"const": "G10-ready-v1"},
+        "review_id": {"enum": ["rights_projection_review", "spec_interface_freeze", "hidden_oracle_mutation_audit", "alternative_solution_audit", "physical_ppa_environment_freeze", "scoring_budget_freeze", "public_private_isolation_release_freeze", "adapter_independence_review", "final_admission"]}
+      }
+    },
+    {
+      "properties": {
+        "task_id": {"const": "G11-picorv32-qor"},
+        "candidate_release": {"const": "G11-ready-v1"},
+        "review_id": {"enum": ["rights_and_redistribution", "public_specification", "public_packet_and_projection", "hidden_oracle_and_calibration", "reference_and_alternates", "environment_and_resource_policy", "scoring_and_release_digest", "final_benchmark_admission"]}
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

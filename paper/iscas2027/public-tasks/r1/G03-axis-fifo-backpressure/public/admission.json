@@ -1,0 +1,28 @@
+{
+  "schema_version": "rtlflowbench.public_admission.v2",
+  "task_id": "G03-axis-fifo-backpressure",
+  "manifest_status": "oracle_development",
+  "benchmark_status": "not_ready",
+  "rights_review_complete": false,
+  "spec_frozen": false,
+  "visible_oracle_implemented": true,
+  "hidden_f2p_calibrated": true,
+  "hidden_p2p_calibrated": true,
+  "alternative_solution_audited": false,
+  "environment_frozen": false,
+  "scoring_frozen": false,
+  "independent_review_complete": false,
+  "benchmark_readiness_gaps": [
+    "Independent MIT rights and public-projection review",
+    "Independent AXI-Stream integration specification freeze",
+    "Independent review and freeze of the development repository projection digest",
+    "Independent visible-runner and negative-calibration review/freeze",
+    "Cross-platform and full-matrix upstream regression; only the exact SERVER26 configuration and development-only build/coverage gates are verified",
+    "Independent structural audit of the alternate correct wrapper",
+    "Independent coverage threshold review and frozen Verilator OCI environment",
+    "Independent build, workflow-neutral exporter, scoring, and evaluator-repeatability review; runner environment, resource budget, and scoring freeze",
+    "Independent benchmark admission"
+  ],
+  "neutral_submission_supported": true,
+  "server_runner_supported": true
+}

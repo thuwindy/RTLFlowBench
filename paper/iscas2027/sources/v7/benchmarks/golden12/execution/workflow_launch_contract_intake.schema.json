@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/workflow-launch-contract-intake.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "decision", "scope",
+    "input_sha256", "workflows", "summary", "attempt_accounting",
+    "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.workflow_launch_contract_intake.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["launch_contract_intake_complete", "launch_contract_intake_partial"]},
+    "decision": {"enum": ["PASS", "BLOCK"]},
+    "scope": {"const": "five_workflow_task_neutral_resource_launch_contract_intake"},
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_release_candidate", "oci_inventory", "podman", "builder", "schema"],
+      "properties": {
+        "workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "oci_inventory": {"$ref": "#/$defs/sha256"},
+        "podman": {"$ref": "#/$defs/sha256"},
+        "builder": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "workflows": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "chipflow"}, "workflow_id": {"const": "chipflow"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}, "workflow_id": {"const": "same_model_vanilla_agent"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}, "workflow_id": {"const": "mage"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}, "workflow_id": {"const": "verilogcoder"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}, "workflow_id": {"const": "hdlagent"}}}]}
+      ],
+      "items": false
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_count", "offline_probe_container_count", "launch_contract_count", "missing_launch_contract_count", "task_packet_load_count", "provider_call_count", "eda_call_count", "private_evaluator_call_count"],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "offline_probe_container_count": {"const": 5},
+        "launch_contract_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "missing_launch_contract_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "task_packet_load_count": {"const": 0},
+        "provider_call_count": {"const": 0},
+        "eda_call_count": {"const": 0},
+        "private_evaluator_call_count": {"const": 0}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["all_runtime_images_probed", "all_launch_contracts_bound", "measurement_requests_permitted", "resource_campaign_permitted", "official_attempts_permitted"],
+      "properties": {
+        "all_runtime_images_probed": {"const": true},
+        "all_launch_contracts_bound": {"type": "boolean"},
+        "measurement_requests_permitted": {"type": "boolean"},
+        "resource_campaign_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "blockers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}},
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"decision": {"const": "PASS"}}},
+      "then": {
+        "properties": {
+          "status": {"const": "launch_contract_intake_complete"},
+          "summary": {"properties": {"launch_contract_count": {"const": 5}, "missing_launch_contract_count": {"const": 0}}},
+          "readiness": {"properties": {"all_launch_contracts_bound": {"const": true}, "measurement_requests_permitted": {"const": true}}},
+          "blockers": {"maxItems": 0}
+        }
+      },
+      "else": {
+        "properties": {
+          "status": {"const": "launch_contract_intake_partial"},
+          "readiness": {"properties": {"all_launch_contracts_bound": {"const": false}, "measurement_requests_permitted": {"const": false}}},
+          "blockers": {"minItems": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "workflow_slot_id", "workflow_id", "source_commit", "source_manifest_sha256",
+        "runtime_image_digest", "runtime_image_id", "probe", "launch_contract", "blockers"
+      ],
+      "properties": {
+        "workflow_slot_id": {"type": "string"},
+        "workflow_id": {"type": "string"},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_image_digest": {"$ref": "#/$defs/image"},
+        "runtime_image_id": {"$ref": "#/$defs/image"},
+        "probe": {
+          "type": "object", "additionalProperties": false,
+          "required": ["container_started", "network_policy", "exit_code", "python_available", "entrypoint_available", "source_binding_available", "entrypoint_sha256", "source_descriptor_sha256", "raw_output_embedded"],
+          "properties": {
+            "container_started": {"const": true},
+            "network_policy": {"const": "none"},
+            "exit_code": {"type": "integer"},
+            "python_available": {"type": "boolean"},
+            "entrypoint_available": {"type": "boolean"},
+            "source_binding_available": {"type": "boolean"},
+            "entrypoint_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+            "source_descriptor_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+            "raw_output_embedded": {"const": false}
+          }
+        },
+        "launch_contract": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object", "additionalProperties": false,
+              "required": ["contract_version", "entrypoint", "entrypoint_sha256", "argv_template", "placeholders", "provider_transport", "eda_observation", "task_solution_knowledge_included", "hidden_evaluator_reachable"],
+              "properties": {
+                "contract_version": {"const": "rtlflowbench.task_neutral_launch_contract.v1"},
+                "entrypoint": {"type": "string", "pattern": "^/opt/rtlflowbench/[a-z0-9_]+\\.py$"},
+                "entrypoint_sha256": {"$ref": "#/$defs/sha256"},
+                "argv_template": {"type": "array", "minItems": 5, "maxItems": 64, "items": {"type": "string", "minLength": 1}},
+                "placeholders": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"enum": ["PUBLIC_BRIDGE_REQUEST_ROOT", "WORK_ROOT", "OBSERVED_AT", "FROZEN_MODEL", "TASK_COMPILE_LIMIT", "MODEL_CONTEXT_WINDOW", "MAX_TOKENS_PER_CALL", "PROVIDER_MAX_RETRIES", "PROVIDER_TIMEOUT_SECONDS", "THINKING_MODE", "MAGE_SIM_MAX_RETRY", "MAGE_RTL_MAX_CANDIDATES", "MAGE_RTL_SELECTED_CANDIDATES"]}},
+                "provider_transport": {"const": "host_observed_openai_compatible_unix_socket"},
+                "eda_observation": {"const": "path_interposed_iverilog_vvp_yosys_unix_socket_events"},
+                "task_solution_knowledge_included": {"const": false},
+                "hidden_evaluator_reachable": {"const": false}
+              }
+            }
+          ]
+        },
+        "blockers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}}
+      }
+    }
+  }
+}

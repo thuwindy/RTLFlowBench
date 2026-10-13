@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/resource-measurement-supersession-candidate-v1.json",
+  "title": "Golden-12 resource measurement supersession technical candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "observed_at",
+    "input_sha256",
+    "source_sha256",
+    "runtime_semantic_fields",
+    "runtime_semantics",
+    "task_public_deltas",
+    "sample_dispositions",
+    "summary",
+    "readiness",
+    "attempt_accounting",
+    "blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.resource_measurement_supersession_candidate.v1"
+    },
+    "status": {
+      "const": "technical_candidate_complete_reuse_not_authorized"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "previous_workflow_release_candidate",
+        "current_workflow_release_candidate",
+        "previous_public_workspace_set",
+        "current_public_suite_archive",
+        "current_public_suite_server_receipt",
+        "historical_resource_request_set",
+        "historical_resource_measurement_set",
+        "current_common_model_candidate",
+        "current_resource_launch_policy",
+        "current_common_provider_gate"
+      ],
+      "properties": {
+        "previous_workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "current_workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "previous_public_workspace_set": {"$ref": "#/$defs/sha256"},
+        "current_public_suite_archive": {"$ref": "#/$defs/sha256"},
+        "current_public_suite_server_receipt": {"$ref": "#/$defs/sha256"},
+        "historical_resource_request_set": {"$ref": "#/$defs/sha256"},
+        "historical_resource_measurement_set": {"$ref": "#/$defs/sha256"},
+        "current_common_model_candidate": {"$ref": "#/$defs/sha256"},
+        "current_resource_launch_policy": {"$ref": "#/$defs/sha256"},
+        "current_common_provider_gate": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["builder", "schema"],
+      "properties": {
+        "builder": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "runtime_semantic_fields": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "runtime_semantics": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {"$ref": "#/$defs/runtime_semantics"}
+    },
+    "task_public_deltas": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task_delta"}
+    },
+    "sample_dispositions": {
+      "type": "array",
+      "minItems": 200,
+      "maxItems": 200,
+      "items": {"$ref": "#/$defs/sample_disposition"}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_count",
+        "workflow_count",
+        "historical_sample_count",
+        "historical_measured_launch_count",
+        "historical_controller_nonlaunch_count",
+        "public_payload_byte_identical_task_count",
+        "public_payload_changed_task_count",
+        "runtime_semantics_byte_identical_workflow_count",
+        "candidate_reuse_sample_count",
+        "remeasurement_required_sample_count",
+        "controller_nonlaunch_regeneration_count"
+      ],
+      "properties": {
+        "task_count": {"const": 12},
+        "workflow_count": {"const": 5},
+        "historical_sample_count": {"const": 200},
+        "historical_measured_launch_count": {"type": "integer", "minimum": 0, "maximum": 200},
+        "historical_controller_nonlaunch_count": {"type": "integer", "minimum": 0, "maximum": 200},
+        "public_payload_byte_identical_task_count": {"type": "integer", "minimum": 0, "maximum": 12},
+        "public_payload_changed_task_count": {"type": "integer", "minimum": 0, "maximum": 12},
+        "runtime_semantics_byte_identical_workflow_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "candidate_reuse_sample_count": {"type": "integer", "minimum": 0, "maximum": 200},
+        "remeasurement_required_sample_count": {"type": "integer", "minimum": 0, "maximum": 200},
+        "controller_nonlaunch_regeneration_count": {"type": "integer", "minimum": 0, "maximum": 200}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "historical_execution_hashes_preserved",
+        "silent_rebinding_permitted",
+        "historical_receipt_reuse_authorized",
+        "independent_review_complete",
+        "current_provider_routes_5_of_5",
+        "targeted_remeasurement_permitted",
+        "resource_calibration_release_frozen",
+        "official_attempts_permitted"
+      ],
+      "properties": {
+        "historical_execution_hashes_preserved": {"const": true},
+        "silent_rebinding_permitted": {"const": false},
+        "historical_receipt_reuse_authorized": {"const": false},
+        "independent_review_complete": {"const": false},
+        "current_provider_routes_5_of_5": {"type": "boolean"},
+        "targeted_remeasurement_permitted": {"const": false},
+        "resource_calibration_release_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_attempts_started",
+        "official_semantic_attempts_consumed",
+        "resource_calibration_attempts_consumed_by_builder",
+        "provider_calls_by_builder",
+        "eda_calls_by_builder"
+      ],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed_by_builder": {"const": 0},
+        "provider_calls_by_builder": {"const": 0},
+        "eda_calls_by_builder": {"const": 0}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "runtime_semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_slot_id",
+        "previous_sha256",
+        "current_sha256",
+        "byte_identical"
+      ],
+      "properties": {
+        "workflow_slot_id": {
+          "enum": [
+            "chipflow",
+            "same_model_vanilla_agent",
+            "external_airtl_1",
+            "external_airtl_2",
+            "external_airtl_3"
+          ]
+        },
+        "previous_sha256": {"$ref": "#/$defs/sha256"},
+        "current_sha256": {"$ref": "#/$defs/sha256"},
+        "byte_identical": {"type": "boolean"}
+      }
+    },
+    "task_delta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "current_candidate_lock_sha256",
+        "previous_public_tree_sha256",
+        "current_public_tree_sha256",
+        "public_payload_byte_identical",
+        "changed_public_paths"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-"},
+        "current_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "previous_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "current_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "public_payload_byte_identical": {"type": "boolean"},
+        "changed_public_paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "sample_disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sample_id",
+        "workflow_slot_id",
+        "task_id",
+        "calibration_run_index",
+        "historical_receipt_kind",
+        "historical_receipt_sha256",
+        "historical_execution_hash_preserved",
+        "previous_public_tree_sha256",
+        "current_public_tree_sha256",
+        "runtime_semantics_byte_identical",
+        "disposition",
+        "reasons"
+      ],
+      "properties": {
+        "sample_id": {"type": "string", "minLength": 1},
+        "workflow_slot_id": {
+          "enum": [
+            "chipflow",
+            "same_model_vanilla_agent",
+            "external_airtl_1",
+            "external_airtl_2",
+            "external_airtl_3"
+          ]
+        },
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-"},
+        "calibration_run_index": {"type": "integer", "minimum": 1},
+        "historical_receipt_kind": {
+          "enum": ["measured_launch", "controller_nonlaunch"]
+        },
+        "historical_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "historical_execution_hash_preserved": {"const": true},
+        "previous_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "current_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_semantics_byte_identical": {"type": "boolean"},
+        "disposition": {
+          "enum": [
+            "candidate_reuse_pending_independent_review",
+            "remeasurement_required",
+            "controller_nonlaunch_regeneration_required"
+          ]
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "public_input_changed",
+              "workflow_runtime_or_adapter_changed",
+              "common_model_candidate_changed",
+              "resource_launch_policy_changed",
+              "current_controller_projection_required",
+              "execution_inputs_byte_bound_and_unchanged"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

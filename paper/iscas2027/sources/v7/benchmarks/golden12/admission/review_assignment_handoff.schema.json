@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/review-assignment-handoff.v1.json",
+  "title": "Golden-12 reviewer assignment handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "subject_count",
+    "task_count",
+    "total_review_item_count",
+    "assigned_review_item_count",
+    "approved_review_item_count",
+    "pending_review_item_count",
+    "minimum_distinct_reviewer_count",
+    "minimum_distinct_reviewer_count_reason",
+    "assignment_ready",
+    "trusted_reviewer_registry_supplied",
+    "registry_governance_complete",
+    "independent_review_complete",
+    "protocol_ready",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "suite_ready",
+    "workflow_workspace_exposure_permitted",
+    "review_handoff",
+    "tracks",
+    "items",
+    "source",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "track_id": {
+      "enum": [
+        "rights_governance",
+        "protocol_schema_freeze",
+        "public_contract_projection",
+        "evaluator_calibration",
+        "environment_scoring_freeze",
+        "technical_admission",
+        "final_admission"
+      ]
+    },
+    "subject_digest_map": {
+      "type": "object",
+      "minProperties": 13,
+      "maxProperties": 13,
+      "propertyNames": {
+        "pattern": "^(protocol|G(?:0[1-9]|1[0-2]))$"
+      },
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.review_assignment_handoff.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "verified_unassigned_pending_independent_review"
+    },
+    "classification": {"const": "evaluator_private_reviewer_only"},
+    "subject_count": {"const": 13},
+    "task_count": {"const": 12},
+    "total_review_item_count": {"const": 102},
+    "assigned_review_item_count": {"const": 0},
+    "approved_review_item_count": {"const": 0},
+    "pending_review_item_count": {"const": 102},
+    "minimum_distinct_reviewer_count": {"type": "null"},
+    "minimum_distinct_reviewer_count_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assignment_ready": {"const": true},
+    "trusted_reviewer_registry_supplied": {"const": false},
+    "registry_governance_complete": {"const": false},
+    "independent_review_complete": {"const": false},
+    "protocol_ready": {"const": false},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "suite_ready": {"const": false},
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "review_handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_sha256",
+        "expected_receipt_sha256",
+        "trust_anchor_digest_match"
+      ],
+      "properties": {
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "trust_anchor_digest_match": {"const": true}
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["track_id", "description", "item_count", "item_keys"],
+        "properties": {
+          "track_id": {"$ref": "#/$defs/track_id"},
+          "description": {"type": "string", "minLength": 1},
+          "item_count": {"type": "integer", "minimum": 0, "maximum": 102},
+          "item_keys": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 3}
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 102,
+      "maxItems": 102,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item_key",
+          "subject_id",
+          "task_id",
+          "review_id",
+          "scope",
+          "primary_track",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "verified_workspace_relative_path",
+          "signature_namespace",
+          "assignment_status",
+          "reviewer_identity",
+          "conflict_of_interest_declaration_required",
+          "detached_signature_required",
+          "approval_status"
+        ],
+        "properties": {
+          "item_key": {"type": "string", "minLength": 3},
+          "subject_id": {
+            "type": "string",
+            "pattern": "^(protocol|G(?:0[1-9]|1[0-2]))$"
+          },
+          "task_id": {
+            "type": ["string", "null"],
+            "pattern": "^G(?:0[1-9]|1[0-2])-"
+          },
+          "review_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "scope": {"type": "string", "minLength": 1},
+          "primary_track": {"$ref": "#/$defs/track_id"},
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "verified_workspace_relative_path": {
+            "type": "string",
+            "minLength": 1,
+            "not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}
+          },
+          "signature_namespace": {
+            "type": "string",
+            "pattern": "^rtlflowbench-(protocol|g(?:0[1-9]|1[0-2]))-review$"
+          },
+          "assignment_status": {"const": "unassigned"},
+          "reviewer_identity": {"type": "null"},
+          "conflict_of_interest_declaration_required": {"const": true},
+          "detached_signature_required": {"const": true},
+          "approval_status": {"const": "pending"}
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "schema_sha256",
+        "review_handoff_schema_sha256",
+        "candidate_lock_sha256",
+        "review_packet_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "review_handoff_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/subject_digest_map"},
+        "review_packet_sha256": {"$ref": "#/$defs/subject_digest_map"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/isolated-command.v1.json",
+  "title": "RTLFlowBench offline isolated command",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "runtime_profile",
+    "argv",
+    "timeout_seconds",
+    "environment"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.isolated_command.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "runtime_profile": {
+      "const": "python3_stdlib"
+    },
+    "argv": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 86400
+    },
+    "environment": {
+      "type": "object",
+      "maxProperties": 0
+    }
+  }
+}

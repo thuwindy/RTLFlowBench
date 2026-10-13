@@ -1,0 +1,10 @@
+{
+  "files": [
+    {
+      "path": "benchmarks/golden12/conformance/verify_chipflow_actual_attempt.py",
+      "sha256": "6e7cca3cecd6980a8f023205fcdf9a55378da5fe13e10bbb177cac04c20c5ec5",
+      "reason": "contains private host path; original not transformed or published"
+    }
+  ],
+  "policy": "No private path redaction was applied to historical code; omission preserves the distinction between partial source and executable closure."
+}

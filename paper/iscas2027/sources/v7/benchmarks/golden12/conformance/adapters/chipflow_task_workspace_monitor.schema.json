@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/adapter/chipflow-task-workspace-monitor.v1.json",
+  "title": "ChipFlow task-workspace process and network monitor receipt",
+  "description": "Externally produced evidence for processes launched in the benchmark task workspace. Model-provider control-plane traffic is outside this monitor; LLM calls are accounted from ChipFlow call artifacts.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "chipflow_run_id",
+    "monitoring_complete",
+    "network_isolation_enforced",
+    "network_access_observed",
+    "network_attempt_count",
+    "monitor_backend",
+    "eda_calls",
+    "observed_commands"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_task_workspace_monitor.v1"
+    },
+    "chipflow_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "monitoring_complete": {
+      "const": true
+    },
+    "network_isolation_enforced": {
+      "const": true
+    },
+    "network_access_observed": {
+      "type": "boolean"
+    },
+    "network_attempt_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "monitor_backend": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eda_calls": {
+      "$ref": "#/$defs/edaCalls"
+    },
+    "observed_commands": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "network_attempt_count": {
+            "const": 0
+          }
+        },
+        "required": [
+          "network_attempt_count"
+        ]
+      },
+      "then": {
+        "properties": {
+          "network_access_observed": {
+            "const": false
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "network_access_observed": {
+            "const": true
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "edaCalls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compile_or_lint",
+        "simulation",
+        "formal",
+        "synthesis"
+      ],
+      "properties": {
+        "compile_or_lint": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "simulation": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "formal": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "synthesis": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

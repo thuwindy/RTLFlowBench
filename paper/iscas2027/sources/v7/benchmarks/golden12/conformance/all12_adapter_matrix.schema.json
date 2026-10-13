@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/all12-adapter-matrix.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "status", "tasks", "summary", "source", "admission_impact", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.all12_adapter_matrix.v1"},
+    "observed_at": {"type": "string", "minLength": 1},
+    "status": {"enum": ["all12_multi_adapter_conformant_submission_only", "fail"]},
+    "tasks": {
+      "type": "array", "minItems": 12, "maxItems": 12,
+      "items": {"$ref": "#/$defs/taskResult"}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_count", "candidate_bound_task_count", "adapter_count_per_task", "check_count", "pass_count", "fail_count"],
+      "properties": {
+        "task_count": {"type": "integer", "minimum": 0},
+        "candidate_bound_task_count": {"type": "integer", "minimum": 0},
+        "adapter_count_per_task": {"const": 2},
+        "check_count": {"type": "integer", "minimum": 0},
+        "pass_count": {"type": "integer", "minimum": 0},
+        "fail_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["matrix_runner_sha256", "matrix_schema_sha256", "multi_adapter_suite_sha256", "task_schema_sha256"],
+      "properties": {
+        "matrix_runner_sha256": {"$ref": "#/$defs/sha256"},
+        "matrix_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "multi_adapter_suite_sha256": {"$ref": "#/$defs/sha256"},
+        "task_schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "admission_impact": {
+      "type": "object", "additionalProperties": false,
+      "required": ["all12_external_submission_coverage_candidate", "hidden_evaluator_run", "rtl_verdict_produced", "workflow_workspace_private_assets_exposed", "protocol_ready", "benchmark_ready", "chipflow_adapter_ready"],
+      "properties": {
+        "all12_external_submission_coverage_candidate": {"type": "boolean"},
+        "hidden_evaluator_run": {"const": false},
+        "rtl_verdict_produced": {"const": false},
+        "workflow_workspace_private_assets_exposed": {"const": false},
+        "protocol_ready": {"const": false},
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 4, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "taskResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "task_descriptor_relative", "task_descriptor_sha256", "candidate_lock_sha256", "candidate_descriptor_bound", "status", "submission_sha256", "check_count", "pass_count", "fail_count", "result_relative"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "task_descriptor_relative": {"type": "string", "pattern": "^benchmarks/golden12/tasks/G(0[1-9]|1[0-2])-[a-z0-9-]+/public/external_task\\.json$"},
+        "task_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_descriptor_bound": {"type": "boolean"},
+        "status": {"enum": ["multi_adapter_conformant_submission_only", "fail"]},
+        "submission_sha256": {"$ref": "#/$defs/sha256"},
+        "check_count": {"type": "integer", "minimum": 0},
+        "pass_count": {"type": "integer", "minimum": 0},
+        "fail_count": {"type": "integer", "minimum": 0},
+        "result_relative": {"type": "string", "pattern": "^tasks/G(0[1-9]|1[0-2])-[a-z0-9-]+/multi-adapter-conformance\\.json$"}
+      }
+    }
+  }
+}

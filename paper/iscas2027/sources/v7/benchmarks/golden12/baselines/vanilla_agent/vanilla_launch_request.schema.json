@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/controller/vanilla-launch-request.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "mode",
+    "status",
+    "workflow_id",
+    "task_id",
+    "model",
+    "paths",
+    "sha256",
+    "attempt",
+    "submission_id",
+    "limits",
+    "public_input_only",
+    "private_evaluator_mounted",
+    "airtl_run_observed",
+    "benchmark_verdict_produced",
+    "adapter_ready",
+    "benchmark_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.vanilla_launch_request.v1"},
+    "mode": {"enum": ["development", "release"]},
+    "status": {
+      "enum": [
+        "development_request_prepared_not_run",
+        "release_request_prepared_not_run"
+      ]
+    },
+    "workflow_id": {"const": "same_model_vanilla_agent"},
+    "task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$"
+    },
+    "model": {"type": "string", "minLength": 1, "maxLength": 256},
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_root",
+        "task",
+        "repository_root",
+        "workspace_receipt",
+        "workflow_binding"
+      ],
+      "properties": {
+        "public_root": {"const": "public"},
+        "task": {"const": "public/external_task.json"},
+        "repository_root": {
+          "oneOf": [{"const": "worktree"}, {"type": "null"}]
+        },
+        "workspace_receipt": {"const": "workspace_receipt.json"},
+        "workflow_binding": {"const": "workflow_binding.json"}
+      }
+    },
+    "sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task", "workspace_receipt", "workflow_binding"],
+      "properties": {
+        "task": {"$ref": "#/$defs/sha256"},
+        "workspace_receipt": {"$ref": "#/$defs/sha256"},
+        "workflow_binding": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["attempt_id", "attempt_index", "repeat_group_id", "seed"],
+      "properties": {
+        "attempt_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "attempt_index": {"type": "integer", "minimum": 1},
+        "repeat_group_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "seed": {"type": ["integer", "null"]}
+      }
+    },
+    "submission_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_public_text_bytes",
+        "maximum_repository_text_bytes"
+      ],
+      "properties": {
+        "maximum_public_text_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        },
+        "maximum_repository_text_bytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        }
+      }
+    },
+    "public_input_only": {"const": true},
+    "private_evaluator_mounted": {"const": false},
+    "airtl_run_observed": {"const": false},
+    "benchmark_verdict_produced": {"const": false},
+    "adapter_ready": {"const": false},
+    "benchmark_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"mode": {"const": "development"}}},
+      "then": {
+        "properties": {
+          "status": {"const": "development_request_prepared_not_run"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"mode": {"const": "release"}}},
+      "then": {
+        "properties": {
+          "status": {"const": "release_request_prepared_not_run"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

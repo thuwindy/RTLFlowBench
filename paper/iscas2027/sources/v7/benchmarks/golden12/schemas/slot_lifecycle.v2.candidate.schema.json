@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/slot-lifecycle.v2.candidate.json",
+  "title": "Golden-12 v2 stage-resolved slot record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "slot_id",
+    "bindings",
+    "independent_repetition",
+    "stages",
+    "headline_classification",
+    "resource_usage"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.slot_lifecycle.v2.candidate"},
+    "slot_id": {"type": "string", "minLength": 1},
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "workflow_id", "public_packet_sha256", "runtime_sha256", "model_policy_sha256", "budget_sha256", "runner_sha256", "scoring_sha256"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "workflow_id": {"type": "string", "minLength": 1},
+        "public_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_sha256": {"$ref": "#/$defs/sha256"},
+        "model_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "budget_sha256": {"$ref": "#/$defs/sha256"},
+        "runner_sha256": {"$ref": "#/$defs/sha256"},
+        "scoring_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "independent_repetition": {"type": "integer", "minimum": 1},
+    "stages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preflight", "launch", "execution", "export", "evaluation", "classification"],
+      "properties": {
+        "preflight": {"$ref": "#/$defs/stage"},
+        "launch": {"$ref": "#/$defs/stage"},
+        "execution": {"$ref": "#/$defs/stage"},
+        "export": {"$ref": "#/$defs/stage"},
+        "evaluation": {"$ref": "#/$defs/stage"},
+        "classification": {"$ref": "#/$defs/stage"}
+      }
+    },
+    "headline_classification": {"enum": ["PASS", "FAIL", "BLOCK", "INFRA", "NOT_RUN"]},
+    "resource_usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wall_time_seconds", "input_tokens", "output_tokens", "llm_calls", "eda_calls", "human_interventions", "missing_measurements"],
+      "properties": {
+        "wall_time_seconds": {"type": ["number", "null"], "minimum": 0},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "llm_calls": {"type": ["integer", "null"], "minimum": 0},
+        "eda_calls": {"type": ["integer", "null"], "minimum": 0},
+        "human_interventions": {"type": ["integer", "null"], "minimum": 0},
+        "missing_measurements": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason", "started_at", "ended_at", "evidence_refs"],
+      "properties": {
+        "status": {
+          "enum": [
+            "NOT_ATTEMPTED", "READY", "STARTED", "COMPLETE",
+            "VALID_SUBMISSION", "EMPTY_SUBMISSION", "INVALID_SUBMISSION",
+            "SCOPE_VIOLATION", "UNSUPPORTED", "SAFE_BLOCK", "BUDGET_BLOCK",
+            "ADAPTER_ERROR", "PROVIDER_INFRA", "TOOL_INFRA", "CRASH",
+            "PASS", "FUNCTION_FAIL", "PROTOCOL_FAIL", "COMPILE_FAIL",
+            "TIMEOUT", "EVALUATOR_INFRA", "CLASSIFIED"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "started_at": {"type": ["string", "null"], "format": "date-time"},
+        "ended_at": {"type": ["string", "null"], "format": "date-time"},
+        "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

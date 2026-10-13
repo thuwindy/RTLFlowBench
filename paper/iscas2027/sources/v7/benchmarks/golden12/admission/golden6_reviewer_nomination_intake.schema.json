@@ -1,0 +1,261 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/golden6-reviewer-nomination-intake.v1.json",
+  "title": "RTLFlowBench Golden-6 alpha reviewer nomination intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "release_target",
+    "anchors",
+    "release_authority",
+    "nomination_count",
+    "distinct_reviewer_count",
+    "subject_count",
+    "review_item_count",
+    "eligible_review_item_count",
+    "uncovered_review_item_count",
+    "conflict_exclusion_count",
+    "tracks",
+    "subjects",
+    "items",
+    "governance",
+    "readiness",
+    "workflow_workspace_exposure_permitted",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden6_reviewer_nomination_intake.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "pending_independent_registry_governance"
+    },
+    "classification": {
+      "const": "reviewer_only_registry_candidates"
+    },
+    "release_target": {"const": "golden6_alpha"},
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assignment_handoff_sha256",
+        "nomination_request_sha256",
+        "nomination_response_sha256"
+      ],
+      "properties": {
+        "assignment_handoff_sha256": {"$ref": "#/$defs/sha256"},
+        "nomination_request_sha256": {"$ref": "#/$defs/sha256"},
+        "nomination_response_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "release_authority": {"type": "string", "minLength": 1},
+    "nomination_count": {"type": "integer", "minimum": 1},
+    "distinct_reviewer_count": {"type": "integer", "minimum": 1},
+    "subject_count": {"const": 7},
+    "review_item_count": {"const": 54},
+    "eligible_review_item_count": {"const": 54},
+    "uncovered_review_item_count": {"const": 0},
+    "conflict_exclusion_count": {"type": "integer", "minimum": 0},
+    "tracks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "track_id",
+          "item_count",
+          "eligible_reviewer_count",
+          "coverage_status"
+        ],
+        "properties": {
+          "track_id": {"$ref": "#/$defs/trackId"},
+          "item_count": {"type": "integer", "minimum": 0},
+          "eligible_reviewer_count": {"type": "integer", "minimum": 0},
+          "coverage_status": {"enum": ["covered", "no_items"]}
+        }
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subject_id",
+          "task_id",
+          "signature_namespace",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "registry_relative_path",
+          "registry_schema_relative_path",
+          "registry_sha256",
+          "allowed_signers_relative_path",
+          "allowed_signers_sha256",
+          "reviewer_count",
+          "allowed_review_id_count"
+        ],
+        "properties": {
+          "subject_id": {"$ref": "#/$defs/subjectId"},
+          "task_id": {
+            "enum": [
+              null,
+              "G01-common-fifo-spec",
+              "G03-axis-fifo-backpressure",
+              "G05-picorv32-missing-irq",
+              "G08-common-fifo-dv",
+              "G10-serv-area-qor",
+              "G12-common-cdc-missing-contract"
+            ]
+          },
+          "signature_namespace": {
+            "type": "string",
+            "pattern": "^rtlflowbench-(?:protocol|g(?:01|03|05|08|10|12))-review$"
+          },
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "registry_relative_path": {
+            "type": "string",
+            "pattern": "^subjects/(?:protocol|G(?:01|03|05|08|10|12))/trusted_reviewers\\.pending\\.json$"
+          },
+          "registry_schema_relative_path": {
+            "type": "string",
+            "minLength": 1,
+            "not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}
+          },
+          "registry_sha256": {"$ref": "#/$defs/sha256"},
+          "allowed_signers_relative_path": {
+            "type": "string",
+            "pattern": "^subjects/(?:protocol|G(?:01|03|05|08|10|12))/reviewer_allowed_signers$"
+          },
+          "allowed_signers_sha256": {"$ref": "#/$defs/sha256"},
+          "reviewer_count": {"type": "integer", "minimum": 1},
+          "allowed_review_id_count": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 54,
+      "maxItems": 54,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item_key",
+          "subject_id",
+          "review_id",
+          "primary_track",
+          "eligible_reviewer_identities",
+          "excluded_for_declared_conflict",
+          "assignment_status",
+          "approval_status"
+        ],
+        "properties": {
+          "item_key": {
+            "type": "string",
+            "pattern": "^(?:protocol|G(?:01|03|05|08|10|12)):[a-z][a-z0-9_]*$"
+          },
+          "subject_id": {"$ref": "#/$defs/subjectId"},
+          "review_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "primary_track": {"$ref": "#/$defs/trackId"},
+          "eligible_reviewer_identities": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "excluded_for_declared_conflict": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "assignment_status": {
+            "const": "pending_registry_governance"
+          },
+          "approval_status": {"const": "pending"}
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trusted_reviewer_registries_generated",
+        "registry_governance_complete",
+        "governance_authority",
+        "approvals_recorded"
+      ],
+      "properties": {
+        "trusted_reviewer_registries_generated": {"const": true},
+        "registry_governance_complete": {"const": false},
+        "governance_authority": {"type": "null"},
+        "approvals_recorded": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independent_review_complete",
+        "protocol_ready",
+        "benchmark_ready_task_count",
+        "chipflow_adapter_ready_task_count",
+        "golden6_alpha_ready",
+        "golden12_v1_ready"
+      ],
+      "properties": {
+        "independent_review_complete": {"const": false},
+        "protocol_ready": {"const": false},
+        "benchmark_ready_task_count": {"const": 0},
+        "chipflow_adapter_ready_task_count": {"const": 0},
+        "golden6_alpha_ready": {"const": false},
+        "golden12_v1_ready": {"const": false}
+      }
+    },
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 6,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "subjectId": {
+      "type": "string",
+      "pattern": "^(?:protocol|G(?:01|03|05|08|10|12))$"
+    },
+    "trackId": {
+      "enum": [
+        "rights_governance",
+        "protocol_schema_freeze",
+        "public_contract_projection",
+        "evaluator_calibration",
+        "environment_scoring_freeze",
+        "technical_admission",
+        "final_admission"
+      ]
+    }
+  }
+}

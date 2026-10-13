@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-public-trial-transport-server-receipt.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "authority_guard",
+    "source_sha256",
+    "public_suite",
+    "trial_transport",
+    "negative_evidence",
+    "readiness",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_trial_transport_server_receipt.v1"
+    },
+    "observed_at": {"type": "string", "minLength": 1},
+    "status": {"const": "transport_calibrated_not_evaluated_not_admitted"},
+    "authority_guard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "branch",
+        "head_before",
+        "head_after",
+        "status_sha256_before",
+        "status_sha256_after",
+        "unchanged"
+      ],
+      "properties": {
+        "host": {"const": "SERVER26"},
+        "branch": {"const": "codex/chipflow-native-trunk"},
+        "head_before": {"$ref": "#/$defs/gitSha"},
+        "head_after": {"$ref": "#/$defs/gitSha"},
+        "status_sha256_before": {"$ref": "#/$defs/sha256"},
+        "status_sha256_after": {"$ref": "#/$defs/sha256"},
+        "unchanged": {"const": true}
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 12,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "public_suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "summary_sha256",
+        "archive_sha256",
+        "archive_bytes",
+        "task_count",
+        "archives_byte_identical",
+        "builder_receipts_byte_identical",
+        "verification_receipts_byte_identical",
+        "private_file_count"
+      ],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/evidenceId"},
+        "summary_sha256": {"$ref": "#/$defs/sha256"},
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "archive_bytes": {"type": "integer", "minimum": 1},
+        "task_count": {"const": 12},
+        "archives_byte_identical": {"const": true},
+        "builder_receipts_byte_identical": {"const": true},
+        "verification_receipts_byte_identical": {"const": true},
+        "private_file_count": {"const": 0}
+      }
+    },
+    "trial_transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "summary_sha256",
+        "task_ids",
+        "workspace_receipt_sha256",
+        "collection_receipt_sha256",
+        "repository_projection_sha256",
+        "collected_not_evaluated_count",
+        "invalid_submission_count",
+        "scope_violation_count",
+        "evaluation_count",
+        "pass_verdict_count",
+        "private_file_count"
+      ],
+      "properties": {
+        "evidence_id": {"$ref": "#/$defs/evidenceId"},
+        "summary_sha256": {"$ref": "#/$defs/sha256"},
+        "task_ids": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/taskId"}
+        },
+        "workspace_receipt_sha256": {"$ref": "#/$defs/taskDigestMap12"},
+        "collection_receipt_sha256": {"$ref": "#/$defs/taskDigestMap12"},
+        "repository_projection_sha256": {
+          "type": "object",
+          "minProperties": 10,
+          "maxProperties": 10,
+          "patternProperties": {
+            "^G(0[1-9]|1[0-2])-[a-z0-9-]+$": {"$ref": "#/$defs/sha256"}
+          },
+          "additionalProperties": false
+        },
+        "collected_not_evaluated_count": {"const": 12},
+        "invalid_submission_count": {"const": 1},
+        "scope_violation_count": {"const": 1},
+        "evaluation_count": {"const": 0},
+        "pass_verdict_count": {"const": 0},
+        "private_file_count": {"const": 0}
+      }
+    },
+    "negative_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "initial_test_failure_evidence_id",
+        "stale_g06_projection_preflight_evidence_id",
+        "failures_preserved"
+      ],
+      "properties": {
+        "initial_test_failure_evidence_id": {"$ref": "#/$defs/evidenceId"},
+        "stale_g06_projection_preflight_evidence_id": {"$ref": "#/$defs/evidenceId"},
+        "failures_preserved": {"const": true}
+      }
+    },
+    "readiness": {
+      "const": {
+        "benchmark_ready_task_count": 0,
+        "chipflow_adapter_ready_task_count": 0,
+        "protocol_ready": false,
+        "suite_ready": false,
+        "publishable_score_permitted": false
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "taskId": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$"
+    },
+    "taskDigestMap12": {
+      "type": "object",
+      "minProperties": 12,
+      "maxProperties": 12,
+      "patternProperties": {
+        "^G(0[1-9]|1[0-2])-[a-z0-9-]+$": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

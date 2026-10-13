@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-launch-policy-candidate.v2.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "policy_id", "status", "scope", "model",
+    "provider", "mage", "measurement_envelope", "source_evidence",
+    "readiness", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.full_workflow_resource_launch_policy_candidate.v2"},
+    "policy_id": {"const": "golden12-full-workflow-resource-launch-policy-v7-candidate"},
+    "status": {"const": "development_candidate_not_frozen"},
+    "scope": {"const": "all_five_workflows_all_twelve_tasks_resource_calibration_only"},
+    "model": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "candidate_sha256", "release_frozen"],
+      "properties": {
+        "name": {"const": "deepseek-v4-pro"},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "release_frozen": {"const": false}
+      }
+    },
+    "provider": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "maximum_calls_per_measurement", "maximum_output_tokens_per_call",
+        "maximum_input_tokens_per_measurement",
+        "maximum_output_tokens_per_measurement",
+        "maximum_consecutive_identical_requests",
+        "maximum_consecutive_identical_errors", "maximum_retries",
+        "timeout_seconds", "thinking_mode"
+      ],
+      "properties": {
+        "maximum_calls_per_measurement": {"const": 4},
+        "maximum_output_tokens_per_call": {"const": 8192},
+        "maximum_input_tokens_per_measurement": {"const": 163840},
+        "maximum_output_tokens_per_measurement": {"const": 16384},
+        "maximum_consecutive_identical_requests": {"const": 2},
+        "maximum_consecutive_identical_errors": {"const": 2},
+        "maximum_retries": {"const": 0},
+        "timeout_seconds": {"const": 120},
+        "thinking_mode": {"const": "disabled"}
+      }
+    },
+    "mage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["context_window", "sim_max_retry", "rtl_max_candidates", "rtl_selected_candidates"],
+      "properties": {
+        "context_window": {"const": 1000000},
+        "sim_max_retry": {"const": 1},
+        "rtl_max_candidates": {"const": 1},
+        "rtl_selected_candidates": {"const": 1}
+      }
+    },
+    "measurement_envelope": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sampling_interval_ms", "pids_limit", "memory_limit_bytes", "network_policy", "public_input_mount", "work_mount"],
+      "properties": {
+        "sampling_interval_ms": {"const": 25},
+        "pids_limit": {"const": 128},
+        "memory_limit_bytes": {"const": 1073741824},
+        "network_policy": {"const": "offline"},
+        "public_input_mount": {"const": "/input"},
+        "work_mount": {"const": "/work"}
+      }
+    },
+    "source_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["budget_protocol_v2_author_recommendation", "common_model_candidate", "provider_runtime_config", "mage_adapter", "mage_development_receipt", "wave0_three_repeat_analysis", "wave0_budget_candidate"],
+      "properties": {
+        "budget_protocol_v2_author_recommendation": {"$ref": "#/$defs/source"},
+        "common_model_candidate": {"$ref": "#/$defs/source"},
+        "provider_runtime_config": {"$ref": "#/$defs/source"},
+        "mage_adapter": {"$ref": "#/$defs/source"},
+        "mage_development_receipt": {"$ref": "#/$defs/source"},
+        "wave0_three_repeat_analysis": {"$ref": "#/$defs/source"},
+        "wave0_budget_candidate": {"$ref": "#/$defs/source"}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["request_materialization_permitted", "resource_campaign_permitted", "official_attempts_permitted"],
+      "properties": {
+        "request_materialization_permitted": {"const": true},
+        "resource_campaign_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "excluded_claims": {
+      "type": "array", "minItems": 4, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[a-zA-Z0-9._-]+(?:/[a-zA-Z0-9._-]+)*$"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

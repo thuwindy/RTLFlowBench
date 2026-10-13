@@ -1,0 +1,37 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "title": "Repair lost simultaneous timer and external IRQs",
+  "family": "repo_repair",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "picorv32",
+  "language": "verilog_2005",
+  "required_submission_files": [
+    "picorv32.v"
+  ],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/cpu_interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": true,
+  "non_cpu_interface_projection": "not_applicable_cpu_interface_spec",
+  "claims": [
+    "This draft defines a narrow repair to the interrupt-pending behavior of the pinned PicoRV32 repository base.",
+    "The workflow receives only a minimal repository projection and an independently worded behavior contract."
+  ],
+  "excluded_claims": [
+    "The historical repair diff, repair commit, evaluator firmware, reference RTL, and hidden traces are not public inputs.",
+    "Development visible, hidden F2P/P2P, firmware, and bounded-formal calibration evidence exists, but none is frozen or independently admitted.",
+    "The repository projection, resource budget, environment, scoring, and public packet digest are not frozen.",
+    "No workflow PASS, unbounded proof, coverage, performance, PPA, or benchmark readiness is claimed."
+  ]
+}

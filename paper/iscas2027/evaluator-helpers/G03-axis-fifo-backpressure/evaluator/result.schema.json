@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/g03-hidden-result.v1.json",
+  "title": "G03 evaluator-private development result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "suite_id",
+    "suite_status",
+    "verdict",
+    "pass",
+    "wall_time_seconds",
+    "tool_paths",
+    "tool_versions",
+    "scope_receipt",
+    "checks",
+    "raw_metrics",
+    "runner_sources",
+    "evidence_manifest",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "chipflow.golden12.g03_hidden_result.v1"
+    },
+    "task_id": {"const": "G03-axis-fifo-backpressure"},
+    "suite_id": {
+      "const": "g03-hidden-seeded-f2p-p2p-v1-development"
+    },
+    "suite_status": {"const": "development_not_frozen"},
+    "verdict": {
+      "enum": [
+        "invalid_submission",
+        "scope_violation",
+        "infra_error",
+        "timeout",
+        "compile_error",
+        "fail_f2p",
+        "fail_p2p",
+        "incomplete",
+        "pass"
+      ]
+    },
+    "pass": {"type": "boolean"},
+    "wall_time_seconds": {
+      "type": ["number", "null"],
+      "minimum": 0
+    },
+    "tool_paths": {"type": "object"},
+    "tool_versions": {"type": "object"},
+    "scope_receipt": {"type": "object"},
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "check_id",
+          "layer",
+          "stage",
+          "verdict",
+          "reason",
+          "expected_sentinel"
+        ]
+      }
+    },
+    "raw_metrics": {
+      "type": "object",
+      "required": [
+        "functional_correctness",
+        "protocol_correctness",
+        "f2p",
+        "p2p",
+        "f2p_case_count",
+        "p2p_case_count",
+        "scope_violation_count",
+        "wall_time_seconds",
+        "eda_calls"
+      ]
+    },
+    "runner_sources": {
+      "type": "object",
+      "minProperties": 4,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "evidence_manifest": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256"],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$)).+$"
+          },
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "error": {"type": "string"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}},
+      "then": {"properties": {"pass": {"const": true}}},
+      "else": {"properties": {"pass": {"const": false}}}
+    }
+  ]
+}

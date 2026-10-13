@@ -1,0 +1,1 @@
+{"schema_version":"rtlflowbench.visible_runner_contract.v1","runner_path":"visible/runner.py","workspace_materialization":"repository_overlay","preliminary_submission_required":false,"argv_template":["{PYTHON}","{VISIBLE_RUNNER}","--workspace","{WORKSPACE_ROOT}","--result","{OUTPUT_RESULT}"],"result_relative_path":"result.json"}

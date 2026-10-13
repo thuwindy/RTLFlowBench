@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/visible-runner-contract.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "runner_path",
+    "workspace_materialization",
+    "preliminary_submission_required",
+    "argv_template",
+    "result_relative_path"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.visible_runner_contract.v1"},
+    "runner_path": {"const": "visible/runner.py"},
+    "workspace_materialization": {
+      "enum": ["submission_root", "repository_overlay"]
+    },
+    "preliminary_submission_required": {"type": "boolean"},
+    "argv_template": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 32,
+      "items": {
+        "type": "string",
+        "pattern": "^(--[a-z0-9-]+|\\{(PYTHON|VISIBLE_RUNNER|SUBMISSION_ROOT|REPOSITORY_ROOT|WORKSPACE_ROOT|OUTPUT_ROOT|OUTPUT_RESULT|SUBMISSION_METADATA)\\})$"
+      }
+    },
+    "result_relative_path": {"const": "result.json"}
+  }
+}

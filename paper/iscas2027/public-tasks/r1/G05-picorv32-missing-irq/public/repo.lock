@@ -1,0 +1,31 @@
+{
+  "schema_version": "chipflow.golden12.repo_lock.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "source_id": "picorv32-pr152-base",
+  "repository_url": "https://github.com/YosysHQ/picorv32",
+  "base_commit": "e308982e18fc952a8d446ddb7ea8b70433a998c2",
+  "submodule_commits": {},
+  "source_archive_sha256": "e529bfbab8a0b33861c2f3404c4f2df5030a02378a6b1e0f6e102c1c77afef7a",
+  "release_date": "2019-11-18T13:21:10Z",
+  "license_spdx": "ISC",
+  "agent_source_mode": "repository_base",
+  "source_snapshot_exposed_to_workflow": true,
+  "repository_projection_status": "development_materialized_not_frozen",
+  "repository_projection_allowlist": [
+    "picorv32.v",
+    "README.md"
+  ],
+  "required_notice_paths": [
+    "picorv32.v"
+  ],
+  "reference_implementation_exposed_to_workflow": false,
+  "excluded_repository_paths": [
+    "firmware/",
+    "scripts/",
+    "testbench.v",
+    "testbench_ez.v",
+    "testbench_wb.v",
+    "testbench.cc"
+  ],
+  "note": "picorv32.v is the editable frozen repair base and carries an embedded ISC notice. README.md is read-only context. No historical repair, upstream testbench, firmware oracle, or evaluator asset may enter the workflow workspace."
+}

@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/golden6-reviewer-distribution.v1.json",
+  "title": "RTLFlowBench Golden-6 alpha reviewer distribution",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "release_target",
+    "subject_count",
+    "task_count",
+    "review_item_count",
+    "payload_file_count",
+    "anchors",
+    "subjects",
+    "governance",
+    "readiness",
+    "workflow_workspace_exposure_permitted",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "subject_id": {
+      "enum": ["protocol", "G01", "G03", "G05", "G08", "G10", "G12"]
+    },
+    "task_id": {
+      "enum": [
+        "G01-common-fifo-spec",
+        "G03-axis-fifo-backpressure",
+        "G05-picorv32-missing-irq",
+        "G08-common-fifo-dv",
+        "G10-serv-area-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden6_reviewer_distribution.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "verified_unsigned_distribution_pending_real_reviewer_nomination"
+    },
+    "classification": {"const": "evaluator_private_reviewer_only"},
+    "release_target": {"const": "golden6_alpha"},
+    "subject_count": {"const": 7},
+    "task_count": {"const": 6},
+    "review_item_count": {"const": 54},
+    "payload_file_count": {"const": 21},
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "golden12_review_handoff_sha256",
+        "golden6_review_assignment_sha256",
+        "golden6_nomination_request_sha256"
+      ],
+      "properties": {
+        "golden12_review_handoff_sha256": {"$ref": "#/$defs/sha256"},
+        "golden6_review_assignment_sha256": {"$ref": "#/$defs/sha256"},
+        "golden6_nomination_request_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subject_id",
+          "task_id",
+          "review_item_count",
+          "status",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "bundle_archive_relative_path",
+          "bundle_archive_sha256",
+          "bundle_archive_bytes",
+          "bundle_manifest_relative_path",
+          "bundle_manifest_sha256",
+          "bundle_receipt_relative_path",
+          "bundle_receipt_sha256",
+          "archive_member_count",
+          "archive_safety_verified",
+          "approved_review_item_count",
+          "independent_review_complete",
+          "subject_ready",
+          "chipflow_adapter_ready",
+          "workflow_workspace_exposure_permitted"
+        ],
+        "properties": {
+          "subject_id": {"$ref": "#/$defs/subject_id"},
+          "task_id": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/task_id"}]},
+          "review_item_count": {"type": "integer", "minimum": 1, "maximum": 10},
+          "status": {"const": "pending_independent_review"},
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "bundle_archive_relative_path": {
+            "type": "string",
+            "pattern": "^subjects/(?:protocol|G(?:01|03|05|08|10|12))/[a-z0-9-]+\\.tar\\.gz$"
+          },
+          "bundle_archive_sha256": {"$ref": "#/$defs/sha256"},
+          "bundle_archive_bytes": {"type": "integer", "minimum": 1},
+          "bundle_manifest_relative_path": {
+            "type": "string",
+            "pattern": "^subjects/(?:protocol|G(?:01|03|05|08|10|12))/bundle_manifest\\.json$"
+          },
+          "bundle_manifest_sha256": {"$ref": "#/$defs/sha256"},
+          "bundle_receipt_relative_path": {
+            "type": "string",
+            "pattern": "^subjects/(?:protocol|G(?:01|03|05|08|10|12))/bundle_receipt\\.json$"
+          },
+          "bundle_receipt_sha256": {"$ref": "#/$defs/sha256"},
+          "archive_member_count": {"type": "integer", "minimum": 1},
+          "archive_safety_verified": {"const": true},
+          "approved_review_item_count": {"const": 0},
+          "independent_review_complete": {"const": false},
+          "subject_ready": {"const": false},
+          "chipflow_adapter_ready": {"const": false},
+          "workflow_workspace_exposure_permitted": {"const": false}
+        }
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "human_nomination_response_supplied",
+        "trusted_reviewer_registry_supplied",
+        "registry_governance_complete",
+        "approvals_recorded"
+      ],
+      "properties": {
+        "human_nomination_response_supplied": {"const": false},
+        "trusted_reviewer_registry_supplied": {"const": false},
+        "registry_governance_complete": {"const": false},
+        "approvals_recorded": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independent_review_complete",
+        "protocol_ready",
+        "benchmark_ready_task_count",
+        "chipflow_adapter_ready_task_count",
+        "golden6_alpha_ready",
+        "golden12_v1_ready"
+      ],
+      "properties": {
+        "independent_review_complete": {"const": false},
+        "protocol_ready": {"const": false},
+        "benchmark_ready_task_count": {"const": 0},
+        "chipflow_adapter_ready_task_count": {"const": 0},
+        "golden6_alpha_ready": {"const": false},
+        "golden12_v1_ready": {"const": false}
+      }
+    },
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 5,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

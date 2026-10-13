@@ -1,0 +1,32 @@
+{
+  "allowed_file_operations": [
+    "replace_text"
+  ],
+  "editable_paths": [
+    "rtl/golden12_axil_wb_split_bridge.sv"
+  ],
+  "forbidden_paths": [
+    "rtl/axilrd2wbsp.v",
+    "rtl/axilwr2wbsp.v",
+    "rtl/axlite2wbsp.v",
+    "rtl/wbarbiter.v",
+    "bench/",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "max_files_changed": 1,
+  "network_access": false,
+  "read_only_repository_paths": [
+    "rtl/axilrd2wbsp.v",
+    "rtl/axilwr2wbsp.v",
+    "README.md"
+  ],
+  "safe_executor_status": "development_candidate",
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "scope_kind": "neutral_submission",
+  "task_id": "G04-wb2axip-split-bridge"
+}

@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/current-development-relock-candidate.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "task_count",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "apply_permitted",
+    "pretransition_signature_reuse_permitted",
+    "workflow_workspace_exposure_permitted",
+    "source",
+    "tasks",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "taskId": {
+      "enum": [
+        "G01-common-fifo-spec",
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G08-common-fifo-dv",
+        "G09-axis-fifo-dv",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.current_development_relock_candidate.v1"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "const": "verified_development_relock_candidate_pending_apply"
+    },
+    "classification": {
+      "const": "release_authority_only"
+    },
+    "task_count": {
+      "const": 12
+    },
+    "benchmark_ready_task_count": {
+      "const": 0
+    },
+    "chipflow_adapter_ready_task_count": {
+      "const": 0
+    },
+    "apply_permitted": {
+      "const": false
+    },
+    "pretransition_signature_reuse_permitted": {
+      "const": false
+    },
+    "workflow_workspace_exposure_permitted": {
+      "const": false
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "schema_sha256",
+        "rebinder_sha256",
+        "packager_sha256",
+        "task_builder_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "rebinder_sha256": {"$ref": "#/$defs/sha256"},
+        "packager_sha256": {"$ref": "#/$defs/sha256"},
+        "task_builder_sha256": {
+          "type": "object",
+          "minProperties": 12,
+          "maxProperties": 12,
+          "additionalProperties": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "task_observed_at",
+          "pretransition_candidate_lock_sha256",
+          "pretransition_review_packet_sha256",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "public_archive_sha256",
+          "candidate_public_archive_sha256",
+          "component_count",
+          "public_file_count",
+          "public_tree_component_bound",
+          "visible_runner_contract_bound",
+          "all_review_items_pending",
+          "benchmark_ready",
+          "chipflow_adapter_ready"
+        ],
+        "properties": {
+          "task_id": {"$ref": "#/$defs/taskId"},
+          "task_observed_at": {"type": "string", "minLength": 10},
+          "pretransition_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "pretransition_review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "public_archive_sha256": {"$ref": "#/$defs/sha256"},
+          "candidate_public_archive_sha256": {
+            "oneOf": [
+              {"$ref": "#/$defs/sha256"},
+              {"type": "null"}
+            ]
+          },
+          "component_count": {"type": "integer", "minimum": 1},
+          "public_file_count": {"type": "integer", "minimum": 1},
+          "public_tree_component_bound": {"const": true},
+          "visible_runner_contract_bound": {"const": true},
+          "all_review_items_pending": {"const": true},
+          "benchmark_ready": {"const": false},
+          "chipflow_adapter_ready": {"const": false}
+        }
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

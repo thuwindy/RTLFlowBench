@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/golden12-suite-release-result.v1.json",
+  "title": "Golden-12 suite release result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "suite_release",
+    "status",
+    "decision",
+    "blockers",
+    "protocol",
+    "tasks",
+    "task_count",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "benchmark_suite_ready",
+    "chipflow_adapter_suite_ready",
+    "published_score_permitted",
+    "release_subject_sha256",
+    "source",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.golden12_suite_release_result.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "suite_release": {"const": "Golden-12-v1"},
+    "status": {"enum": ["released", "BLOCK"]},
+    "decision": {"enum": ["RELEASE", "BLOCK"]},
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(protocol_release_incomplete|task_release_incomplete:G(?:0[1-9]|1[0-2]))$"
+      }
+    },
+    "protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "release_result_sha256",
+        "expected_release_result_sha256",
+        "trust_anchor_digest_match",
+        "independent_review_complete",
+        "protocol_ready"
+      ],
+      "properties": {
+        "status": {"enum": ["released", "BLOCK"]},
+        "release_result_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_release_result_sha256": {"$ref": "#/$defs/sha256"},
+        "trust_anchor_digest_match": {"const": true},
+        "independent_review_complete": {"type": "boolean"},
+        "protocol_ready": {"type": "boolean"}
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "status",
+          "release_result_sha256",
+          "expected_release_result_sha256",
+          "trust_anchor_digest_match",
+          "benchmark_ready",
+          "chipflow_adapter_ready"
+        ],
+        "properties": {
+          "task_id": {"$ref": "#/$defs/taskId"},
+          "status": {"enum": ["released", "BLOCK"]},
+          "release_result_sha256": {"$ref": "#/$defs/sha256"},
+          "expected_release_result_sha256": {"$ref": "#/$defs/sha256"},
+          "trust_anchor_digest_match": {"const": true},
+          "benchmark_ready": {"type": "boolean"},
+          "chipflow_adapter_ready": {"type": "boolean"}
+        }
+      }
+    },
+    "task_count": {"const": 12},
+    "benchmark_ready_task_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "chipflow_adapter_ready_task_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "benchmark_suite_ready": {"type": "boolean"},
+    "chipflow_adapter_suite_ready": {"const": false},
+    "published_score_permitted": {"type": "boolean"},
+    "release_subject_sha256": {"$ref": "#/$defs/sha256"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aggregator_sha256",
+        "expected_aggregator_sha256",
+        "aggregator_trust_anchor_digest_match",
+        "result_schema_sha256",
+        "task_release_schema_sha256",
+        "protocol_release_schema_sha256",
+        "task_finalizer_sha256",
+        "protocol_finalizer_sha256"
+      ],
+      "properties": {
+        "aggregator_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_aggregator_sha256": {"$ref": "#/$defs/sha256"},
+        "aggregator_trust_anchor_digest_match": {"const": true},
+        "result_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "task_release_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "protocol_release_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "task_finalizer_sha256": {"$ref": "#/$defs/sha256"},
+        "protocol_finalizer_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "taskId": {
+      "enum": [
+        "G01-common-fifo-spec",
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G08-common-fifo-dv",
+        "G09-axis-fifo-dv",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    }
+  }
+}

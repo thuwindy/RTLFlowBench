@@ -1,0 +1,37 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G06-ibex-debug-csr-exception",
+  "status": "implemented_development_not_frozen",
+  "runner_status": "implemented_scope_lint_and_positive_preservation_behavior",
+  "strict_verdict_parser_status": "implemented_compile_simulation_semantics_exit_result_unique_sentinel_agreement",
+  "planned_scenarios": [
+    "Seven-file projection and two-file submission scope validation",
+    "Separate controller/package and CSR-register/package component lint",
+    "Read-only hash and combined editable-byte budget enforcement",
+    "Public reset-state preservation smoke",
+    "Public normal illegal-instruction exception context-save smoke",
+    "Public first Debug Mode entry context-preservation smoke",
+    "Hard timeout, output cap, and exact case/suite/result/sentinel agreement"
+  ],
+  "excluded_private_scenarios": [
+    "Exception while already in Debug Mode CSR before/after differential",
+    "Multiple synchronous exception-class matrix",
+    "Debug entry/exception/DRET/re-entry preservation sequence",
+    "Interrupt, NMI, MRET, EBREAK, PMP and performance-counter regression",
+    "Bounded formal, non-vacuity, coverage, mutation, and alternate-solution oracle"
+  ],
+  "pass_sentinel": "GOLDEN12_G06_VISIBLE_PASS",
+  "compile_timeout_seconds": 60,
+  "simulation_timeout_seconds": 10,
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "verdict_parser_path": "visible/verdict.py",
+  "calibration_status": "server_eight_case_behavior_and_failure_taxonomy_observed_not_frozen",
+  "excluded_claims": [
+    "The public runner exercises only positive preservation behavior and is not the hidden defect oracle.",
+    "The public runner does not exercise the exception-while-already-in-debug requirement.",
+    "SERVER26 development calibration observed base and two independent positives pass, one preservation mutant functional_fail, plus distinct compile, scope, infra, and timeout fixtures; the calibration subjects remain private and unfrozen.",
+    "The runner, tool binary, sandbox, timeout, budget, and result schema are development candidates and are not frozen.",
+    "No hidden evaluation, formal proof, score, benchmark readiness, or adapter readiness is claimed."
+  ]
+}

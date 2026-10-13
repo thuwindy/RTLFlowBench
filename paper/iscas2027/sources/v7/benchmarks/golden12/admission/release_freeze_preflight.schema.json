@@ -1,0 +1,235 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-freeze-preflight.v1.json",
+  "title": "Golden-12 release-freeze preflight",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "policy_sha256",
+    "selection_sha256",
+    "task_count",
+    "exact_budget_proposal_count",
+    "candidate_bound_material_count",
+    "public_rights_ready_count",
+    "environment_release_frozen_count",
+    "scoring_release_frozen_count",
+    "runner_source_closure_verified_count",
+    "runner_release_frozen_count",
+    "freeze_transition_eligible_count",
+    "tasks",
+    "source",
+    "independent_review_complete",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_freeze_preflight.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "blocked_pending_independent_freeze"},
+    "policy_sha256": {"$ref": "#/$defs/sha256"},
+    "selection_sha256": {"$ref": "#/$defs/sha256"},
+    "task_count": {"const": 12},
+    "exact_budget_proposal_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "candidate_bound_material_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "public_rights_ready_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "environment_release_frozen_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "scoring_release_frozen_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "runner_source_closure_verified_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "runner_release_frozen_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "freeze_transition_eligible_count": {"type": "integer", "minimum": 0, "maximum": 12},
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "output_schema_sha256",
+        "policy_schema_sha256",
+        "selection_schema_sha256",
+        "offline_evaluator_registry_sha256",
+        "offline_evaluator_registry_schema_sha256",
+        "protocol_candidate_lock_sha256",
+        "task_schema_sha256",
+        "public_packager_sha256",
+        "release_material_builder_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "output_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "policy_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "selection_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "offline_evaluator_registry_sha256": {"$ref": "#/$defs/sha256"},
+        "offline_evaluator_registry_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "protocol_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "task_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "public_packager_sha256": {"$ref": "#/$defs/sha256"},
+        "release_material_builder_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "independent_review_complete": {"const": false},
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "relative_path",
+        "sha256",
+        "candidate_component_bound",
+        "current_release_freeze_status",
+        "current_release_freeze_verified",
+        "proposed_release_freeze_status",
+        "review_status",
+        "effective"
+      ],
+      "properties": {
+        "role": {"enum": ["environment_lock", "scoring_profile"]},
+        "relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_component_bound": {"type": "boolean"},
+        "current_release_freeze_status": {"enum": ["verified_frozen", "not_frozen", "not_available"]},
+        "current_release_freeze_verified": {"type": "boolean"},
+        "proposed_release_freeze_status": {"const": "release_frozen"},
+        "review_status": {"const": "pending_independent_review"},
+        "effective": {"const": false}
+      }
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "registry_status",
+        "entrypoint_relative",
+        "entrypoint_sha256",
+        "candidate_relative",
+        "candidate_sha256",
+        "candidate_schema_relative",
+        "candidate_schema_sha256",
+        "receipt_schema_relative",
+        "receipt_schema_sha256",
+        "source_closure_file_count",
+        "source_closure_verified",
+        "current_release_freeze_verified",
+        "proposed_release_freeze_status",
+        "review_status",
+        "effective"
+      ],
+      "properties": {
+        "role": {"const": "runner_lock"},
+        "registry_status": {"const": "development_not_admitted"},
+        "entrypoint_relative": {"type": "string", "minLength": 1},
+        "entrypoint_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_relative": {"type": "string", "minLength": 1},
+        "candidate_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_schema_relative": {"type": "string", "minLength": 1},
+        "candidate_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema_relative": {"type": "string", "minLength": 1},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "source_closure_file_count": {"type": "integer", "minimum": 1},
+        "source_closure_verified": {"const": true},
+        "current_release_freeze_verified": {"type": "boolean"},
+        "proposed_release_freeze_status": {"const": "release_frozen"},
+        "review_status": {"const": "pending_independent_review"},
+        "effective": {"const": false}
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "candidate_lock_sha256",
+        "external_task_sha256",
+        "rights_receipt_sha256",
+        "current_public_content_manifest_sha256",
+        "current_public_budget_sha256",
+        "target_public_content_manifest_sha256",
+        "current_descriptor_state",
+        "descriptor_transition_template_status",
+        "descriptor_transition_template",
+        "proposed_public_budget",
+        "exact_budget_proposal_complete",
+        "materials",
+        "all_selected_materials_candidate_bound",
+        "public_rights_ready",
+        "freeze_transition_eligible",
+        "blockers"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "external_task_sha256": {"$ref": "#/$defs/sha256"},
+        "rights_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "current_public_content_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "current_public_budget_sha256": {"$ref": "#/$defs/sha256"},
+        "target_public_content_manifest_sha256": {
+          "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+        },
+        "current_descriptor_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "benchmark_version",
+            "packet_status",
+            "rights_status",
+            "public_digest_status",
+            "budget_status",
+            "evaluator_status"
+          ],
+          "properties": {
+            "benchmark_version": {"type": "string", "minLength": 1},
+            "packet_status": {"enum": ["draft", "frozen"]},
+            "rights_status": {"enum": ["pending_independent_review", "approved", "blocked"]},
+            "public_digest_status": {"enum": ["not_frozen", "frozen"]},
+            "budget_status": {"enum": ["provisional_not_frozen", "frozen"]},
+            "evaluator_status": {"enum": ["not_implemented", "development", "calibrated", "frozen"]}
+          }
+        },
+        "descriptor_transition_template_status": {
+          "const": "awaiting_post_materialization_public_digest"
+        },
+        "descriptor_transition_template": {"type": "object"},
+        "proposed_public_budget": {"type": "object"},
+        "exact_budget_proposal_complete": {"type": "boolean"},
+        "materials": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["environment_lock", "scoring_profile", "runner"],
+          "properties": {
+            "environment_lock": {"$ref": "#/$defs/material"},
+            "scoring_profile": {"$ref": "#/$defs/material"},
+            "runner": {"$ref": "#/$defs/runner"}
+          }
+        },
+        "all_selected_materials_candidate_bound": {"type": "boolean"},
+        "public_rights_ready": {"type": "boolean"},
+        "freeze_transition_eligible": {"const": false},
+        "blockers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

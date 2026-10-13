@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-campaign-authorization.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "decision", "scope",
+    "input_sha256", "provider_gate", "cohort", "permissions",
+    "attempt_accounting", "readiness", "resource_campaign_blockers",
+    "official_attempt_blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.full_workflow_resource_campaign_authorization.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "resource_campaign_authorized_model_release_pending"},
+    "decision": {"const": "PASS_RESOURCE_CALIBRATION_ONLY"},
+    "scope": {
+      "const": "five_workflows_all_twelve_tasks_resource_calibration_only"
+    },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blocked_preflight", "workflow_release_candidate",
+        "common_provider_gate", "controller_envelope",
+        "full_workflow_request_set", "bridge_request_set",
+        "common_model_candidate", "controller_runner",
+        "authorization_builder", "authorization_schema"
+      ],
+      "properties": {
+        "blocked_preflight": {"$ref": "#/$defs/sha256"},
+        "workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "common_provider_gate": {"$ref": "#/$defs/sha256"},
+        "controller_envelope": {"$ref": "#/$defs/sha256"},
+        "full_workflow_request_set": {"$ref": "#/$defs/sha256"},
+        "bridge_request_set": {"$ref": "#/$defs/sha256"},
+        "common_model_candidate": {"$ref": "#/$defs/sha256"},
+        "controller_runner": {"$ref": "#/$defs/sha256"},
+        "authorization_builder": {"$ref": "#/$defs/sha256"},
+        "authorization_schema": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "provider_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider", "required_route_count", "passed_route_count",
+        "infra_route_count", "not_run_route_count", "thinking_mode",
+        "temperature", "credential_value_or_hash_recorded",
+        "common_model_release_frozen"
+      ],
+      "properties": {
+        "provider": {"const": "deepseek"},
+        "required_route_count": {"const": 5},
+        "passed_route_count": {"const": 5},
+        "infra_route_count": {"const": 0},
+        "not_run_route_count": {"const": 0},
+        "thinking_mode": {"const": "disabled"},
+        "temperature": {"const": 0},
+        "credential_value_or_hash_recorded": {"const": false},
+        "common_model_release_frozen": {"const": false}
+      }
+    },
+    "cohort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow_count", "task_count", "planned_resource_measurement_count",
+        "launch_plan_count", "nonlaunch_disposition_count"
+      ],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "task_count": {"const": 12},
+        "planned_resource_measurement_count": {"const": 200},
+        "launch_plan_count": {"const": 98},
+        "nonlaunch_disposition_count": {"const": 102}
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource_calibration_campaign_permitted",
+        "maximum_planned_resource_measurements",
+        "host_capacity_policy_derivation_permitted",
+        "official_attempts_permitted", "benchmark_results_permitted",
+        "private_evaluator_reachable"
+      ],
+      "properties": {
+        "resource_calibration_campaign_permitted": {"const": true},
+        "maximum_planned_resource_measurements": {"const": 200},
+        "host_capacity_policy_derivation_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false},
+        "benchmark_results_permitted": {"const": false},
+        "private_evaluator_reachable": {"const": false}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource_calibration_attempts_consumed", "official_attempts_started",
+        "official_semantic_attempts_consumed", "benchmark_results_created",
+        "private_evaluator_calls"
+      ],
+      "properties": {
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0},
+        "private_evaluator_calls": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "common_provider_preflight_passed",
+        "all_200_controller_dispositions_bound",
+        "resource_campaign_permitted", "resource_calibration_complete",
+        "host_capacity_policy_derivation_permitted",
+        "official_attempts_permitted"
+      ],
+      "properties": {
+        "common_provider_preflight_passed": {"const": true},
+        "all_200_controller_dispositions_bound": {"const": true},
+        "resource_campaign_permitted": {"const": true},
+        "resource_calibration_complete": {"const": false},
+        "host_capacity_policy_derivation_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "resource_campaign_blockers": {"const": []},
+    "official_attempt_blockers": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

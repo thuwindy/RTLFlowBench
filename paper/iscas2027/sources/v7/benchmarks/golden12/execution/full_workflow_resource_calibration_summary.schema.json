@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-calibration-summary.v2.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "status", "scope", "measurement_set_id", "input_sha256", "workflows", "summary", "attempt_accounting", "readiness", "blockers", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.full_workflow_resource_calibration_summary.v2"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "full_workflow_measurement_coverage_complete_pending_policy_and_review"},
+    "scope": {"const": "five_workflows_all_twelve_tasks_resource_calibration_only"},
+    "measurement_set_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["measurement_set", "workflow_release_candidate", "primary_cohort_execution_plan", "oci_inventory", "measurement_set_schema", "launch_receipt_schema", "nonlaunch_receipt_schema", "summary_schema", "aggregator"],
+      "properties": {
+        "measurement_set": {"$ref": "#/$defs/sha256"},
+        "workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "primary_cohort_execution_plan": {"$ref": "#/$defs/sha256"},
+        "oci_inventory": {"$ref": "#/$defs/sha256"},
+        "measurement_set_schema": {"$ref": "#/$defs/sha256"},
+        "launch_receipt_schema": {"$ref": "#/$defs/sha256"},
+        "nonlaunch_receipt_schema": {"$ref": "#/$defs/sha256"},
+        "summary_schema": {"$ref": "#/$defs/sha256"},
+        "aggregator": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "workflows": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "chipflow"}, "workflow_id": {"const": "chipflow"}, "launched_task_count": {"const": 12}, "measured_launch_sample_count": {"const": 40}, "controller_nonlaunch_count": {"const": 0}, "resource_metric_slot_count": {"const": 40}, "not_available_resource_metric_slot_count": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}, "workflow_id": {"const": "same_model_vanilla_agent"}, "launched_task_count": {"const": 12}, "measured_launch_sample_count": {"const": 40}, "controller_nonlaunch_count": {"const": 0}, "resource_metric_slot_count": {"const": 40}, "not_available_resource_metric_slot_count": {"const": 0}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}, "workflow_id": {"const": "mage"}, "launched_task_count": {"const": 2}, "measured_launch_sample_count": {"const": 6}, "controller_nonlaunch_count": {"const": 34}, "resource_metric_slot_count": {"const": 6}, "not_available_resource_metric_slot_count": {"const": 34}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}, "workflow_id": {"const": "verilogcoder"}, "launched_task_count": {"const": 2}, "measured_launch_sample_count": {"const": 6}, "controller_nonlaunch_count": {"const": 34}, "resource_metric_slot_count": {"const": 6}, "not_available_resource_metric_slot_count": {"const": 34}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}, "workflow_id": {"const": "hdlagent"}, "launched_task_count": {"const": 2}, "measured_launch_sample_count": {"const": 6}, "controller_nonlaunch_count": {"const": 34}, "resource_metric_slot_count": {"const": 6}, "not_available_resource_metric_slot_count": {"const": 34}}}]}
+      ], "items": false
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_count", "task_count", "planned_slot_count", "launched_sample_count", "eligible_launched_sample_count", "controller_nonlaunch_count", "complete_disposition_count", "workflow_measurement_coverage_complete_count", "resource_calibration_complete_count", "independent_review_complete_count", "official_attempts_permitted_count"],
+      "properties": {
+        "workflow_count": {"const": 5}, "task_count": {"const": 12},
+        "planned_slot_count": {"const": 200},
+        "launched_sample_count": {"const": 98},
+        "eligible_launched_sample_count": {"const": 98},
+        "controller_nonlaunch_count": {"const": 102},
+        "complete_disposition_count": {"const": 200},
+        "workflow_measurement_coverage_complete_count": {"const": 5},
+        "resource_calibration_complete_count": {"const": 0},
+        "independent_review_complete_count": {"const": 0},
+        "official_attempts_permitted_count": {"const": 0}
+      }
+    },
+    "attempt_accounting": {"$ref": "#/$defs/accounting"},
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["all_five_measurement_cohorts_complete", "host_capacity_policy_derivation_permitted", "host_capacity_policy_frozen", "independent_review_complete", "resource_calibration_release_frozen", "official_attempts_permitted"],
+      "properties": {
+        "all_five_measurement_cohorts_complete": {"const": true},
+        "host_capacity_policy_derivation_permitted": {"const": true},
+        "host_capacity_policy_frozen": {"const": false},
+        "independent_review_complete": {"const": false},
+        "resource_calibration_release_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "blockers": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 24}},
+    "excluded_claims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["peak_memory_bytes", "peak_cpu_time_seconds", "peak_wall_time_seconds", "peak_scratch_bytes", "peak_process_count", "peak_eda_concurrency", "peak_llm_concurrency", "total_activity_count", "provider_call_limit", "total_provider_call_count", "total_provider_budget_rejection_count", "provider_budget_exhausted_sample_count", "zero_activity_sample_count", "peak_memory_task_ids"],
+      "properties": {
+        "peak_memory_bytes": {"type": "integer", "minimum": 1},
+        "peak_cpu_time_seconds": {"type": "number", "minimum": 0},
+        "peak_wall_time_seconds": {"type": "number", "exclusiveMinimum": 0},
+        "peak_scratch_bytes": {"type": "integer", "minimum": 0},
+        "peak_process_count": {"type": "integer", "minimum": 1},
+        "peak_eda_concurrency": {"type": "integer", "minimum": 0},
+        "peak_llm_concurrency": {"type": "integer", "minimum": 0},
+        "total_activity_count": {"type": "integer", "minimum": 0},
+        "provider_call_limit": {"type": "integer", "minimum": 1, "maximum": 4096},
+        "total_provider_call_count": {"type": "integer", "minimum": 0},
+        "total_provider_budget_rejection_count": {"type": "integer", "minimum": 0},
+        "provider_budget_exhausted_sample_count": {"type": "integer", "minimum": 0, "maximum": 40},
+        "zero_activity_sample_count": {"type": "integer", "minimum": 0, "maximum": 40},
+        "peak_memory_task_ids": {"type": "array", "minItems": 1, "maxItems": 12, "uniqueItems": true, "items": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"}}
+      }
+    },
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_slot_id", "workflow_id", "source_commit", "source_manifest_sha256", "runtime_image_digest", "runtime_image_id", "scheduled_task_count", "scheduled_slot_count", "launched_task_count", "measured_launch_sample_count", "controller_nonlaunch_count", "disposition_receipt_set_sha256", "resource_metric_slot_count", "not_available_resource_metric_slot_count", "metrics", "measurement_coverage_complete", "resource_calibration_complete", "independent_review_complete", "official_attempts_permitted", "blockers"],
+      "properties": {
+        "workflow_slot_id": {"type": "string"}, "workflow_id": {"type": "string"},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_image_digest": {"$ref": "#/$defs/image"}, "runtime_image_id": {"$ref": "#/$defs/image"},
+        "scheduled_task_count": {"const": 12},
+        "scheduled_slot_count": {"const": 40},
+        "launched_task_count": {"type": "integer", "minimum": 1, "maximum": 12},
+        "measured_launch_sample_count": {"type": "integer", "minimum": 1, "maximum": 40},
+        "controller_nonlaunch_count": {"type": "integer", "minimum": 0, "maximum": 40},
+        "disposition_receipt_set_sha256": {"$ref": "#/$defs/sha256"},
+        "resource_metric_slot_count": {"type": "integer", "minimum": 1, "maximum": 40},
+        "not_available_resource_metric_slot_count": {"type": "integer", "minimum": 0, "maximum": 40},
+        "metrics": {"$ref": "#/$defs/metrics"},
+        "measurement_coverage_complete": {"const": true},
+        "resource_calibration_complete": {"const": false},
+        "independent_review_complete": {"const": false},
+        "official_attempts_permitted": {"const": false},
+        "blockers": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 24}}
+      }
+    },
+    "accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls"],
+      "properties": {
+        "official_attempts_started": {"const": 0}, "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 98}, "benchmark_results_created": {"const": 0},
+        "private_evaluator_calls": {"const": 0}
+      }
+    }
+  }
+}

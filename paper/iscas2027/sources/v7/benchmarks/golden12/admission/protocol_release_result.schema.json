@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/protocol-release-result.v1.json",
+  "title": "RTLFlowBench protocol release result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "candidate_release",
+    "candidate_lock_sha256",
+    "status",
+    "decision",
+    "blockers",
+    "automatic_gates_complete",
+    "independent_review_complete",
+    "protocol_ready",
+    "external_protocol_use_permitted",
+    "release_subject_sha256",
+    "input_sha256",
+    "source",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.protocol_release_result.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "candidate_release": {"const": "rtlflowbench-protocol-v1"},
+    "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"enum": ["released", "BLOCK"]},
+    "decision": {"enum": ["RELEASE", "BLOCK"]},
+    "blockers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "protocol_automatic_gates_incomplete",
+          "review_cryptographic_verification_incomplete",
+          "review_registry_governance_incomplete",
+          "review_decisions_incomplete"
+        ]
+      }
+    },
+    "automatic_gates_complete": {"type": "boolean"},
+    "independent_review_complete": {"type": "boolean"},
+    "protocol_ready": {"type": "boolean"},
+    "external_protocol_use_permitted": {"type": "boolean"},
+    "release_subject_sha256": {"$ref": "#/$defs/sha256"},
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_lock",
+        "live_candidate_check",
+        "live_review_verification"
+      ],
+      "properties": {
+        "candidate_lock": {"$ref": "#/$defs/sha256"},
+        "live_candidate_check": {"$ref": "#/$defs/sha256"},
+        "live_review_verification": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "finalizer_sha256",
+        "expected_finalizer_sha256",
+        "finalizer_trust_anchor_digest_match",
+        "result_schema_sha256",
+        "candidate_checker_sha256",
+        "review_verifier_sha256"
+      ],
+      "properties": {
+        "finalizer_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_finalizer_sha256": {"$ref": "#/$defs/sha256"},
+        "finalizer_trust_anchor_digest_match": {"const": true},
+        "result_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_checker_sha256": {"$ref": "#/$defs/sha256"},
+        "review_verifier_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

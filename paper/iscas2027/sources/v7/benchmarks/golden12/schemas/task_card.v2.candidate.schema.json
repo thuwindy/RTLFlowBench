@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/task-card.v2.candidate.json",
+  "title": "Golden-12 v2 candidate task card",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "task_id",
+    "activity_type",
+    "start_state",
+    "goal",
+    "editable_scope",
+    "available_inputs",
+    "submission_contract",
+    "evaluation_contract",
+    "legal_terminal_states",
+    "budget_binding",
+    "environment_binding",
+    "rights_and_contamination"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.task_card.v2.candidate"},
+    "status": {"enum": ["migration_pending", "candidate", "frozen"]},
+    "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+    "activity_type": {
+      "enum": [
+        "spec_to_rtl",
+        "protocol_integration",
+        "repository_repair",
+        "verification_generation",
+        "qor_optimization",
+        "safe_refusal"
+      ]
+    },
+    "start_state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "public_root", "source_binding"],
+      "properties": {
+        "kind": {"enum": ["blank_scaffold", "repository_snapshot", "read_only_dut", "incomplete_contract"]},
+        "public_root": {"$ref": "#/$defs/relativePath"},
+        "source_binding": {"$ref": "#/$defs/relativePath"}
+      }
+    },
+    "goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "public_requirement_ids"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 1},
+        "public_requirement_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/requirementId"}
+        }
+      }
+    },
+    "editable_scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_path", "editable_paths", "max_files_changed"],
+      "properties": {
+        "contract_path": {"$ref": "#/$defs/relativePath"},
+        "editable_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/relativePath"}},
+        "max_files_changed": {"type": "integer", "minimum": 0}
+      }
+    },
+    "available_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_documents", "visible_feedback", "tools", "private_assets_exposed"],
+      "properties": {
+        "public_documents": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/relativePath"}},
+        "visible_feedback": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "tools": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "private_assets_exposed": {"const": false}
+      }
+    },
+    "submission_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_kind", "required_paths", "schema_binding"],
+      "properties": {
+        "artifact_kind": {"enum": ["rtl_bundle", "repository_patch", "verification_bundle", "block_decision"]},
+        "required_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/relativePath"}},
+        "schema_binding": {"$ref": "#/$defs/relativePath"}
+      }
+    },
+    "evaluation_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_oracle_classes", "traceability_binding", "private_evaluator_isolated"],
+      "properties": {
+        "required_oracle_classes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["F2P", "P2P", "formal", "mutation", "qor", "trust"]}},
+        "traceability_binding": {"$ref": "#/$defs/relativePath"},
+        "private_evaluator_isolated": {"const": true}
+      }
+    },
+    "legal_terminal_states": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["submission", "evidence_backed_block"]}
+    },
+    "budget_binding": {"$ref": "#/$defs/relativePath"},
+    "environment_binding": {
+      "oneOf": [
+        {"$ref": "#/$defs/relativePath"},
+        {"type": "null"}
+      ]
+    },
+    "rights_and_contamination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rights_binding", "contamination_policy_binding", "review_status"],
+      "properties": {
+        "rights_binding": {"$ref": "#/$defs/relativePath"},
+        "contamination_policy_binding": {"$ref": "#/$defs/relativePath"},
+        "review_status": {"enum": ["pending", "author_reviewed", "independently_reviewed", "blocked"]}
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "requirementId": {"type": "string", "pattern": "^(?:REQ-[A-Z0-9][A-Z0-9_-]*|G(?:0[1-9]|1[0-2])-A[0-9]{2}|A[0-9]{2})$"}
+  }
+}

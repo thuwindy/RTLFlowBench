@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/golden6-freeze-readiness-blocker.v1.json",
+  "title": "RTLFlowBench Golden-6 freeze readiness blocker receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "release_target",
+    "task_count",
+    "review_item_count",
+    "anchors",
+    "machine_gates",
+    "tasks",
+    "human_governance",
+    "post_review_materialization",
+    "downstream_experiments",
+    "readiness",
+    "workflow_workspace_exposure_permitted",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_id": {
+      "enum": [
+        "G01-common-fifo-spec",
+        "G03-axis-fifo-backpressure",
+        "G05-picorv32-missing-irq",
+        "G08-common-fifo-dv",
+        "G10-serv-area-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    },
+    "subject_id": {"enum": ["G01", "G03", "G05", "G08", "G10", "G12"]}
+  },
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden6_freeze_readiness_blocker.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "automatic_preflight_pass_human_review_and_freeze_pending"},
+    "classification": {"const": "release_authority_private"},
+    "release_target": {"const": "golden6_alpha"},
+    "task_count": {"const": 6},
+    "review_item_count": {"const": 54},
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "golden12_freeze_preflight_sha256",
+        "golden6_technical_control_sha256",
+        "golden6_reviewer_distribution_sha256"
+      ],
+      "properties": {
+        "golden12_freeze_preflight_sha256": {"$ref": "#/$defs/sha256"},
+        "golden6_technical_control_sha256": {"$ref": "#/$defs/sha256"},
+        "golden6_reviewer_distribution_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "machine_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "integrity_checks_passed",
+        "protocol_automatic_gate_failure_count",
+        "task_component_mismatch_count",
+        "candidate_bound_task_count",
+        "exact_budget_task_count",
+        "safe_reviewer_bundle_task_count",
+        "public_transport_private_file_count",
+        "offline_evaluator_source_integrity_task_count",
+        "pre_review_automatic_blocker_count"
+      ],
+      "properties": {
+        "integrity_checks_passed": {"const": true},
+        "protocol_automatic_gate_failure_count": {"const": 0},
+        "task_component_mismatch_count": {"const": 0},
+        "candidate_bound_task_count": {"const": 6},
+        "exact_budget_task_count": {"const": 6},
+        "safe_reviewer_bundle_task_count": {"const": 6},
+        "public_transport_private_file_count": {"const": 0},
+        "offline_evaluator_source_integrity_task_count": {"const": 6},
+        "pre_review_automatic_blocker_count": {"const": 0}
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "subject_id",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "review_item_count",
+          "automatic_gate_status",
+          "exact_budget_proposal_complete",
+          "all_selected_materials_candidate_bound",
+          "review_bundle_safety_verified",
+          "public_rights_ready",
+          "environment_release_frozen",
+          "scoring_release_frozen",
+          "freeze_transition_eligible",
+          "ordered_blockers"
+        ],
+        "properties": {
+          "task_id": {"$ref": "#/$defs/task_id"},
+          "subject_id": {"$ref": "#/$defs/subject_id"},
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "review_item_count": {"type": "integer", "minimum": 1, "maximum": 10},
+          "automatic_gate_status": {"const": "pass"},
+          "exact_budget_proposal_complete": {"const": true},
+          "all_selected_materials_candidate_bound": {"const": true},
+          "review_bundle_safety_verified": {"const": true},
+          "public_rights_ready": {"const": false},
+          "environment_release_frozen": {"const": false},
+          "scoring_release_frozen": {"const": false},
+          "freeze_transition_eligible": {"const": false},
+          "ordered_blockers": {
+            "type": "array",
+            "minItems": 9,
+            "maxItems": 9,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "human_governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "nomination_response_supplied",
+        "trusted_reviewer_registry_supplied",
+        "registry_governance_complete",
+        "independent_rights_ready_task_count",
+        "approved_review_item_count",
+        "independent_review_complete",
+        "freeze_policy_approved",
+        "final_admission_complete"
+      ],
+      "properties": {
+        "nomination_response_supplied": {"const": false},
+        "trusted_reviewer_registry_supplied": {"const": false},
+        "registry_governance_complete": {"const": false},
+        "independent_rights_ready_task_count": {"const": 0},
+        "approved_review_item_count": {"const": 0},
+        "independent_review_complete": {"const": false},
+        "freeze_policy_approved": {"const": false},
+        "final_admission_complete": {"const": false}
+      }
+    },
+    "post_review_materialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_release_frozen_task_count",
+        "scoring_release_frozen_task_count",
+        "public_digest_recomputed_task_count",
+        "candidate_relock_complete_task_count",
+        "post_relock_signature_complete_task_count",
+        "freeze_materialized"
+      ],
+      "properties": {
+        "environment_release_frozen_task_count": {"const": 0},
+        "scoring_release_frozen_task_count": {"const": 0},
+        "public_digest_recomputed_task_count": {"const": 0},
+        "candidate_relock_complete_task_count": {"const": 0},
+        "post_relock_signature_complete_task_count": {"const": 0},
+        "freeze_materialized": {"const": false}
+      }
+    },
+    "downstream_experiments": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["formal_experiments_permitted", "formal_results_admissible"],
+      "properties": {
+        "formal_experiments_permitted": {"const": false},
+        "formal_results_admissible": {"const": false}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "benchmark_ready_task_count",
+        "chipflow_adapter_ready_task_count",
+        "golden6_alpha_ready",
+        "golden12_v1_ready"
+      ],
+      "properties": {
+        "benchmark_ready_task_count": {"const": 0},
+        "chipflow_adapter_ready_task_count": {"const": 0},
+        "golden6_alpha_ready": {"const": false},
+        "golden12_v1_ready": {"const": false}
+      }
+    },
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 5,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

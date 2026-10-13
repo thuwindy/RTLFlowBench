@@ -1,0 +1,105 @@
+{
+  "schema_version": "chipflow.golden12.cpu_interface_spec.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "interface_kind": "picorv32_irq_repair",
+  "top_module": "picorv32",
+  "language": "verilog_2005",
+  "cpu_interface_spec_required": true,
+  "projection": "irq_subsystem_cpu_interface_spec",
+  "parameters": [
+    {
+      "name": "ENABLE_IRQ",
+      "type": "bit",
+      "base_default": 0,
+      "repair_relevant_value": 1
+    },
+    {
+      "name": "ENABLE_IRQ_TIMER",
+      "type": "bit",
+      "base_default": 1,
+      "repair_relevant_value": 1
+    },
+    {
+      "name": "MASKED_IRQ",
+      "type": "32_bit_mask",
+      "base_default": "32'h00000000",
+      "meaning": "A set bit permanently disables the corresponding interrupt source."
+    },
+    {
+      "name": "LATCHED_IRQ",
+      "type": "32_bit_mask",
+      "base_default": "32'hffffffff",
+      "meaning": "A set bit requests retention of a sampled event until the existing service path observes it."
+    }
+  ],
+  "clock": {
+    "port": "clk",
+    "active_edge": "rising",
+    "clock_domains": 1
+  },
+  "reset": {
+    "port": "resetn",
+    "polarity": "active_low",
+    "timing": "synchronous",
+    "sample_edge": "rising_clk",
+    "priority": "higher_than_interrupt_event_retention",
+    "asynchronous_effect_between_edges": false
+  },
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "resetn",
+      "direction": "input",
+      "width": "1"
+    },
+    {
+      "name": "irq",
+      "direction": "input",
+      "width": "32"
+    },
+    {
+      "name": "eoi",
+      "direction": "output",
+      "width": "32"
+    },
+    {
+      "name": "trap",
+      "direction": "output",
+      "width": "1"
+    }
+  ],
+  "interrupt_event_semantics": {
+    "external_irq_sample": "When ENABLE_IRQ is one, each irq bit is sampled on the rising clock edge as an interrupt source event.",
+    "timer_expiry_event": "When ENABLE_IRQ and ENABLE_IRQ_TIMER are one, expiry of the existing internal timer contributes the existing timer interrupt bit as an event.",
+    "simultaneous_events": "Timer expiry and externally sampled irq bits on the same rising edge are merged as a set union; neither source may erase another source.",
+    "closely_spaced_events": "Distinct retained interrupt-source bits observed on adjacent or otherwise close rising edges remain pending according to the latch and service semantics; an update for one source may not overwrite an unserved retained source."
+  },
+  "pending_state_semantics": {
+    "pending_retention": "A retained event stays represented in the existing pending state until reset or the existing interrupt service/acknowledgement path consumes it.",
+    "service_observation": "The existing service path observes the unmasked subset of pending sources and preserves PicoRV32's established priority and acknowledgement behavior.",
+    "event_merge": "Pending-state evolution combines retained prior state, timer expiry, and sampled external events without source loss. Multiple occurrences of the same bit before service are represented by one pending bit, not an event count.",
+    "reset_state": "A rising edge sampling resetn low clears the pending state and eoi state; pre-reset events are not retained after reset."
+  },
+  "masking_and_latching_semantics": {
+    "compile_time_mask": "Any bit set in MASKED_IRQ must not become an observable pending interrupt.",
+    "runtime_mask": "The existing runtime irq_mask blocks a pending source from service observation but does not redefine the compile-time MASKED_IRQ or LATCHED_IRQ contracts.",
+    "latched_irq": "For a bit set in LATCHED_IRQ, a one-cycle sampled event remains pending until the existing service path consumes it, unless compile-time masked.",
+    "non_latched_irq": "For a bit clear in LATCHED_IRQ, behavior remains level-sensitive to the sampled irq input; retention after the input deasserts is not required."
+  },
+  "preservation_requirements": [
+    "Preserve the public picorv32 module signature and all unrelated parameters and ports.",
+    "Preserve instruction execution, native memory-interface behavior, trap behavior, and IRQ instruction semantics outside the stated pending-event repair.",
+    "Preserve eoi encoding and existing service ordering for already pending, unmasked sources.",
+    "Preserve the embedded copyright and ISC permission notice in picorv32.v.",
+    "Do not modify README.md or add, delete, or rename repository files."
+  ],
+  "latency_semantics": {
+    "mode": "existing_picorv32_irq_latency_not_cycle_refrozen",
+    "new_pipeline_stage_allowed": false,
+    "progress": "An unmasked retained event remains eligible for the existing interrupt entry path; this repair does not add a new architectural latency guarantee."
+  }
+}

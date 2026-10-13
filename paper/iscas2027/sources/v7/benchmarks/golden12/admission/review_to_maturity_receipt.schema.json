@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/review-to-maturity-receipt.v1.json",
+  "title": "Verified Golden-12 review-to-maturity crosswalk receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "classification",
+    "source_sha256", "summary", "tasks", "protocol", "readiness",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.review_to_maturity_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "verified_unsigned_crosswalk_pending_independent_review"},
+    "classification": {"const": "reviewer_control_plane_no_private_oracle"},
+    "source_sha256": {
+      "type": "object", "minProperties": 30,
+      "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_count", "task_maturity_gate_count", "task_review_item_count", "primary_review_assignment_count", "protocol_review_item_count", "approved_review_item_count"],
+      "properties": {
+        "task_count": {"const": 12},
+        "task_maturity_gate_count": {"const": 91},
+        "task_review_item_count": {"const": 99},
+        "primary_review_assignment_count": {"const": 99},
+        "protocol_review_item_count": {"const": 3},
+        "approved_review_item_count": {"const": 0}
+      }
+    },
+    "tasks": {
+      "type": "array", "minItems": 12, "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "protocol": {"$ref": "#/$defs/protocol"},
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["independent_gate_pass_count", "independent_gate_pending_count", "independent_review_complete", "suite_ready"],
+      "properties": {
+        "independent_gate_pass_count": {"const": 0},
+        "independent_gate_pending_count": {"const": 91},
+        "independent_review_complete": {"const": false},
+        "suite_ready": {"const": false}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["gate_id", "status", "primary_review_ids", "required_review_ids"],
+      "properties": {
+        "gate_id": {"type": "string", "minLength": 1},
+        "status": {"const": "pending"},
+        "primary_review_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "required_review_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": ["task_id", "maturity_policy_sha256", "review_packet_sha256", "candidate_lock_sha256", "maturity_gate_count", "review_item_count", "primary_review_assignment_count", "approved_review_item_count", "independent_review_complete", "independent_gates"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-"},
+        "maturity_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "maturity_gate_count": {"type": "integer", "minimum": 1},
+        "review_item_count": {"type": "integer", "minimum": 1},
+        "primary_review_assignment_count": {"type": "integer", "minimum": 1},
+        "approved_review_item_count": {"const": 0},
+        "independent_review_complete": {"const": false},
+        "independent_gates": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/gate"}}
+      }
+    },
+    "protocol": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_lock_sha256", "review_packet_sha256", "review_item_count", "approved_review_item_count", "independent_review_complete", "review_ids"],
+      "properties": {
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "review_item_count": {"const": 3},
+        "approved_review_item_count": {"const": 0},
+        "independent_review_complete": {"const": false},
+        "review_ids": {"type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/task-release-materials.v1.json",
+  "title": "Golden-12 task release materials receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "task_id",
+    "candidate_release",
+    "candidate_lock_sha256",
+    "status",
+    "materials",
+    "missing_roles",
+    "all_required_materials_verified",
+    "release_freeze_missing_roles",
+    "all_release_freezes_verified",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "source",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.task_release_materials.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "task_id": {"type": "string", "minLength": 1},
+    "candidate_release": {"type": "string", "minLength": 1},
+    "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"enum": ["complete_candidate_bound", "incomplete"]},
+    "materials": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_task_archive",
+        "evaluator_private_archive",
+        "environment_lock",
+        "scoring_profile",
+        "runner_lock",
+        "protocol_release"
+      ],
+      "properties": {
+        "public_task_archive": {"$ref": "#/$defs/archiveMaterial"},
+        "evaluator_private_archive": {"$ref": "#/$defs/privateArchiveMaterial"},
+        "environment_lock": {"$ref": "#/$defs/componentMaterial"},
+        "scoring_profile": {"$ref": "#/$defs/componentMaterial"},
+        "runner_lock": {"$ref": "#/$defs/componentMaterial"},
+        "protocol_release": {"$ref": "#/$defs/protocolMaterial"}
+      }
+    },
+    "missing_roles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "public_task_archive",
+          "evaluator_private_archive",
+          "environment_lock",
+          "scoring_profile",
+          "runner_lock",
+          "protocol_release"
+        ]
+      }
+    },
+    "all_required_materials_verified": {"type": "boolean"},
+    "release_freeze_missing_roles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["environment_lock", "scoring_profile", "runner_lock"]}
+    },
+    "all_release_freezes_verified": {"type": "boolean"},
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "schema_sha256",
+        "public_archive_builder_sha256",
+        "public_archive_schema_sha256",
+        "release_freeze_declaration_schema_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "public_archive_builder_sha256": {"$ref": "#/$defs/sha256"},
+        "public_archive_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "release_freeze_declaration_schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "nullableSha256": {
+      "oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]
+    },
+    "archiveMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "sha256", "bytes", "candidate_digest_bound", "binding_method"],
+      "properties": {
+        "status": {"enum": ["verified", "not_available", "unbound"]},
+        "sha256": {"$ref": "#/$defs/nullableSha256"},
+        "bytes": {"type": ["integer", "null"], "minimum": 1},
+        "candidate_digest_bound": {"type": "boolean"},
+        "binding_method": {
+          "oneOf": [
+            {"enum": ["candidate_archive_sha256", "candidate_public_component_closure"]},
+            {"type": "null"}
+          ]
+        }
+      }
+    },
+    "privateArchiveMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "sha256",
+        "bytes",
+        "candidate_digest_bound",
+        "receipt_sha256",
+        "candidate_lock_sha256",
+        "workflow_workspace_exposed"
+      ],
+      "properties": {
+        "status": {"enum": ["verified", "not_available", "unbound"]},
+        "sha256": {"$ref": "#/$defs/nullableSha256"},
+        "bytes": {"type": ["integer", "null"], "minimum": 1},
+        "candidate_digest_bound": {"type": "boolean"},
+        "receipt_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "workflow_workspace_exposed": {"const": false}
+      }
+    },
+    "componentMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "relative_path",
+        "sha256",
+        "candidate_component_bound",
+        "release_freeze_status",
+        "release_freeze_verified",
+        "freeze_evidence"
+      ],
+      "properties": {
+        "status": {"enum": ["verified", "not_available", "unbound"]},
+        "relative_path": {"type": ["string", "null"]},
+        "sha256": {"$ref": "#/$defs/nullableSha256"},
+        "candidate_component_bound": {"type": "boolean"},
+        "release_freeze_status": {
+          "enum": ["verified_frozen", "not_frozen", "not_available"]
+        },
+        "release_freeze_verified": {"type": "boolean"},
+        "freeze_evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "protocolMaterial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "receipt_sha256",
+        "expected_receipt_sha256",
+        "trust_anchor_digest_match",
+        "protocol_ready",
+        "independent_review_complete"
+      ],
+      "properties": {
+        "status": {"enum": ["verified", "not_available", "invalid"]},
+        "receipt_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "expected_receipt_sha256": {"$ref": "#/$defs/nullableSha256"},
+        "trust_anchor_digest_match": {"type": "boolean"},
+        "protocol_ready": {"type": "boolean"},
+        "independent_review_complete": {"type": "boolean"}
+      }
+    }
+  }
+}

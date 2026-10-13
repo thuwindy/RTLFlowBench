@@ -1,0 +1,31 @@
+{
+  "schema_version": "chipflow.golden12.allowed_scope.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "scope_kind": "neutral_submission",
+  "editable_paths": [
+    "picorv32.v"
+  ],
+  "read_only_repository_paths": [
+    "README.md"
+  ],
+  "allowed_file_operations": [
+    "replace_text"
+  ],
+  "max_files_changed": 1,
+  "forbidden_paths": [
+    "README.md",
+    "firmware/",
+    "scripts/",
+    "testbench.v",
+    "testbench_ez.v",
+    "testbench_wb.v",
+    "testbench.cc",
+    "public/",
+    "private/",
+    "spec/",
+    "visible/",
+    "evaluator/",
+    "reference/"
+  ],
+  "network_access": false
+}

@@ -1,0 +1,95 @@
+{
+  "schema_version": "chipflow.golden12.acceptance_spec.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "status": "draft_pending_independent_review",
+  "requirements": [
+    {
+      "requirement_id": "G05-A01",
+      "statement": "The submitted picorv32.v preserves the pinned repository-base module interfaces and elaborates as Verilog 2005.",
+      "acceptance_rule": "The evaluator can elaborate the public picorv32 top and the repository wrappers without a submission-induced compile or interface error.",
+      "verification_intent": "Implemented development-visible build and scope checks; current-source freeze remains pending."
+    },
+    {
+      "requirement_id": "G05-A02",
+      "statement": "An unmasked, latched one-cycle external IRQ event is retained for the existing service path.",
+      "acceptance_rule": "A sampled external source does not disappear before service when its LATCHED_IRQ bit is set and its MASKED_IRQ bit is clear.",
+      "verification_intent": "Implemented development-visible smoke and development-calibrated hidden differential trace; neither is frozen."
+    },
+    {
+      "requirement_id": "G05-A03",
+      "statement": "Internal timer expiry remains observable through the existing timer IRQ behavior.",
+      "acceptance_rule": "Timer expiry contributes the timer source when IRQ and timer support are enabled and the source is not compile-time masked.",
+      "verification_intent": "Implemented development-visible timer smoke and development-calibrated hidden simulation/formal checks; neither is frozen."
+    },
+    {
+      "requirement_id": "G05-A04",
+      "statement": "Simultaneous timer and external IRQ events do not overwrite one another.",
+      "acceptance_rule": "The pending source set after the sampled edge contains the set union of all eligible timer and external sources from that edge.",
+      "verification_intent": "Development public service-edge merge smoke plus development-calibrated hidden cycle-accurate sequence sweep and pending-state differential trace; neither is frozen."
+    },
+    {
+      "requirement_id": "G05-A05",
+      "statement": "Closely spaced retained IRQ sources are not lost before service.",
+      "acceptance_rule": "Adding an eligible source on a later edge does not clear a different retained, unserved source.",
+      "verification_intent": "Development-calibrated hidden adjacent-event sequences and depth-16 bounded formal properties; not independently frozen."
+    },
+    {
+      "requirement_id": "G05-A06",
+      "statement": "Compile-time masking and latched-versus-level-sensitive behavior remain intact.",
+      "acceptance_rule": "MASKED_IRQ sources never become observable pending sources; latched one-cycle events persist; non-latched sources are not promised retention after deassertion.",
+      "verification_intent": "Development-calibrated hidden P2P mask, latch, and runtime-mask matrix; not independently frozen."
+    },
+    {
+      "requirement_id": "G05-A07",
+      "statement": "Reset clears interrupt-pending and acknowledgement state.",
+      "acceptance_rule": "After a rising edge sampling resetn low, pre-reset pending events and eoi are cleared.",
+      "verification_intent": "Development-calibrated reset-directed simulation and bounded formal reset property; not independently frozen."
+    },
+    {
+      "requirement_id": "G05-A08",
+      "statement": "Existing interrupt service, acknowledgement, CPU, and memory behavior is preserved.",
+      "acceptance_rule": "Unrelated public and evaluator-only regression scenarios remain behaviorally equivalent to the pinned base except for the stated lost-event repair.",
+      "verification_intent": "Development-calibrated server firmware P2P regression and cross-environment differential checks; environment freeze remains pending."
+    },
+    {
+      "requirement_id": "G05-A09",
+      "statement": "The change remains within the single editable RTL file.",
+      "acceptance_rule": "Only picorv32.v differs from the projected repository base, no file is added or deleted, README.md is byte-identical, and the embedded ISC notice is preserved.",
+      "verification_intent": "Implemented strict submission manifest, digest, and notice checks; freeze remains pending."
+    },
+    {
+      "requirement_id": "G05-A10",
+      "statement": "The repair does not depend on evaluator assets or network access.",
+      "acceptance_rule": "The submitted file is self-contained within the allowed repository projection and passes scope validation with evaluation networking disabled.",
+      "verification_intent": "Implemented scope and hermetic-runner checks; freeze remains pending."
+    }
+  ],
+  "simultaneous_operation_table": [
+    {
+      "condition": "timer expiry and one or more eligible external irq bits are sampled on the same rising edge",
+      "required_effect": "All eligible source bits are merged into the pending set; no source update overwrites another."
+    },
+    {
+      "condition": "a retained source is pending and a different eligible source is sampled before the first is serviced",
+      "required_effect": "Both distinct source bits remain represented as pending."
+    },
+    {
+      "condition": "the same source is sampled repeatedly before service",
+      "required_effect": "The pending representation remains a single set bit; no event-counting behavior is required."
+    },
+    {
+      "condition": "resetn is sampled low on an edge that also presents interrupt events",
+      "required_effect": "Reset wins and those events are not retained across reset."
+    }
+  ],
+  "visible_verification_status": "implemented",
+  "evaluator_verification_status": "calibrated",
+  "performance_claim_status": "not_measured",
+  "excluded_claims": [
+    "This draft does not disclose or encode the historical repair diff.",
+    "The changed public service-edge suite remains pending current-source freeze; separate development receipts record hidden differential, firmware, depth-16 formal, and mutant calibration without making them benchmark results.",
+    "No cycle-accurate IRQ entry latency beyond the pinned design's existing behavior is frozen.",
+    "No environment, scoring profile, projection digest, or benchmark admission is frozen.",
+    "No performance, area, timing, power, coverage, or PPA claim exists."
+  ]
+}

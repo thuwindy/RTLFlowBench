@@ -1,0 +1,167 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/reviewer-nomination-request.v1.json",
+  "title": "RTLFlowBench Golden-12 reviewer nomination request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "assignment_anchor",
+    "tracks",
+    "nomination_response_schema",
+    "governance",
+    "readiness",
+    "workflow_workspace_exposure_permitted",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.reviewer_nomination_request.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "awaiting_real_reviewer_nominations"},
+    "classification": {"const": "reviewer_only_not_workflow_input"},
+    "assignment_anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "schema_version",
+        "observed_at",
+        "subject_count",
+        "review_item_count"
+      ],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "schema_version": {
+          "const": "rtlflowbench.review_assignment_handoff.v1"
+        },
+        "observed_at": {"type": "string", "format": "date-time"},
+        "subject_count": {"const": 13},
+        "review_item_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "track_id",
+          "description",
+          "item_count",
+          "item_keys",
+          "required_competencies",
+          "nomination_status",
+          "nominated_reviewer_count"
+        ],
+        "properties": {
+          "track_id": {"$ref": "#/$defs/trackId"},
+          "description": {"type": "string", "minLength": 1},
+          "item_count": {"type": "integer", "minimum": 0},
+          "item_keys": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^(?:protocol|G(?:0[1-9]|1[0-2])):[a-z][a-z0-9_]*$"
+            }
+          },
+          "required_competencies": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "nomination_status": {"const": "pending"},
+          "nominated_reviewer_count": {"const": 0}
+        }
+      }
+    },
+    "nomination_response_schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256"],
+      "properties": {
+        "relative_path": {
+          "const": "benchmarks/golden12/admission/reviewer_nomination_response.schema.json"
+        },
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "real_reviewer_identity_required",
+        "public_key_required",
+        "public_key_fingerprint_required",
+        "conflict_of_interest_declaration_required",
+        "separate_registry_governance_authority_required",
+        "trusted_reviewer_registry_supplied",
+        "registry_governance_complete"
+      ],
+      "properties": {
+        "real_reviewer_identity_required": {"const": true},
+        "public_key_required": {"const": true},
+        "public_key_fingerprint_required": {"const": true},
+        "conflict_of_interest_declaration_required": {"const": true},
+        "separate_registry_governance_authority_required": {"const": true},
+        "trusted_reviewer_registry_supplied": {"const": false},
+        "registry_governance_complete": {"const": false}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "independent_review_complete",
+        "protocol_ready",
+        "benchmark_ready_task_count",
+        "chipflow_adapter_ready_task_count",
+        "suite_ready"
+      ],
+      "properties": {
+        "independent_review_complete": {"const": false},
+        "protocol_ready": {"const": false},
+        "benchmark_ready_task_count": {"const": 0},
+        "chipflow_adapter_ready_task_count": {"const": 0},
+        "suite_ready": {"const": false}
+      }
+    },
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 4,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "trackId": {
+      "enum": [
+        "rights_governance",
+        "protocol_schema_freeze",
+        "public_contract_projection",
+        "evaluator_calibration",
+        "environment_scoring_freeze",
+        "technical_admission",
+        "final_admission"
+      ]
+    }
+  }
+}

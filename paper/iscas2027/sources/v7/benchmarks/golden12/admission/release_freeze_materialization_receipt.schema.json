@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-freeze-materialization-receipt.v1.json",
+  "title": "Golden-12 release-freeze materialization candidate receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "preflight_sha256",
+    "protocol_release_sha256",
+    "protocol_candidate_lock_sha256",
+    "task_count",
+    "tasks",
+    "selection_candidate",
+    "source",
+    "apply_permitted",
+    "signature_reuse_permitted",
+    "relock_required",
+    "new_review_required",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "suite_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_freeze_materialization_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "materialized_candidate_pending_relock_review"},
+    "classification": {"const": "release_authority_only"},
+    "preflight_sha256": {"$ref": "#/$defs/sha256"},
+    "protocol_release_sha256": {"$ref": "#/$defs/sha256"},
+    "protocol_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "task_count": {"const": 12},
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "selection_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256"],
+      "properties": {
+        "relative_path": {"const": "benchmarks/golden12/admission/release_material_selection.json"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "receipt_schema_sha256",
+        "declaration_schema_sha256",
+        "preflight_schema_sha256",
+        "protocol_release_schema_sha256",
+        "task_schema_sha256",
+        "release_selection_schema_sha256",
+        "live_review_finalizer_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "declaration_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "preflight_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "protocol_release_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "task_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "release_selection_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "live_review_finalizer_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "apply_permitted": {"const": false},
+    "signature_reuse_permitted": {"const": false},
+    "relock_required": {"const": true},
+    "new_review_required": {"const": true},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "suite_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256", "bytes"],
+      "properties": {
+        "relative_path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "pretransition_candidate_lock_sha256",
+        "live_review_verification_sha256",
+        "preliminary_review_complete",
+        "final_review_status",
+        "target_public_content_manifest_sha256",
+        "files",
+        "relock_required",
+        "new_review_required",
+        "benchmark_ready",
+        "chipflow_adapter_ready"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "pretransition_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "live_review_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "preliminary_review_complete": {"const": true},
+        "final_review_status": {"const": "pending"},
+        "target_public_content_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "files": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {"$ref": "#/$defs/file"}
+        },
+        "relock_required": {"const": true},
+        "new_review_required": {"const": true},
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false}
+      }
+    }
+  }
+}

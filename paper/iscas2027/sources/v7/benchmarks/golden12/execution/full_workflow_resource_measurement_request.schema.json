@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-measurement-request.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "measurement_id", "measurement_scope",
+    "workflow_slot_id", "workflow_id", "task_id", "calibration_run_index",
+    "attempt_id", "official_attempt_binding", "source_binding",
+    "runtime_binding", "public_input_binding", "launch_contract_binding",
+    "controller_binding", "resource_policy", "attempt_accounting",
+    "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.full_workflow_resource_measurement_request.v1"},
+    "measurement_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "measurement_scope": {"const": "full_workflow_calibration"},
+    "workflow_slot_id": {"$ref": "#/$defs/slot"},
+    "workflow_id": {"$ref": "#/$defs/workflow"},
+    "task_id": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"},
+    "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+    "attempt_id": {"type": "string", "pattern": "^resource-calibration-[a-z0-9][a-z0-9-]{0,218}$"},
+    "official_attempt_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["attempt_id", "independent_run_index", "seed", "budget_sha256", "execution_status", "semantic_attempt_consumed"],
+      "properties": {
+        "attempt_id": {"type": "string", "minLength": 1, "maxLength": 240},
+        "independent_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+        "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295},
+        "budget_sha256": {"$ref": "#/$defs/sha256"},
+        "execution_status": {"const": "controller_gate_blocked_not_started"},
+        "semantic_attempt_consumed": {"const": false}
+      }
+    },
+    "source_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["commit", "manifest_sha256"],
+      "properties": {
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "runtime_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["image_digest", "image_id"],
+      "properties": {
+        "image_digest": {"$ref": "#/$defs/image"},
+        "image_id": {"$ref": "#/$defs/image"}
+      }
+    },
+    "public_input_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_relative_root", "tree_manifest_sha256", "file_count", "external_task_sha256", "budget_sha256", "repo_lock_sha256", "private_assets_included", "workspace_materialized"],
+      "properties": {
+        "source_relative_root": {"type": "string", "pattern": "^benchmarks/golden12/tasks/G(?:0[1-9]|1[0-2])-[a-z0-9-]+/public$"},
+        "tree_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "file_count": {"type": "integer", "minimum": 1, "maximum": 512},
+        "external_task_sha256": {"$ref": "#/$defs/sha256"},
+        "budget_sha256": {"$ref": "#/$defs/sha256"},
+                "repo_lock_sha256": {"$ref": "#/$defs/sha256"},
+                "private_assets_included": {"const": false},
+                "workspace_materialized": {"type": "boolean"},
+                "workspace_set_receipt_sha256": {
+                  "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+                },
+                "workspace_receipt_sha256": {
+                  "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+                },
+                "workspace_payload_sha256": {
+                  "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+                }
+              }
+    },
+    "launch_contract_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["intake_sha256", "contract_version", "entrypoint", "entrypoint_sha256", "container_argv_template", "placeholder_bindings", "unresolved_runtime_placeholders", "static_materialization_sha256", "task_solution_knowledge_included", "hidden_evaluator_reachable"],
+      "properties": {
+        "intake_sha256": {"$ref": "#/$defs/sha256"},
+        "contract_version": {"const": "rtlflowbench.task_neutral_launch_contract.v1"},
+        "entrypoint": {"type": "string", "pattern": "^/opt/rtlflowbench/[a-z0-9_]+\\.py$"},
+        "entrypoint_sha256": {"$ref": "#/$defs/sha256"},
+        "container_argv_template": {"type": "array", "minItems": 5, "maxItems": 64, "items": {"type": "string", "minLength": 1}},
+        "placeholder_bindings": {
+          "type": "object", "minProperties": 2, "maxProperties": 13,
+          "propertyNames": {"enum": ["PUBLIC_BRIDGE_REQUEST_ROOT", "WORK_ROOT", "OBSERVED_AT", "FROZEN_MODEL", "TASK_COMPILE_LIMIT", "MODEL_CONTEXT_WINDOW", "MAX_TOKENS_PER_CALL", "PROVIDER_MAX_RETRIES", "PROVIDER_TIMEOUT_SECONDS", "THINKING_MODE", "MAGE_SIM_MAX_RETRY", "MAGE_RTL_MAX_CANDIDATES", "MAGE_RTL_SELECTED_CANDIDATES"]},
+          "additionalProperties": {"type": "string", "minLength": 1, "maxLength": 256}
+        },
+        "unresolved_runtime_placeholders": {"type": "array", "uniqueItems": true, "items": {"enum": ["OBSERVED_AT"]}},
+        "static_materialization_sha256": {"$ref": "#/$defs/sha256"},
+        "task_solution_knowledge_included": {"const": false},
+        "hidden_evaluator_reachable": {"const": false}
+      }
+    },
+    "controller_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["observed_transport_probe_sha256", "provider_transport", "eda_observation", "network_policy", "credential_location", "raw_provider_content_persisted", "private_evaluator_reachable"],
+      "properties": {
+        "observed_transport_probe_sha256": {"$ref": "#/$defs/sha256"},
+        "provider_transport": {"const": "host_observed_openai_compatible_unix_socket"},
+        "eda_observation": {"const": "path_interposed_iverilog_vvp_yosys_unix_socket_events"},
+        "network_policy": {"const": "offline"},
+        "credential_location": {"const": "host_controller_only"},
+        "raw_provider_content_persisted": {"const": false},
+        "private_evaluator_reachable": {"const": false}
+      }
+    },
+    "resource_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "launch_policy_sha256", "wall_time_seconds", "maximum_provider_calls",
+        "maximum_output_tokens_per_call", "maximum_input_tokens",
+        "maximum_output_tokens", "maximum_consecutive_identical_requests",
+        "maximum_consecutive_identical_errors", "sampling_interval_ms",
+        "pids_limit", "memory_limit_bytes", "public_input_mount", "work_mount"
+      ],
+      "properties": {
+        "launch_policy_sha256": {"$ref": "#/$defs/sha256"},
+        "wall_time_seconds": {"type": "integer", "minimum": 1, "maximum": 86400},
+        "maximum_provider_calls": {"type": "integer", "minimum": 1, "maximum": 4096},
+        "maximum_output_tokens_per_call": {"type": "integer", "minimum": 1},
+        "maximum_input_tokens": {"type": "integer", "minimum": 1},
+        "maximum_output_tokens": {"type": "integer", "minimum": 1},
+        "maximum_consecutive_identical_requests": {"type": "integer", "minimum": 1, "maximum": 64},
+        "maximum_consecutive_identical_errors": {"type": "integer", "minimum": 1, "maximum": 64},
+        "sampling_interval_ms": {"type": "integer", "minimum": 10, "maximum": 1000},
+        "pids_limit": {"type": "integer", "minimum": 2, "maximum": 4096},
+        "memory_limit_bytes": {"const": 1073741824},
+        "public_input_mount": {"const": "/input"},
+        "work_mount": {"const": "/work"}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls", "provider_calls", "eda_calls"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["request_materialized", "public_workspace_materialized", "controller_envelope_bound", "common_provider_preflight_passed", "resource_calibration_execution_eligible", "official_attempts_permitted"],
+      "properties": {
+        "request_materialized": {"const": true},
+                "public_workspace_materialized": {"type": "boolean"},
+        "controller_envelope_bound": {"const": false},
+        "common_provider_preflight_passed": {"const": false},
+        "resource_calibration_execution_eligible": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+        "blockers": {
+          "oneOf": [
+            {
+              "const": [
+                "public_trial_workspace_not_materialized",
+                "controller_aware_measurement_envelope_not_bound",
+                "common_provider_preflight_not_passed"
+              ]
+            },
+            {
+              "const": [
+                "controller_aware_measurement_envelope_not_bound",
+                "common_provider_preflight_not_passed"
+              ]
+            }
+          ]
+        },
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "allOf": [
+    {"if": {"properties": {"workflow_slot_id": {"const": "chipflow"}}}, "then": {"properties": {"workflow_id": {"const": "chipflow"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}}}, "then": {"properties": {"workflow_id": {"const": "same_model_vanilla_agent"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}}}, "then": {"properties": {"workflow_id": {"const": "mage"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}}}, "then": {"properties": {"workflow_id": {"const": "verilogcoder"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}}}, "then": {"properties": {"workflow_id": {"const": "hdlagent"}}}}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "slot": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]},
+    "workflow": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "public_input_binding": {
+                "properties": {"workspace_materialized": {"const": true}},
+                "required": ["workspace_materialized"]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "public_input_binding": {
+                "required": [
+                  "workspace_set_receipt_sha256",
+                  "workspace_receipt_sha256",
+                  "workspace_payload_sha256"
+                ],
+                "properties": {
+                  "workspace_set_receipt_sha256": {"$ref": "#/$defs/sha256"},
+                  "workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+                  "workspace_payload_sha256": {"$ref": "#/$defs/sha256"}
+                }
+              },
+              "readiness": {
+                "properties": {"public_workspace_materialized": {"const": true}}
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "readiness": {
+                "properties": {"public_workspace_materialized": {"const": false}}
+              }
+            }
+          }
+        }
+      ]
+}

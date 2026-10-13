@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/workflow-resource-measurement-receipt.v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "status", "runner_id", "measurement_id", "measurement_scope", "workflow_slot_id", "workflow_id", "task_id", "attempt_id", "source_binding", "runtime_binding", "request_sha256", "runner_sha256", "request_schema_sha256", "receipt_schema_sha256", "launcher", "metrics", "missing_measurements", "raw_evidence", "attempt_accounting", "readiness", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.workflow_resource_measurement_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["measurement_completed", "measurement_timeout"]},
+    "runner_id": {
+      "enum": [
+        "rtlflowbench.workflow_resource_measurement_envelope.v1",
+        "rtlflowbench.controller_aware_resource_measurement_envelope.v1"
+      ]
+    },
+    "measurement_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"}, "measurement_scope": {"enum": ["task_free_runtime_baseline", "full_workflow_calibration"]},
+    "workflow_slot_id": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]}, "workflow_id": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]}, "task_id": {"type": ["string", "null"], "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"}, "attempt_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 240},
+    "source_binding": {"$ref": "#/$defs/sourceBinding"}, "runtime_binding": {"$ref": "#/$defs/runtimeBinding"},
+    "request_sha256": {"$ref": "#/$defs/sha256"}, "runner_sha256": {"$ref": "#/$defs/sha256"}, "request_schema_sha256": {"$ref": "#/$defs/sha256"}, "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "launcher": {
+      "type": "object", "additionalProperties": false,
+      "required": ["kind", "executable_sha256", "exit_code", "timed_out", "outcome", "argv_sha256", "argument_count", "argv_values_recorded", "launcher_path_recorded", "runtime_image_argv_index", "runtime_image_binding_enforced_by_measurement_envelope", "network_policy_declared", "network_policy_enforced_by_measurement_envelope"],
+      "properties": {"kind": {"const": "podman_oci"}, "executable_sha256": {"$ref": "#/$defs/sha256"}, "exit_code": {"type": ["integer", "null"]}, "timed_out": {"type": "boolean"}, "controller_guard_terminated": {"type": "boolean"}, "controller_guard_reason": {"type": ["string", "null"], "enum": [null, "call_limit", "input_token_limit", "output_token_limit", "token_accounting_incomplete", "repeated_request", "repeated_error"]}, "outcome": {"enum": ["exited_zero", "exited_nonzero", "timed_out"]}, "argv_sha256": {"$ref": "#/$defs/sha256"}, "argument_count": {"type": "integer", "minimum": 1, "maximum": 128}, "argv_values_recorded": {"const": false}, "launcher_path_recorded": {"const": false}, "runtime_image_argv_index": {"type": "integer", "minimum": 2, "maximum": 126}, "runtime_image_binding_enforced_by_measurement_envelope": {"const": true}, "network_policy_declared": {"const": "offline"}, "network_policy_enforced_by_measurement_envelope": {"const": true}}
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["wall_time_seconds", "envelope_child_user_cpu_time_seconds", "envelope_child_system_cpu_time_seconds", "envelope_child_cpu_time_seconds", "peak_launcher_process_tree_rss_bytes", "peak_launcher_process_tree_count", "peak_container_cgroup_memory_bytes", "container_cgroup_cpu_time_seconds", "peak_container_cgroup_pids", "container_cgroup_sample_count", "container_cgroup_lookup_error_count", "container_cgroup_read_error_count", "peak_scratch_bytes", "peak_eda_concurrency", "peak_llm_concurrency", "sample_count", "sampling_interval_ms", "scratch_integrity_valid"],
+      "properties": {"wall_time_seconds": {"type": "number", "minimum": 0}, "envelope_child_user_cpu_time_seconds": {"type": "number", "minimum": 0}, "envelope_child_system_cpu_time_seconds": {"type": "number", "minimum": 0}, "envelope_child_cpu_time_seconds": {"type": "number", "minimum": 0}, "peak_launcher_process_tree_rss_bytes": {"type": "integer", "minimum": 0}, "peak_launcher_process_tree_count": {"type": "integer", "minimum": 0}, "peak_container_cgroup_memory_bytes": {"type": "integer", "minimum": 0}, "container_cgroup_cpu_time_seconds": {"type": "number", "minimum": 0}, "peak_container_cgroup_pids": {"type": "integer", "minimum": 0}, "container_cgroup_sample_count": {"type": "integer", "minimum": 0}, "container_cgroup_lookup_error_count": {"type": "integer", "minimum": 0}, "container_cgroup_read_error_count": {"type": "integer", "minimum": 0}, "peak_scratch_bytes": {"type": "integer", "minimum": 0}, "peak_eda_concurrency": {"type": "null"}, "peak_llm_concurrency": {"type": "null"}, "forced_eda_activity_closure_count": {"type": "integer", "minimum": 0}, "sample_count": {"type": "integer", "minimum": 1}, "sampling_interval_ms": {"type": "integer", "minimum": 10}, "scratch_integrity_valid": {"type": "boolean"}}
+    },
+    "missing_measurements": {"const": ["peak_eda_concurrency", "peak_llm_concurrency"]},
+    "raw_evidence": {"type": "object", "additionalProperties": false, "required": ["invocation_sha256", "stdout_sha256", "stderr_sha256", "raw_content_embedded"], "properties": {"invocation_sha256": {"$ref": "#/$defs/sha256"}, "stdout_sha256": {"$ref": "#/$defs/sha256"}, "stderr_sha256": {"$ref": "#/$defs/sha256"}, "raw_content_embedded": {"const": false}}},
+    "attempt_accounting": {"type": "object", "additionalProperties": false, "required": ["official_attempt_started", "official_semantic_attempt_consumed", "resource_calibration_attempt_consumed", "benchmark_result_created", "private_evaluator_calls"], "properties": {"official_attempt_started": {"const": false}, "official_semantic_attempt_consumed": {"const": false}, "resource_calibration_attempt_consumed": {"type": "boolean"}, "benchmark_result_created": {"const": false}, "private_evaluator_calls": {"const": 0}}},
+    "readiness": {"type": "object", "additionalProperties": false, "required": ["launcher_completed_successfully", "process_tree_measurement_complete", "container_cgroup_measurement_complete", "full_workflow_resource_calibration_eligible", "host_capacity_policy_derivation_permitted", "official_attempts_permitted"], "properties": {"launcher_completed_successfully": {"type": "boolean"}, "process_tree_measurement_complete": {"type": "boolean"}, "container_cgroup_measurement_complete": {"type": "boolean"}, "full_workflow_resource_calibration_eligible": {"const": false}, "host_capacity_policy_derivation_permitted": {"const": false}, "official_attempts_permitted": {"const": false}}},
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "allOf": [
+    {"if": {"properties": {"measurement_scope": {"const": "task_free_runtime_baseline"}}}, "then": {"properties": {"task_id": {"type": "null"}, "attempt_id": {"type": "null"}, "attempt_accounting": {"properties": {"resource_calibration_attempt_consumed": {"const": false}}}}}},
+    {"if": {"properties": {"measurement_scope": {"const": "full_workflow_calibration"}}}, "then": {"properties": {"task_id": {"type": "string"}, "attempt_id": {"type": "string"}, "attempt_accounting": {"properties": {"resource_calibration_attempt_consumed": {"const": true}}}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "chipflow"}}}, "then": {"properties": {"workflow_id": {"const": "chipflow"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}}}, "then": {"properties": {"workflow_id": {"const": "same_model_vanilla_agent"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}}}, "then": {"properties": {"workflow_id": {"const": "mage"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}}}, "then": {"properties": {"workflow_id": {"const": "verilogcoder"}}}},
+    {"if": {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}}}, "then": {"properties": {"workflow_id": {"const": "hdlagent"}}}},
+    {
+      "if": {"properties": {"status": {"const": "measurement_timeout"}}},
+      "then": {"properties": {
+        "launcher": {"properties": {"exit_code": {"type": "null"}, "timed_out": {"const": true}, "outcome": {"const": "timed_out"}}},
+        "readiness": {"properties": {"launcher_completed_successfully": {"const": false}, "process_tree_measurement_complete": {"const": false}, "container_cgroup_measurement_complete": {"const": false}}}
+      }}
+    },
+    {
+      "if": {"properties": {"status": {"const": "measurement_completed"}}},
+      "then": {"properties": {"launcher": {"properties": {"exit_code": {"type": "integer"}, "timed_out": {"const": false}, "outcome": {"enum": ["exited_zero", "exited_nonzero"]}}}}}
+    },
+    {
+      "if": {"properties": {"launcher": {"properties": {"outcome": {"const": "exited_zero"}}}}},
+      "then": {"properties": {"launcher": {"properties": {"exit_code": {"const": 0}}}, "readiness": {"properties": {"launcher_completed_successfully": {"const": true}}}}}
+    },
+    {
+      "if": {"properties": {"launcher": {"properties": {"outcome": {"const": "exited_nonzero"}}}}},
+      "then": {"properties": {
+        "launcher": {"properties": {"exit_code": {"type": "integer", "not": {"const": 0}}}},
+        "readiness": {"properties": {"launcher_completed_successfully": {"const": false}}}
+      }}
+    },
+    {
+      "if": {"properties": {"launcher": {"properties": {"controller_guard_terminated": {"const": true}}, "required": ["controller_guard_terminated"]}}},
+      "then": {"properties": {"launcher": {"properties": {"controller_guard_reason": {"type": "string"}, "timed_out": {"const": false}, "outcome": {"enum": ["exited_zero", "exited_nonzero"]}}}}}
+    },
+    {
+      "if": {"properties": {"launcher": {"properties": {"controller_guard_terminated": {"const": false}}, "required": ["controller_guard_terminated"]}}},
+      "then": {"properties": {"launcher": {"properties": {"controller_guard_reason": {"type": "null"}}}}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sourceBinding": {"type": "object", "additionalProperties": false, "required": ["commit", "manifest_sha256"], "properties": {"commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "manifest_sha256": {"$ref": "#/$defs/sha256"}}},
+    "runtimeBinding": {"type": "object", "additionalProperties": false, "required": ["image_digest", "image_id"], "properties": {"image_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}, "image_id": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"}}}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "chipflow.golden12.public_task.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "title": "AXI-Lite to Wishbone split bridge under independent stalls",
+  "family": "protocol_integration",
+  "source_mode": "repository_base",
+  "packet_status": "reviewable_draft",
+  "top_module": "golden12_axil_wb_split_bridge",
+  "language": "systemverilog",
+  "required_submission_files": ["rtl/golden12_axil_wb_split_bridge.sv"],
+  "design_spec_path": "spec/design_spec.md",
+  "acceptance_spec_path": "spec/acceptance_spec.json",
+  "interface_spec_path": "spec/interface_spec.json",
+  "repo_lock_path": "repo.lock",
+  "allowed_scope_path": "allowed_scope.json",
+  "budget_path": "budget.json",
+  "scaffold_plan_path": "scaffold/plan.json",
+  "visible_plan_path": "visible/plan.json",
+  "interoperability_task_path": "external_task.json",
+  "rights_review_path": "rights_review.json",
+  "admission_path": "admission.json",
+  "network_access": false,
+  "cpu_interface_spec_required": false,
+  "non_cpu_interface_projection": "independent_non_cpu_interface_spec",
+  "claims": [
+    "This draft specifies a one-file arbitration wrapper around two pinned read-only AXI-Lite-to-Wishbone dependencies.",
+    "The public packet contains no upstream combined wrapper, arbiter, formal harness, hidden oracle, or reference submission."
+  ],
+  "excluded_claims": [
+    "One development reference visible run passed on SERVER26, but this is not an AI workflow result, hidden PASS, formal proof, benchmark PASS, or frozen runner result.",
+    "Private development calibration has two correct subjects passing the implemented full gate set and one fixed-priority mutant killed in hidden F2P; this is not frozen admission or a workflow score.",
+    "No synthesis result, coverage, performance, PPA, or benchmark readiness is claimed.",
+    "The rights review, specification freeze, evaluator freeze, environment, scoring, and independent admission remain pending."
+  ]
+}

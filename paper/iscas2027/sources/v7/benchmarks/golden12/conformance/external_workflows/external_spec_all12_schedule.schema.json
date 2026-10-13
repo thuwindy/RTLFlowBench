@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/external-spec-all12-schedule.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "workflow", "tasks",
+    "summary", "terminal_records", "source_sha256", "preflight_evidence", "readiness",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.external_spec_all12_schedule.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "all12_scheduled_partial_terminal_projection_not_released"},
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "workflow_id", "name", "version", "commit", "source_archive_sha256",
+        "tracked_manifest_sha256", "adapter_name", "adapter_version", "config_sha256"
+      ],
+      "properties": {
+        "workflow_id": {"enum": ["verilogcoder", "hdlagent"]},
+        "name": {"enum": ["VerilogCoder", "HDLAgent"]},
+        "version": {"type": "string", "minLength": 1},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "tracked_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "adapter_name": {"const": "rtlflowbench-public-spec-submission-bridge"},
+        "adapter_version": {"const": "1"},
+        "config_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "tasks": {
+      "type": "array", "minItems": 12, "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "task_count", "scheduled_attempt_count",
+        "pending_real_workflow_attempt_count", "controller_block_attempt_count",
+        "omitted_attempt_count", "airtl_workflow_run_count",
+        "hidden_evaluator_run_count", "rtl_verdict_count"
+      ],
+      "properties": {
+        "task_count": {"const": 12},
+        "scheduled_attempt_count": {"const": 40},
+        "pending_real_workflow_attempt_count": {"const": 6},
+        "controller_block_attempt_count": {"const": 34},
+        "omitted_attempt_count": {"const": 0},
+        "airtl_workflow_run_count": {"const": 0},
+        "hidden_evaluator_run_count": {"const": 0},
+        "rtl_verdict_count": {"const": 0}
+      }
+    },
+    "terminal_records": {
+      "type": "array", "minItems": 34, "maxItems": 34,
+      "items": {"$ref": "#/$defs/terminalRecord"}
+    },
+    "source_sha256": {
+      "type": "object", "minProperties": 6,
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    },
+    "preflight_evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "source_preflight_sha256", "adapter_test_receipt_sha256",
+        "source_preflight_passed", "adapter_control_tests_passed",
+        "environment_reproduced", "dependency_lock_frozen"
+      ],
+      "properties": {
+        "source_preflight_sha256": {"$ref": "#/$defs/sha256"},
+        "adapter_test_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "source_preflight_passed": {"const": true},
+        "adapter_control_tests_passed": {"const": true},
+        "environment_reproduced": {"const": false},
+        "dependency_lock_frozen": {"const": false}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "schedule_complete", "terminal_projection_complete_for_unsupported_shapes",
+        "real_workflow_attempts_complete", "environment_frozen", "adapter_ready",
+        "benchmark_ready", "publication_permitted"
+      ],
+      "properties": {
+        "schedule_complete": {"const": true},
+        "terminal_projection_complete_for_unsupported_shapes": {"const": true},
+        "real_workflow_attempts_complete": {"const": false},
+        "environment_frozen": {"const": false},
+        "adapter_ready": {"const": false},
+        "benchmark_ready": {"const": false},
+        "publication_permitted": {"const": false}
+      }
+    },
+    "excluded_claims": {
+      "type": "array", "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "relativePath": {
+      "type": "string", "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    },
+    "classification": {
+      "type": "object", "additionalProperties": false,
+      "required": ["supported", "reason_code", "reason"],
+      "properties": {
+        "supported": {"type": "boolean"},
+        "reason_code": {
+          "oneOf": [
+            {"type": "null"},
+            {"enum": [
+              "unsupported_capability", "unsupported_submission_shape",
+              "missing_required_public_contract", "security_policy_block"
+            ]}
+          ]
+        },
+        "reason": {"type": ["string", "null"]},
+        "target_output_path": {"$ref": "#/$defs/relativePath"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"supported": {"const": true}}, "required": ["supported"]},
+          "then": {
+            "required": ["target_output_path"],
+            "properties": {"reason_code": {"type": "null"}, "reason": {"type": "null"}}
+          },
+          "else": {
+            "properties": {
+              "reason_code": {"not": {"type": "null"}},
+              "reason": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    },
+    "attempt": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "independent_run_index", "workflow_attempt_index", "status",
+        "terminal_result_path", "attempt_control_path"
+      ],
+      "properties": {
+        "independent_run_index": {"type": "integer", "minimum": 1},
+        "workflow_attempt_index": {"const": 1},
+        "status": {"enum": ["pending_real_workflow_execution", "controller_block_recorded"]},
+        "terminal_result_path": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/relativePath"}]
+        },
+        "attempt_control_path": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/relativePath"}]
+        }
+      }
+    },
+    "task": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "task_id", "capability_family", "minimum_independent_runs",
+        "candidate_lock_sha256", "task_descriptor_sha256",
+        "public_shape_classification", "attempts"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "capability_family": {"type": "string", "minLength": 1},
+        "minimum_independent_runs": {"enum": [3, 5]},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "task_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+        "public_shape_classification": {"$ref": "#/$defs/classification"},
+        "attempts": {"type": "array", "minItems": 3, "maxItems": 5, "items": {"$ref": "#/$defs/attempt"}}
+      }
+    },
+    "terminalRecord": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "task_id", "terminal_result_path", "terminal_result_sha256",
+        "attempt_control_path", "attempt_control_sha256"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "terminal_result_path": {"$ref": "#/$defs/relativePath"},
+        "terminal_result_sha256": {"$ref": "#/$defs/sha256"},
+        "attempt_control_path": {"$ref": "#/$defs/relativePath"},
+        "attempt_control_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

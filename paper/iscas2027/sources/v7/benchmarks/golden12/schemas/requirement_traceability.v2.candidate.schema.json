@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/requirement-traceability.v2.candidate.json",
+  "title": "Golden-12 v2 private requirement/evaluator traceability record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "status", "requirements", "infrastructure_rules", "audit"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.requirement_traceability.v2.candidate"},
+    "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+    "status": {"enum": ["mapping_pending", "candidate", "calibrated", "frozen"]},
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["requirement_id", "public_source", "public_summary", "check_ids", "positive_control_ids", "negative_control_ids"],
+        "properties": {
+          "requirement_id": {"$ref": "#/$defs/requirementId"},
+          "public_source": {"$ref": "#/$defs/relativePath"},
+          "public_summary": {"type": "string", "minLength": 1},
+          "check_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "positive_control_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "negative_control_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "coverage_status": {"enum": ["unmapped", "partial", "complete"]},
+          "coverage_limitations": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "infrastructure_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["rule_id", "summary", "check_ids"],
+        "properties": {
+          "rule_id": {"type": "string", "pattern": "^INFRA-[A-Z0-9][A-Z0-9_-]*$"},
+          "summary": {"type": "string", "minLength": 1},
+          "check_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["public_requirement_count", "mapped_requirement_count", "orphan_requirement_ids", "orphan_check_ids", "missing_positive_control_requirement_ids", "missing_negative_control_requirement_ids", "alternate_implementation_passes"],
+      "properties": {
+        "public_requirement_count": {"type": "integer", "minimum": 1},
+        "mapped_requirement_count": {"type": "integer", "minimum": 0},
+        "orphan_requirement_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/requirementId"}},
+        "orphan_check_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "partial_requirement_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/requirementId"}},
+        "missing_positive_control_requirement_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/requirementId"}},
+        "missing_negative_control_requirement_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/requirementId"}},
+        "alternate_implementation_passes": {"type": ["boolean", "null"]}
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"},
+    "requirementId": {"type": "string", "pattern": "^(?:REQ-[A-Z0-9][A-Z0-9_-]*|G(?:0[1-9]|1[0-2])-A[0-9]{2}|A[0-9]{2})$"}
+  }
+}

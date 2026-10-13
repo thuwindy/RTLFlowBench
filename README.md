@@ -1,20 +1,40 @@
-# RTLFlowBench · Golden-12
+# G12-RTL · RTLFlowBench
 
-A workflow-neutral benchmark project for six dimensions of AI-assisted RTL work.
-The name refers to **RTL workflows**, not to one model or to ChipFlow alone.
+G12-RTL examines whether local RTL repair success translates into complete design
+acceptance. It separates target repair, preserved behavior, task-level acceptance
+and resource cost, so an improvement on one check is not counted as a complete
+solution. The repository name `RTLFlowBench` is retained for existing users.
 
-> **Research preview, not Golden-12 v1.** This repository publishes the twelve
-> public input packets, proposed evaluation policy, neutral schemas and offline
-> packaging tools. It is not yet a turnkey scored benchmark or a leaderboard.
-> New-version evaluator bindings, full recalibration and runtime gates remain open.
-> There are no new-version comparative experiment results in this release.
+## ISCAS 2027 paper source
 
-## Quick start
+**Start here: [paper source and provenance](paper/iscas2027/README.md).**
+This directory accompanies *CriticRTL: RTL Repair with Independent Review and
+Acceptance Diagnostics*, by Jinhan Fu, Haonan Sun and Hu He. It adds the
+paper-associated benchmark/controller and baseline-adapter source distribution,
+with exact version mappings and explicit publication transformations where needed.
 
-中文导航：[Benchmark 介绍](docs/BENCHMARKS.md) · [五个工作流](docs/WORKFLOWS.md) ·
-[协作开发](CONTRIBUTING.md) · [多人实验](docs/EXPERIMENTS.md) · [进展与待办](docs/STATUS.md)。
+CriticRTL studies independent diagnosis for target repair; G12-RTL tests complete
+acceptance and explains the gap between the two. The paper evaluates/calibrates
+G01–G07; G08–G12 are not evaluated in the paper. Baseline adapters and source
+snapshots must be interpreted under the common experiment protocol, not as an
+unmodified upstream leaderboard.
 
-Python 3.10+; no model account or ChipFlow installation is needed for these commands.
+- [Paper source layout, checks and distribution boundaries](paper/iscas2027/README.md).
+- [CriticRTL framework repository](https://github.com/thuwindy/Chipflow) (currently private; access required).
+- [Third-party notices and licensing scope](NOTICE.md).
+
+The paper source directory and the older draft packets below are distinct
+versions. Do not substitute the draft packets for historical paper inputs or
+interpret a file-integrity check as an RTL acceptance result. Hidden evaluator
+assets are kept separate from workflow-visible inputs; this source update does
+not publish a turnkey scored benchmark service or assert a fresh experiment replay.
+
+## Public task preview
+
+The original twelve draft public packets, neutral submission schemas and offline
+packaging tools remain available. Their task contents and candidate hashes are
+unchanged. See the [full preview guide](README.preview-20260915.md) for task
+summaries, upstream source locks, scope rules and usage.
 
 ```sh
 git clone https://github.com/thuwindy/RTLFlowBench.git
@@ -23,79 +43,13 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/python rtlflowbench.py verify
 .venv/bin/python rtlflowbench.py list
-.venv/bin/python rtlflowbench.py describe --task G01-common-fifo-spec
-.venv/bin/python rtlflowbench.py export-public \
-  --task G01-common-fifo-spec --output ../g01-public
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-The exported folder contains the specification, constraints, declared budget,
-source lock, visible tests and submission contract. It contains **no solution**.
-`export-public` does not fetch upstream repositories. Repository-based tasks need
-their exact, allowlisted source projection before they can be attempted fairly.
-Do not expose entire repository histories, upstream tests or private evaluation
-assets to an agent. See [third-party usage](docs/USAGE.md).
+`verify` checks distribution hashes and draft schemas; it does not run RTL or
+award benchmark scores. See the paper directory for its separate source-integrity
+check. Missing measurements remain unknown rather than zero. Failures,
+capability blocks and infrastructure errors remain distinct.
 
-## Twelve tasks, six capability families
-
-| ID | Upstream context | Public input and requested output | What is measured |
-|---|---|---|---|
-| G01 | common_cells | FIFO specification → independent RTL | Parameters, queue ordering, boundaries, reset |
-| G02 | common_cells | Arbitration specification → independent RTL | Arbitration safety, locking and bounded fairness |
-| G03 | verilog-axis | AXI-Stream FIFO IP + integration contract → wrapper | Frames, backpressure, protocol integration |
-| G04 | wb2axip | Split bridge IP + contract → AXI-Lite/Wishbone integration | Transaction ownership, response routing, stalls |
-| G05 | PicoRV32 | Pinned CPU base + defect contract → interrupt repair | Fail-to-pass repair and preserved regressions |
-| G06 | Ibex | Pinned CPU base + exception contract → CSR/debug repair | Context preservation and unaffected behavior |
-| G07 | Ibex | Pinned CPU base + PMP update contract → serialization repair | Protection update enforcement; historical ID retained |
-| G08 | common_cells | Read-only FIFO + DV contract → TB and properties | Correct-design acceptance, mutant kill, false positives |
-| G09 | verilog-axis | Read-only FIFO + DV contract → cocotb tests | Protocol defect detection and false alarms |
-| G10 | SERV | Pinned CPU + fixed QoR constraints → optimized RTL | Area improvement with correctness/timing preservation |
-| G11 | PicoRV32 | Pinned CPU + QoR/workload contract → optimized RTL | Area, timing and workload cycles, separately |
-| G12 | common_cells | Explicitly incomplete CDC contract → refusal artifact | Safe refusal and zero-action scope compliance |
-
-G07's directory retains `ibex-ifetch-error-timing` for identity continuity; its
-current specification concerns PMP updates. G12's refusal class is explicit:
-it tests compliance, **not** autonomous discovery of an unstated risk.
-
-## Scoring and fairness
-
-The proposed authority is [candidate/policy.json](candidate/policy.json).
-Primary reporting is the full task-by-workflow outcome matrix, with separate raw
-functional/protocol, F2P/P2P, formal, mutation/false-positive, QoR and cost evidence.
-There is no invented weighted total. Missing metrics remain `null`, not zero.
-Evaluator evidence—not a workflow's self-report or process exit alone—determines
-success. FAIL, capability BLOCK and infrastructure INFRA remain distinguishable.
-For G12, a contract-compliant BLOCK is the expected successful behavior.
-
-The planned five-workflow cohort has 200 independent slots: three repeats on ten
-non-QoR tasks and five on two QoR tasks, per workflow. EDA measurement repeats are
-not additional independent agent solves. All workflows receive the same inputs,
-model configuration and budget. Adapter code may translate transport, not solve
-tasks. Semantic changes require a new identity and fresh comparable runs.
-
-## Status and repository layout
-
-New collaborator? Start with [the Chinese contributor guide](CONTRIBUTING.md),
-then use [the experiment operator checklist](docs/EXPERIMENTS.md).
-The public repository and the controlled evaluator workspace serve different
-roles; cloning this preview does not install the private scoring service.
-
-- `candidate/tasks/*/public/`: twelve content-bound draft public packets.
-- `candidate/candidate-lock.json`: exact public packet file hashes and known gaps.
-- `candidate/policy.json`: proposed universal evaluation policy.
-- `schemas/`: workflow-neutral task, submission and result formats.
-- `tools/package_submission.py`: validates scope, budget and artifact hashes.
-- `public-release-lock.json`: exact **preview distribution**, not runner release lock.
-- [Readiness checklist](docs/READINESS.md), [usage](docs/USAGE.md),
-  [licensing and upstream provenance](NOTICE.md).
-
-The legacy wire identifier `chipflow-golden12` is retained in schemas for
-compatibility; it does not require ChipFlow. Inherited rights/admission receipts
-are historical and do not admit this new candidate. No human-independent review
-or official v1 readiness is claimed. Hidden evaluators and answers are deliberately
-not in this public repository. Do not use visible-test passes as full scores.
-
-For a paper, a repository helps readers inspect and reproduce the work; its
-existence alone does not establish benchmark validity. A final paper must bind a
-specific release, disclose review limitations and report actual complete-cohort
-results. No accepted-paper or conference affiliation is claimed here.
+The repository remains **public**. Existing preview licenses and upstream notices
+are retained; no blanket relicensing of the imported corpus is implied.

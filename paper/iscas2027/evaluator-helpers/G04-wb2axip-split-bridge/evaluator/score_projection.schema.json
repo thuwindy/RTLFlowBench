@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/g04-score-projection.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "task_id", "source_verdict", "classification", "dimensions", "development_score", "maximum_points", "official_score", "score_eligible", "profile_status", "issues"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.g04_score_projection.v1"},
+    "task_id": {"const": "G04-wb2axip-split-bridge"},
+    "source_verdict": {"type": "string"},
+    "classification": {"enum": ["development_full_pass", "observed_candidate_failure", "not_comparable_or_incomplete"]},
+    "dimensions": {"type": "array", "minItems": 5, "items": {"type": "object"}},
+    "development_score": {"type": ["integer", "null"], "minimum": 0, "maximum": 100},
+    "maximum_points": {"const": 100},
+    "official_score": {"const": null},
+    "score_eligible": {"const": false},
+    "profile_status": {"const": "development_calibrated_not_frozen"},
+    "issues": {"type": "array", "items": {"type": "string"}}
+  }
+}

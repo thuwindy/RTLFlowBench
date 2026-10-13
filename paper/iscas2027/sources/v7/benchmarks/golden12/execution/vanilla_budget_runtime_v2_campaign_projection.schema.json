@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/vanilla-budget-runtime-v2-campaign-projection.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "scope", "input_sha256",
+    "output_sha256", "summary", "invariants", "attempt_accounting",
+    "readiness", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.vanilla_budget_runtime_v2_campaign_projection.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PASS_TASK_NEUTRAL_RUNTIME_BINDING_PROJECTED_NOT_RUN"},
+    "scope": {"const": "full_200_slot_campaign_vanilla_runtime_binding_only"},
+    "input_sha256": {"$ref": "#/$defs/hash_map"},
+    "output_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_release_candidate", "resource_request_set", "bridge_request_set"],
+      "properties": {
+        "workflow_release_candidate": {"$ref": "#/$defs/sha"},
+        "resource_request_set": {"$ref": "#/$defs/sha"},
+        "bridge_request_set": {"$ref": "#/$defs/sha"}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "planned_slot_count", "vanilla_slot_count", "resource_request_replacement_count",
+        "resource_request_byte_identical_count", "bridge_root_replacement_count",
+        "non_vanilla_bridge_root_byte_identical_count", "provider_call_count",
+        "eda_call_count", "private_evaluator_call_count", "benchmark_result_count"
+      ],
+      "properties": {
+        "planned_slot_count": {"const": 200},
+        "vanilla_slot_count": {"const": 40},
+        "resource_request_replacement_count": {"const": 40},
+        "resource_request_byte_identical_count": {"const": 160},
+        "bridge_root_replacement_count": {"const": 40},
+        "non_vanilla_bridge_root_byte_identical_count": {"type": "integer", "minimum": 1},
+        "provider_call_count": {"const": 0},
+        "eda_call_count": {"const": 0},
+        "private_evaluator_call_count": {"const": 0},
+        "benchmark_result_count": {"const": 0}
+      }
+    },
+    "invariants": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "benchmark_bytes_changed", "public_workspace_payloads_changed",
+        "budgets_changed", "seeds_changed", "scoring_changed",
+        "private_evaluator_reachable", "task_specific_logic_added",
+        "all_non_vanilla_resource_requests_byte_identical",
+        "all_non_vanilla_bridge_roots_byte_identical"
+      ],
+      "properties": {
+        "benchmark_bytes_changed": {"const": false},
+        "public_workspace_payloads_changed": {"const": false},
+        "budgets_changed": {"const": false},
+        "seeds_changed": {"const": false},
+        "scoring_changed": {"const": false},
+        "private_evaluator_reachable": {"const": false},
+        "task_specific_logic_added": {"const": false},
+        "all_non_vanilla_resource_requests_byte_identical": {"const": true},
+        "all_non_vanilla_bridge_roots_byte_identical": {"const": true}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["resource_calibration_attempts_consumed", "official_attempts_started", "semantic_attempts_consumed"],
+      "properties": {
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "official_attempts_started": {"const": 0},
+        "semantic_attempts_consumed": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["projection_validated", "controller_envelope_bound", "resource_campaign_authorized", "official_attempts_permitted"],
+      "properties": {
+        "projection_validated": {"const": true},
+        "controller_envelope_bound": {"const": false},
+        "resource_campaign_authorized": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "hash_map": {"type": "object", "minProperties": 8, "additionalProperties": {"$ref": "#/$defs/sha"}}
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/public-release-archive-receipt.v1.json",
+  "title": "Candidate-bound public task archive receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "task_id",
+    "candidate_release",
+    "candidate_lock_sha256",
+    "status",
+    "classification",
+    "archive_format",
+    "archive_sha256",
+    "archive_bytes",
+    "member_count",
+    "members",
+    "candidate_component_closure_complete",
+    "contains_private_paths",
+    "contains_symlinks",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "source",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.public_release_archive_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "task_id": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-"},
+    "candidate_release": {"type": "string", "minLength": 1},
+    "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"const": "candidate_component_closure_verified_not_released"},
+    "classification": {"const": "public_input_packet"},
+    "archive_format": {"const": "canonical_tar_gzip_v1"},
+    "archive_sha256": {"$ref": "#/$defs/sha256"},
+    "archive_bytes": {"type": "integer", "minimum": 1},
+    "member_count": {"type": "integer", "minimum": 1},
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "bytes", "sha256", "candidate_component_path"],
+        "properties": {
+          "path": {"type": "string", "pattern": "^public/"},
+          "bytes": {"type": "integer", "minimum": 0},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "candidate_component_path": {"type": "string", "pattern": "^benchmarks/golden12/tasks/G(?:0[1-9]|1[0-2])-[^/]+/public/"}
+        }
+      }
+    },
+    "candidate_component_closure_complete": {"const": true},
+    "contains_private_paths": {"const": false},
+    "contains_symlinks": {"const": false},
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["builder_sha256", "schema_sha256"],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

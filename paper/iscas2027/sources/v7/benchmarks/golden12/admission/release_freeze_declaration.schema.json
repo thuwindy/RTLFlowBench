@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-freeze-declaration.v1.json",
+  "title": "Golden-12 independently reviewed material freeze declaration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "role",
+    "status",
+    "freeze_status",
+    "independent_freeze",
+    "source_material",
+    "pretransition_review",
+    "release_effective",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_freeze_declaration.v1"},
+    "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+    "role": {"enum": ["environment_lock", "scoring_profile", "runner_lock"]},
+    "status": {"const": "release_frozen"},
+    "freeze_status": {"const": "release_frozen"},
+    "independent_freeze": {"const": true},
+    "source_material": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256", "candidate_component_bound"],
+      "properties": {
+        "relative_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_component_bound": {"const": true}
+      }
+    },
+    "runner_source_closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entrypoint",
+        "candidate",
+        "candidate_schema",
+        "receipt_schema",
+        "source_closure_file_count",
+        "source_closure_verified"
+      ],
+      "properties": {
+        "entrypoint": {"$ref": "#/$defs/boundFile"},
+        "candidate": {"$ref": "#/$defs/boundFile"},
+        "candidate_schema": {"$ref": "#/$defs/boundFile"},
+        "receipt_schema": {"$ref": "#/$defs/boundFile"},
+        "source_closure_file_count": {"type": "integer", "minimum": 1},
+        "source_closure_verified": {"const": true}
+      }
+    },
+    "pretransition_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_lock_sha256",
+        "live_verification_sha256",
+        "approved_review_ids",
+        "reviewer_identities",
+        "rights_attestation_sha256",
+        "rights_signature_sha256"
+      ],
+      "properties": {
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "live_verification_sha256": {"$ref": "#/$defs/sha256"},
+        "approved_review_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "reviewer_identities": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rights_attestation_sha256": {"$ref": "#/$defs/sha256"},
+        "rights_signature_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "release_effective": {"const": false},
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"role": {"const": "runner_lock"}}},
+      "then": {"required": ["runner_source_closure"]},
+      "else": {"not": {"required": ["runner_source_closure"]}}
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "boundFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "sha256"],
+      "properties": {
+        "relative_path": {"$ref": "#/$defs/relativePath"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    }
+  }
+}

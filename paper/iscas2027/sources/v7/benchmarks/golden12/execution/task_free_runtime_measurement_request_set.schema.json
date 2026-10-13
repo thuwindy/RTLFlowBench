@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/task-free-runtime-measurement-request-set.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "status", "batch_id", "source_binding", "oci_inventory_sha256", "launcher", "requests", "summary", "attempt_accounting", "readiness", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.task_free_runtime_measurement_request_set.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "five_task_free_requests_built_not_resource_calibration"},
+    "batch_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"},
+    "source_binding": {"$ref": "#/$defs/sourceBinding"},
+    "oci_inventory_sha256": {"$ref": "#/$defs/sha256"},
+    "launcher": {"type": "object", "additionalProperties": false, "required": ["kind", "executable_sha256"], "properties": {"kind": {"const": "podman_oci"}, "executable_sha256": {"$ref": "#/$defs/sha256"}}},
+    "requests": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/request"}, {"properties": {"workflow_slot_id": {"const": "chipflow"}, "workflow_id": {"const": "chipflow"}}}]},
+        {"allOf": [{"$ref": "#/$defs/request"}, {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}, "workflow_id": {"const": "same_model_vanilla_agent"}}}]},
+        {"allOf": [{"$ref": "#/$defs/request"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}, "workflow_id": {"const": "mage"}}}]},
+        {"allOf": [{"$ref": "#/$defs/request"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}, "workflow_id": {"const": "verilogcoder"}}}]},
+        {"allOf": [{"$ref": "#/$defs/request"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}, "workflow_id": {"const": "hdlagent"}}}]}
+      ],
+      "items": false
+    },
+    "summary": {"type": "object", "additionalProperties": false, "required": ["workflow_count", "request_count", "container_start_count"], "properties": {"workflow_count": {"const": 5}, "request_count": {"const": 5}, "container_start_count": {"const": 0}}},
+    "attempt_accounting": {"$ref": "#/$defs/zeroAttempts"},
+    "readiness": {"type": "object", "additionalProperties": false, "required": ["task_free_request_set_complete", "full_workflow_resource_calibration_complete", "host_capacity_policy_derivation_permitted", "official_attempts_permitted"], "properties": {"task_free_request_set_complete": {"const": true}, "full_workflow_resource_calibration_complete": {"const": false}, "host_capacity_policy_derivation_permitted": {"const": false}, "official_attempts_permitted": {"const": false}}},
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceBinding": {"type": "object", "additionalProperties": false, "required": ["commit", "manifest_sha256"], "properties": {"commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "manifest_sha256": {"$ref": "#/$defs/sha256"}}},
+    "request": {"type": "object", "additionalProperties": false, "required": ["workflow_slot_id", "workflow_id", "request_path", "request_sha256", "runtime_image_digest", "runtime_image_id"], "properties": {"workflow_slot_id": {"type": "string", "minLength": 1}, "workflow_id": {"type": "string", "minLength": 1}, "request_path": {"type": "string", "pattern": "^[a-z0-9_]+\\.request\\.json$"}, "request_sha256": {"$ref": "#/$defs/sha256"}, "runtime_image_digest": {"$ref": "#/$defs/image"}, "runtime_image_id": {"$ref": "#/$defs/image"}}},
+    "zeroAttempts": {"type": "object", "additionalProperties": false, "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls"], "properties": {"official_attempts_started": {"const": 0}, "official_semantic_attempts_consumed": {"const": 0}, "resource_calibration_attempts_consumed": {"const": 0}, "benchmark_results_created": {"const": 0}, "private_evaluator_calls": {"const": 0}}}
+  }
+}

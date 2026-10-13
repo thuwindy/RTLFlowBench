@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/task-review-attestation-policy.v1.json",
+  "title": "Golden-12 task review attestation policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "candidate_release",
+    "status",
+    "signature_namespace",
+    "required_review_ids",
+    "trusted_registry_sha256_allowlist",
+    "trusted_registry_bootstrap",
+    "self_approval_forbidden",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.task_review_attestation_policy.v1"
+    },
+    "task_id": {
+      "enum": [
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor"
+      ]
+    },
+    "candidate_release": {"type": "string", "minLength": 1},
+    "status": {"const": "development_policy_not_frozen"},
+    "signature_namespace": {
+      "pattern": "^rtlflowbench-g(?:0[2-7]|10|11)-review$"
+    },
+    "required_review_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+    },
+    "trusted_registry_sha256_allowlist": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/sha256"}
+    },
+    "trusted_registry_bootstrap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "empty_allowlist_behavior",
+        "candidate_relock_required_on_change",
+        "runtime_governance_claim_is_not_sufficient",
+        "candidate_registry_pin_is_not_a_trust_anchor",
+        "external_governance_attestation_required",
+        "out_of_band_governance_allowed_signers_sha256_required",
+        "governance_signature_namespace"
+      ],
+      "properties": {
+        "status": {"const": "pending_independent_registry_pin"},
+        "empty_allowlist_behavior": {"const": "all_registries_remain_untrusted"},
+        "candidate_relock_required_on_change": {"const": true},
+        "runtime_governance_claim_is_not_sufficient": {"const": true},
+        "candidate_registry_pin_is_not_a_trust_anchor": {"const": true},
+        "external_governance_attestation_required": {"const": true},
+        "out_of_band_governance_allowed_signers_sha256_required": {"const": true},
+        "governance_signature_namespace": {
+          "const": "rtlflowbench-registry-governance"
+        }
+      }
+    },
+    "self_approval_forbidden": {"const": true},
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

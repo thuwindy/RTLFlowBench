@@ -1,0 +1,35 @@
+{
+  "schema_version": "rtlflowbench.task_workspace_monitor_profile.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "suite_id": null,
+  "required_public_assets": [
+    "runner.py",
+    "verdict.py",
+    "g05_visible_tb.v"
+  ],
+  "repository_files": [
+    "picorv32.v",
+    "README.md"
+  ],
+  "submission_files": [
+    "picorv32.v"
+  ],
+  "runner_argv": [
+    "{python}",
+    "{visible}/runner.py",
+    "--repository-root",
+    "{repository}",
+    "--submission-root",
+    "{submission}",
+    "--output-dir",
+    "{runner_output}",
+    "--iverilog",
+    "{iverilog}",
+    "--vvp",
+    "{vvp}",
+    "--command-timeout-seconds",
+    "{command_timeout_seconds}"
+  ],
+  "result_filename": "runner/result.json",
+  "pass_sentinel": "CHIPFLOW_G05_VISIBLE_MONITORED_PASS task=G05-picorv32-missing-irq"
+}

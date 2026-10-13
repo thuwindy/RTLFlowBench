@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/controller/workflow-launch-runtime-set.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "scope", "input_sha256",
+    "source_sha256", "workflows", "summary", "attempt_accounting",
+    "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.workflow_launch_runtime_set.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["launch_runtime_set_partial", "launch_runtime_set_complete"]},
+    "scope": {"const": "five_workflow_task_neutral_launch_runtime_candidates"},
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["base_release_candidate", "prior_launch_intake", "chipflow_probe", "verilogcoder_runtime", "runtime_supersession", "mage_probe", "vanilla_probe", "vanilla_descriptor"],
+      "properties": {
+        "base_release_candidate": {"$ref": "#/$defs/sha256"},
+        "prior_launch_intake": {"$ref": "#/$defs/sha256"},
+        "chipflow_probe": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "verilogcoder_runtime": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "runtime_supersession": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "mage_probe": {"$ref": "#/$defs/sha256"},
+        "vanilla_probe": {"$ref": "#/$defs/sha256"},
+        "vanilla_descriptor": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["builder", "schema", "podman"],
+      "properties": {
+        "builder": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"},
+        "podman": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "workflows": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "items": {"$ref": "#/$defs/workflow"}
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_count", "runtime_image_bound_count", "task_neutral_launch_candidate_count", "missing_launch_candidate_count", "task_packet_load_count", "provider_call_count", "eda_call_count", "private_evaluator_call_count"],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "runtime_image_bound_count": {"const": 5},
+        "task_neutral_launch_candidate_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "missing_launch_candidate_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "task_packet_load_count": {"type": "integer", "minimum": 0, "maximum": 1},
+        "provider_call_count": {"const": 0},
+        "eda_call_count": {"const": 0},
+        "private_evaluator_call_count": {"const": 0}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "semantic_attempts_consumed", "benchmark_results_created"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "semantic_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["all_runtime_images_bound", "all_task_neutral_launch_candidates_bound", "runtime_release_frozen", "official_attempts_permitted"],
+      "properties": {
+        "all_runtime_images_bound": {"const": true},
+        "all_task_neutral_launch_candidates_bound": {"type": "boolean"},
+        "runtime_release_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "blockers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "excluded_claims": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_slot_id", "workflow_id", "source_commit", "source_manifest_sha256", "runtime_image_digest", "runtime_image_id", "stored_image_size_bytes", "runtime_evidence_receipt_sha256", "runtime_candidate_status", "task_neutral_launch_candidate_bound", "runtime_release_frozen", "official_attempts_permitted", "blockers"],
+      "properties": {
+        "workflow_slot_id": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]},
+        "workflow_id": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_image_digest": {"$ref": "#/$defs/image"},
+        "runtime_image_id": {"$ref": "#/$defs/image"},
+        "stored_image_size_bytes": {"type": "integer", "minimum": 1},
+        "runtime_evidence_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_candidate_status": {"enum": ["preflight_only_launch_missing", "task_neutral_runtime_probe_passed", "deterministic_runtime_environment_reproduced", "prior_task_neutral_launch_contract_bound", "task_neutral_runtime_supersession_validated"]},
+        "task_neutral_launch_candidate_bound": {"type": "boolean"},
+        "runtime_release_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false},
+        "blockers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

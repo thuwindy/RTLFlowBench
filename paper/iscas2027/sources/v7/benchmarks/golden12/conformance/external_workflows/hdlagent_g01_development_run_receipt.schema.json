@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.local/schemas/hdlagent_g01_development_run_receipt.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "task_id",
+    "run_id",
+    "development_benchmark_outcome",
+    "official_benchmark_outcome",
+    "source_binding",
+    "source_assets",
+    "runtime",
+    "adapter_conformance",
+    "provider_stage",
+    "submission",
+    "private_evaluation",
+    "failed_or_excluded_attempts",
+    "isolation",
+    "readiness",
+    "remaining_blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.hdlagent_g01_development_run_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "completed_evaluated_compile_error_development_only"},
+    "task_id": {"const": "G01-common-fifo-spec"},
+    "run_id": {"const": "hdlagent-g01-networkless-development-5-run"},
+    "development_benchmark_outcome": {"const": "FAIL"},
+    "official_benchmark_outcome": {"type": "null"},
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "commit", "manifest_sha256", "source_archive_sha256"],
+      "properties": {
+        "name": {"const": "HDLAgent"},
+        "commit": {"$ref": "#/$defs/sha1"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_archive_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_assets": {
+      "type": "object",
+      "minProperties": 7,
+      "additionalProperties": {"$ref": "#/$defs/sourceAsset"}
+    },
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image_id", "digest", "size_bytes", "containerfile_sha256", "bash_wrapper_sha256", "busybox_sha256", "build_reproducibility_status", "release_frozen", "redistribution_review_complete"],
+      "properties": {
+        "image_id": {"$ref": "#/$defs/sha256"},
+        "digest": {"$ref": "#/$defs/digest"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "containerfile_sha256": {"$ref": "#/$defs/sha256"},
+        "bash_wrapper_sha256": {"$ref": "#/$defs/sha256"},
+        "busybox_sha256": {"$ref": "#/$defs/sha256"},
+        "build_reproducibility_status": {"const": "single_build_only"},
+        "release_frozen": {"const": false},
+        "redistribution_review_complete": {"const": false}
+      }
+    },
+    "adapter_conformance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_version", "automatic_status", "test_count", "test_pass_count", "all12_matrix_check_count", "all12_matrix_pass_count", "conformance_receipt_sha256", "all12_matrix_sha256", "public_format_translation_only", "private_asset_exposure_observed", "release_conformance_frozen"],
+      "properties": {
+        "adapter_version": {"const": "2"},
+        "automatic_status": {"const": "pass_not_release_frozen"},
+        "test_count": {"const": 54},
+        "test_pass_count": {"const": 54},
+        "all12_matrix_check_count": {"const": 180},
+        "all12_matrix_pass_count": {"const": 180},
+        "conformance_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "all12_matrix_sha256": {"$ref": "#/$defs/sha256"},
+        "public_format_translation_only": {"const": true},
+        "private_asset_exposure_observed": {"const": false},
+        "release_conformance_frozen": {"const": false}
+      }
+    },
+    "provider_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "model", "temperature", "top_p", "thinking_mode", "provider_preflight_status", "provider_preflight_receipt_sha256", "workflow_attempt_receipt_sha256", "airtl_run_observed", "private_evaluator_mounted", "rtl_verdict_produced", "workspace_network_access_observed", "output_rtl", "resource_usage"],
+      "properties": {
+        "status": {"const": "completed_output_observed"},
+        "model": {"const": "deepseek-v4-pro"},
+        "temperature": {"const": 0},
+        "top_p": {"const": 1},
+        "thinking_mode": {"const": "disabled"},
+        "provider_preflight_status": {"const": "pass"},
+        "provider_preflight_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "workflow_attempt_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "airtl_run_observed": {"const": true},
+        "private_evaluator_mounted": {"const": false},
+        "rtl_verdict_produced": {"const": false},
+        "workspace_network_access_observed": {"const": false},
+        "output_rtl": {"$ref": "#/$defs/rtlArtifact"},
+        "resource_usage": {"$ref": "#/$defs/resourceUsage"}
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["submission_id", "submission_sha256", "bridge_receipt_sha256", "rtl_sha256", "bytes_preserved", "attempt_index", "seed", "scope_file_count", "scope_violation_count"],
+      "properties": {
+        "submission_id": {"const": "hdlagent-g01-networkless-development-5"},
+        "submission_sha256": {"$ref": "#/$defs/sha256"},
+        "bridge_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "rtl_sha256": {"$ref": "#/$defs/sha256"},
+        "bytes_preserved": {"const": true},
+        "attempt_index": {"const": 1},
+        "seed": {"type": "null"},
+        "scope_file_count": {"const": 1},
+        "scope_violation_count": {"const": 0}
+      }
+    },
+    "private_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "classification", "verdict", "neutral_result_sha256", "server_receipt_sha256", "result_schema_valid", "infra_failure", "expected_top_present", "all_public_ports_present", "required_parameter_data_width_present", "required_parameter_depth_present", "build_failure_category", "gates", "score_status", "score_total", "resource_usage"],
+      "properties": {
+        "status": {"const": "completed"},
+        "classification": {"const": "compile_error"},
+        "verdict": {"const": "compile_error"},
+        "neutral_result_sha256": {"$ref": "#/$defs/sha256"},
+        "server_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "result_schema_valid": {"const": true},
+        "infra_failure": {"const": false},
+        "expected_top_present": {"const": true},
+        "all_public_ports_present": {"const": true},
+        "required_parameter_data_width_present": {"const": false},
+        "required_parameter_depth_present": {"const": false},
+        "build_failure_category": {"const": "missing_public_parameter_depth_defparam"},
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["build", "lint", "f2p_differential", "p2p_simulation", "bounded_formal", "simulation_coverage", "synthesis", "scope"],
+          "properties": {
+            "build": {"const": "fail"},
+            "lint": {"const": "fail"},
+            "f2p_differential": {"const": "not_run"},
+            "p2p_simulation": {"const": "not_run"},
+            "bounded_formal": {"const": "not_run"},
+            "simulation_coverage": {"const": "not_run"},
+            "synthesis": {"const": "fail"},
+            "scope": {"const": "pass"}
+          }
+        },
+        "score_status": {"const": "not_scored"},
+        "score_total": {"type": "null"},
+        "resource_usage": {"$ref": "#/$defs/resourceUsage"}
+      }
+    },
+    "failed_or_excluded_attempts": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/excludedAttempt"}
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["workflow_container_network", "eda_container_network", "private_evaluator_container_network", "provider_control_plane_separate_from_workspace_and_eda", "provider_credential_mounted_in_workflow", "provider_environment_forwarded_to_eda", "private_evaluator_mounted_during_provider_stage", "private_evaluator_started_after_provider_exit", "raw_provider_response_recorded", "private_oracle_in_receipt", "secret_matches"],
+      "properties": {
+        "workflow_container_network": {"const": "none"},
+        "eda_container_network": {"const": "none"},
+        "private_evaluator_container_network": {"const": "none"},
+        "provider_control_plane_separate_from_workspace_and_eda": {"const": true},
+        "provider_credential_mounted_in_workflow": {"const": false},
+        "provider_environment_forwarded_to_eda": {"const": false},
+        "private_evaluator_mounted_during_provider_stage": {"const": false},
+        "private_evaluator_started_after_provider_exit": {"const": true},
+        "raw_provider_response_recorded": {"const": false},
+        "private_oracle_in_receipt": {"const": false},
+        "secret_matches": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actual_airtl_run_observed", "provider_eda_isolation_observed", "automatic_conformance_complete", "cross_host_reproduced", "repeatability_complete", "runtime_frozen", "independent_review_complete", "submission_adapter_ready", "benchmark_ready", "publishable_cohort_eligible"],
+      "properties": {
+        "actual_airtl_run_observed": {"const": true},
+        "provider_eda_isolation_observed": {"const": true},
+        "automatic_conformance_complete": {"const": true},
+        "cross_host_reproduced": {"const": false},
+        "repeatability_complete": {"const": false},
+        "runtime_frozen": {"const": false},
+        "independent_review_complete": {"const": false},
+        "submission_adapter_ready": {"const": false},
+        "benchmark_ready": {"const": false},
+        "publishable_cohort_eligible": {"const": false}
+      }
+    },
+    "remaining_blockers": {"type": "array", "minItems": 7, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "excluded_claims": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)private(?:/|$)).+$"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "rtlArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "bytes"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "edaUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compile_or_lint", "simulation", "formal", "synthesis"],
+      "properties": {
+        "compile_or_lint": {"type": "integer", "minimum": 0},
+        "simulation": {"type": "integer", "minimum": 0},
+        "formal": {"type": "integer", "minimum": 0},
+        "synthesis": {"type": "integer", "minimum": 0}
+      }
+    },
+    "resourceUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["wall_time_seconds", "input_tokens", "output_tokens", "llm_calls", "eda_calls", "human_interventions", "missing_measurements"],
+      "properties": {
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "llm_calls": {"type": "integer", "minimum": 0},
+        "eda_calls": {"$ref": "#/$defs/edaUsage"},
+        "human_interventions": {"type": "integer", "minimum": 0},
+        "missing_measurements": {"type": "array", "uniqueItems": true, "items": {"enum": ["input_tokens", "output_tokens"]}}
+      }
+    },
+    "excludedAttempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "classification", "evidence_receipt_sha256", "eligible"],
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1},
+        "classification": {"type": "string", "minLength": 1},
+        "evidence_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "eligible": {"const": false}
+      }
+    }
+  }
+}

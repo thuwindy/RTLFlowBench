@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/adapter/chipflow-calibration.v1.json",
+  "title": "ChipFlow adapter synthetic conformance calibration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "synthetic_conformance_only",
+    "actual_airtl_run_observed",
+    "rtl_evaluator_run",
+    "task_id",
+    "case_count",
+    "pass_count",
+    "fail_count",
+    "cases",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_adapter_calibration.v1"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": [
+        "pass",
+        "fail"
+      ]
+    },
+    "synthetic_conformance_only": {
+      "const": true
+    },
+    "actual_airtl_run_observed": {
+      "const": false
+    },
+    "rtl_evaluator_run": {
+      "const": false
+    },
+    "task_id": {
+      "const": "G01-common-fifo-spec"
+    },
+    "case_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "pass_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fail_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "expected",
+          "observed",
+          "status",
+          "reason"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected": {
+            "enum": [
+              "accept",
+              "reject"
+            ]
+          },
+          "observed": {
+            "enum": [
+              "accept",
+              "reject"
+            ]
+          },
+          "status": {
+            "enum": [
+              "pass",
+              "fail"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

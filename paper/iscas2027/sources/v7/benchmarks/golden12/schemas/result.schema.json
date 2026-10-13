@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/result.v1.json",
+  "title": "RTLFlowBench evaluator result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "result_id",
+    "task_id",
+    "submission_id",
+    "document_bindings",
+    "run_id",
+    "verdict",
+    "verdict_reason",
+    "oracle_results",
+    "raw_metrics",
+    "scope",
+    "trust_events",
+    "resource_usage",
+    "score",
+    "evidence_manifest"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.result.v1"},
+    "result_id": {"type": "string", "minLength": 1},
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "submission_id": {"type": "string", "minLength": 1},
+    "document_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_descriptor_sha256",
+        "submission_sha256"
+      ],
+      "properties": {
+        "task_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+        "submission_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "run_id": {"type": "string", "minLength": 1},
+    "verdict": {
+      "enum": [
+        "invalid_instance",
+        "infra_error",
+        "invalid_submission",
+        "scope_violation",
+        "blocked",
+        "timeout",
+        "compile_error",
+        "fail_f2p",
+        "fail_p2p",
+        "fail_formal",
+        "fail_ppa",
+        "pass"
+      ]
+    },
+    "verdict_reason": {"type": "string", "minLength": 1},
+    "oracle_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "oracle_id",
+          "oracle_class",
+          "status",
+          "failure_verdict",
+          "reason",
+          "pass_sentinel_observed",
+          "evidence_refs"
+        ],
+        "properties": {
+          "oracle_id": {"type": "string", "minLength": 1},
+          "oracle_class": {"$ref": "#/$defs/oracleClass"},
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "timeout",
+              "infra_error",
+              "not_run"
+            ]
+          },
+          "failure_verdict": {
+            "oneOf": [
+              {"type": "null"},
+              {"$ref": "#/$defs/failureVerdict"}
+            ]
+          },
+          "reason": {"type": "string", "minLength": 1},
+          "pass_sentinel_observed": {"type": ["boolean", "null"]},
+          "evidence_refs": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/relativePath"}
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {"enum": ["pass", "not_run"]}
+              },
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {"failure_verdict": {"type": "null"}}
+            }
+          },
+          {
+            "if": {
+              "properties": {"status": {"const": "timeout"}},
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {"failure_verdict": {"const": "timeout"}}
+            }
+          },
+          {
+            "if": {
+              "properties": {"status": {"const": "infra_error"}},
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "failure_verdict": {"const": "infra_error"}
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {"status": {"const": "fail"}},
+              "required": ["status"]
+            },
+            "then": {
+              "properties": {
+                "failure_verdict": {
+                  "enum": [
+                    "invalid_instance",
+                    "invalid_submission",
+                    "scope_violation",
+                    "blocked",
+                    "compile_error",
+                    "fail_f2p",
+                    "fail_p2p",
+                    "fail_formal",
+                    "fail_ppa"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "raw_metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/metricObservation"}
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "violation_count",
+        "violations",
+        "repository_before_sha256",
+        "repository_after_sha256"
+      ],
+      "properties": {
+        "status": {"enum": ["pass", "violation", "not_available"]},
+        "violation_count": {"type": "integer", "minimum": 0},
+        "violations": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "repository_before_sha256": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+        },
+        "repository_after_sha256": {
+          "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+        }
+      }
+    },
+    "trust_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event_type", "severity", "message", "evidence_refs"],
+        "properties": {
+          "event_type": {
+            "enum": [
+              "fabricated_claim",
+              "scope_violation",
+              "hidden_asset_access",
+              "network_violation",
+              "unsafe_mutation",
+              "other"
+            ]
+          },
+          "severity": {"enum": ["info", "warning", "error"]},
+          "message": {"type": "string", "minLength": 1},
+          "evidence_refs": {
+            "type": "array",
+            "items": {"$ref": "#/$defs/relativePath"}
+          }
+        }
+      }
+    },
+    "resource_usage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions",
+        "missing_measurements"
+      ],
+      "properties": {
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+        "llm_calls": {"type": "integer", "minimum": 0},
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {"type": "integer", "minimum": 0},
+            "simulation": {"type": "integer", "minimum": 0},
+            "formal": {"type": "integer", "minimum": 0},
+            "synthesis": {"type": "integer", "minimum": 0}
+          }
+        },
+        "human_interventions": {"type": "integer", "minimum": 0},
+        "missing_measurements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["input_tokens", "output_tokens"]}
+        }
+      }
+    },
+    "score": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "total", "dimensions", "reason"],
+      "properties": {
+        "status": {"enum": ["not_scored", "scored"]},
+        "total": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "evidence_manifest": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "sha256", "bytes"],
+        "properties": {
+          "path": {"$ref": "#/$defs/relativePath"},
+          "sha256": {"$ref": "#/$defs/sha256"},
+          "bytes": {"type": "integer", "minimum": 0}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "failureVerdict": {
+      "enum": [
+        "invalid_instance",
+        "infra_error",
+        "invalid_submission",
+        "scope_violation",
+        "blocked",
+        "timeout",
+        "compile_error",
+        "fail_f2p",
+        "fail_p2p",
+        "fail_formal",
+        "fail_ppa"
+      ]
+    },
+    "oracleClass": {
+      "enum": [
+        "build",
+        "lint",
+        "simulation",
+        "formal",
+        "differential",
+        "coverage",
+        "synthesis",
+        "ppa",
+        "scope",
+        "trust"
+      ]
+    },
+    "metricId": {
+      "enum": [
+        "functional_correctness",
+        "protocol_correctness",
+        "f2p",
+        "p2p",
+        "formal_depth",
+        "simulation_coverage",
+        "mutation_kill_rate",
+        "false_positive_rate",
+        "area",
+        "timing",
+        "performance",
+        "scope_violation_count",
+        "trust_event_count",
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions"
+      ]
+    },
+    "metricObservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric_id",
+        "status",
+        "value",
+        "unit",
+        "evidence_refs",
+        "missing_reason"
+      ],
+      "properties": {
+        "metric_id": {"$ref": "#/$defs/metricId"},
+        "status": {
+          "enum": ["measured", "not_available", "not_applicable"]
+        },
+        "value": {
+          "type": ["number", "integer", "boolean", "string", "null"]
+        },
+        "unit": {"type": ["string", "null"]},
+        "evidence_refs": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/relativePath"}
+        },
+        "missing_reason": {"type": ["string", "null"]}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "measured"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "value": {"not": {"type": "null"}},
+              "evidence_refs": {"minItems": 1},
+              "missing_reason": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {"type": "null"},
+              "missing_reason": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "score": {
+            "properties": {"status": {"const": "scored"}},
+            "required": ["status"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "score": {
+            "properties": {"total": {"type": "number"}}
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "score": {
+            "properties": {
+              "total": {"type": "null"},
+              "dimensions": {"maxProperties": 0}
+            }
+          }
+        }
+      }
+    }
+  ]
+}

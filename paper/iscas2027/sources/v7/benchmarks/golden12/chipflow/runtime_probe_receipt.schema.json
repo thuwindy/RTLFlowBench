@@ -1,0 +1,470 @@
+{
+  "$defs": {
+    "image": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    }
+  },
+  "$id": "https://rtlflowbench.org/controller/chipflow-runtime-probe-receipt.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "activity": {
+      "additionalProperties": false,
+      "properties": {
+        "benchmark_verdict_count": {
+          "const": 0
+        },
+        "eda_call_count": {
+          "const": 0
+        },
+        "official_attempt_count": {
+          "const": 0
+        },
+        "private_evaluator_call_count": {
+          "const": 0
+        },
+        "provider_call_count": {
+          "const": 0
+        },
+        "task_mutation_count": {
+          "const": 0
+        },
+        "task_packet_load_count": {
+          "const": 1
+        }
+      },
+      "required": [
+        "task_packet_load_count",
+        "provider_call_count",
+        "eda_call_count",
+        "private_evaluator_call_count",
+        "task_mutation_count",
+        "benchmark_verdict_count",
+        "official_attempt_count"
+      ],
+      "type": "object"
+    },
+    "blockers": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "decision": {
+      "const": "PASS"
+    },
+    "excluded_claims": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "minItems": 4,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "fail_closed_control": {
+      "additionalProperties": false,
+      "properties": {
+        "exception_class": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "exit_code": {
+          "const": 2
+        },
+        "raw_exception_text_recorded": {
+          "const": false
+        },
+        "status": {
+          "const": "control_plane_error"
+        }
+      },
+      "required": [
+        "exit_code",
+        "status",
+        "exception_class",
+        "raw_exception_text_recorded"
+      ],
+      "type": "object"
+    },
+    "input_sha256": {
+      "additionalProperties": false,
+      "properties": {
+        "checkpoint": {
+          "$ref": "#/$defs/sha256"
+        },
+        "container_post_inspect": {
+          "$ref": "#/$defs/sha256"
+        },
+        "container_pre_inspect": {
+          "$ref": "#/$defs/sha256"
+        },
+        "control_receipt": {
+          "$ref": "#/$defs/sha256"
+        },
+        "evidence_manifest": {
+          "$ref": "#/$defs/sha256"
+        },
+        "image_inspect": {
+          "$ref": "#/$defs/sha256"
+        },
+        "launch_request": {
+          "$ref": "#/$defs/sha256"
+        },
+        "missing_container_post_inspect": {
+          "$ref": "#/$defs/sha256"
+        },
+        "missing_container_pre_inspect": {
+          "$ref": "#/$defs/sha256"
+        },
+        "missing_exit": {
+          "$ref": "#/$defs/sha256"
+        },
+        "missing_stderr": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run_exit": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run_stdout": {
+          "$ref": "#/$defs/sha256"
+        },
+        "workflow_binding": {
+          "$ref": "#/$defs/sha256"
+        },
+        "workspace_receipt": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "evidence_manifest",
+        "image_inspect",
+        "container_pre_inspect",
+        "container_post_inspect",
+        "missing_container_pre_inspect",
+        "missing_container_post_inspect",
+        "launch_request",
+        "workflow_binding",
+        "workspace_receipt",
+        "control_receipt",
+        "checkpoint",
+        "run_stdout",
+        "run_exit",
+        "missing_stderr",
+        "missing_exit"
+      ],
+      "type": "object"
+    },
+    "isolation": {
+      "additionalProperties": false,
+      "properties": {
+        "network_mode": {
+          "const": "none"
+        },
+        "private_evaluator_mount_count": {
+          "const": 0
+        },
+        "request_mount_read_only": {
+          "const": true
+        },
+        "unexpected_mount_count": {
+          "const": 0
+        },
+        "work_mount_writable": {
+          "const": true
+        }
+      },
+      "required": [
+        "network_mode",
+        "request_mount_read_only",
+        "work_mount_writable",
+        "private_evaluator_mount_count",
+        "unexpected_mount_count"
+      ],
+      "type": "object"
+    },
+    "native_control_plane": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "approval_required_block"
+              }
+            }
+          },
+          "then": {
+            "not": {
+              "required": [
+                "block_categories"
+              ]
+            },
+            "properties": {
+              "artifact_count": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "native_stage": {
+                "const": "DESIGN_BRIEF_APPROVAL"
+              },
+              "reason_code": {
+                "const": "zero_intervention_policy_stopped_at_native_approval_gate"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "workflow_capability_block"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "artifact_count": {
+                "const": 0
+              },
+              "block_categories": {
+                "const": [
+                  "runtime_configuration_unavailable"
+                ]
+              },
+              "native_stage": {
+                "const": "BLOCKED"
+              },
+              "native_status": {
+                "const": "blocked"
+              },
+              "reason_code": {
+                "const": "native_workflow_blocked"
+              }
+            },
+            "required": [
+              "block_categories"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "artifact_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "block_categories": {
+          "items": {
+            "const": "runtime_configuration_unavailable"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "checkpoint_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "exit_code": {
+          "const": 5
+        },
+        "native_stage": {
+          "enum": [
+            "DESIGN_BRIEF_APPROVAL",
+            "BLOCKED"
+          ]
+        },
+        "native_status": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "reason_code": {
+          "enum": [
+            "zero_intervention_policy_stopped_at_native_approval_gate",
+            "native_workflow_blocked"
+          ]
+        },
+        "status": {
+          "enum": [
+            "approval_required_block",
+            "workflow_capability_block"
+          ]
+        }
+      },
+      "required": [
+        "exit_code",
+        "status",
+        "reason_code",
+        "native_stage",
+        "native_status",
+        "checkpoint_sha256",
+        "artifact_count"
+      ],
+      "type": "object"
+    },
+    "observed_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "readiness": {
+      "additionalProperties": false,
+      "properties": {
+        "binding_probe_passed": {
+          "const": true
+        },
+        "fail_closed_probe_passed": {
+          "const": true
+        },
+        "official_attempts_permitted": {
+          "const": false
+        },
+        "runtime_release_frozen": {
+          "const": false
+        },
+        "task_neutral_launch_candidate_bound": {
+          "const": true
+        }
+      },
+      "required": [
+        "binding_probe_passed",
+        "fail_closed_probe_passed",
+        "task_neutral_launch_candidate_bound",
+        "runtime_release_frozen",
+        "official_attempts_permitted"
+      ],
+      "type": "object"
+    },
+    "request": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_ready": {
+          "const": false
+        },
+        "benchmark_ready": {
+          "const": false
+        },
+        "mode": {
+          "const": "development"
+        },
+        "model": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "private_evaluator_mounted": {
+          "const": false
+        },
+        "public_input_only": {
+          "const": true
+        },
+        "repository_mounted": {
+          "type": "boolean"
+        },
+        "task_id": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "task_id",
+        "model",
+        "mode",
+        "public_input_only",
+        "private_evaluator_mounted",
+        "repository_mounted",
+        "benchmark_ready",
+        "adapter_ready"
+      ],
+      "type": "object"
+    },
+    "runtime_image": {
+      "additionalProperties": false,
+      "properties": {
+        "image_digest": {
+          "$ref": "#/$defs/image"
+        },
+        "image_id": {
+          "$ref": "#/$defs/image"
+        },
+        "private_evaluator_included": {
+          "const": false
+        },
+        "stored_image_size_bytes": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "image_id",
+        "image_digest",
+        "stored_image_size_bytes",
+        "private_evaluator_included"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_runtime_probe.v1"
+    },
+    "scope": {
+      "const": "development_public_control_plane_structural_probe"
+    },
+    "source_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "source_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_sha256": {
+      "additionalProperties": false,
+      "properties": {
+        "builder": {
+          "$ref": "#/$defs/sha256"
+        },
+        "schema": {
+          "$ref": "#/$defs/sha256"
+        }
+      },
+      "required": [
+        "builder",
+        "schema"
+      ],
+      "type": "object"
+    },
+    "status": {
+      "const": "task_neutral_runtime_probe_passed"
+    },
+    "workflow_id": {
+      "const": "chipflow"
+    }
+  },
+  "required": [
+    "schema_version",
+    "observed_at",
+    "decision",
+    "status",
+    "workflow_id",
+    "scope",
+    "source_commit",
+    "source_manifest_sha256",
+    "runtime_image",
+    "request",
+    "isolation",
+    "native_control_plane",
+    "fail_closed_control",
+    "activity",
+    "readiness",
+    "blockers",
+    "input_sha256",
+    "source_sha256",
+    "excluded_claims"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-public-trial-workspace-receipt.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "task_id",
+    "public_suite",
+    "repository_projection",
+    "layout",
+    "readiness",
+    "materializer_sha256",
+    "public_suite_verifier_sha256",
+    "receipt_schema_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_trial_workspace_receipt.v1"
+    },
+    "observed_at": {"type": "string", "minLength": 1},
+    "status": {
+      "const": "development_trial_workspace_materialized_not_admitted"
+    },
+    "task_id": {"$ref": "#/$defs/taskId"},
+    "public_suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_sha256",
+        "verification_receipt_sha256",
+        "suite_descriptor_sha256",
+        "candidate_lock_sha256",
+        "task_public_archive_sha256",
+        "task_public_tree_sha256"
+      ],
+      "properties": {
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "verification_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "suite_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "task_public_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "task_public_tree_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "repository_projection": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "required",
+            "receipt_schema_version",
+            "receipt_sha256",
+            "archive_sha256",
+            "projection_digest",
+            "projected_paths",
+            "redistribution_review_complete"
+          ],
+          "properties": {
+            "required": {"const": true},
+            "receipt_schema_version": {"type": "string", "minLength": 1},
+            "receipt_sha256": {"$ref": "#/$defs/sha256"},
+            "archive_sha256": {"$ref": "#/$defs/sha256"},
+            "projection_digest": {"$ref": "#/$defs/sha256"},
+            "projected_paths": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/path"}
+            },
+            "redistribution_review_complete": {"const": false}
+          }
+        }
+      ]
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "public_root",
+        "worktree_root",
+        "public_file_count",
+        "repository_file_count",
+        "private_file_count",
+        "editable_paths",
+        "editable_existing_paths",
+        "editable_absent_paths",
+        "read_only_repository_paths",
+        "filesystem_permissions_not_security_boundary",
+        "scope_monitor_required"
+      ],
+      "properties": {
+        "public_root": {"const": "public"},
+        "worktree_root": {"const": "worktree"},
+        "public_file_count": {"type": "integer", "minimum": 1},
+        "repository_file_count": {"type": "integer", "minimum": 0},
+        "private_file_count": {"const": 0},
+        "editable_paths": {"$ref": "#/$defs/paths"},
+        "editable_existing_paths": {"$ref": "#/$defs/pathsMaybeEmpty"},
+        "editable_absent_paths": {"$ref": "#/$defs/pathsMaybeEmpty"},
+        "read_only_repository_paths": {"$ref": "#/$defs/pathsMaybeEmpty"},
+        "filesystem_permissions_not_security_boundary": {"const": true},
+        "scope_monitor_required": {"const": true}
+      }
+    },
+    "readiness": {
+      "const": {
+        "rights_review_complete": false,
+        "benchmark_ready": false,
+        "chipflow_adapter_ready": false,
+        "publishable_score_permitted": false
+      }
+    },
+    "materializer_sha256": {"$ref": "#/$defs/sha256"},
+    "public_suite_verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "taskId": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/path"}
+    },
+    "pathsMaybeEmpty": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/path"}
+    }
+  }
+}

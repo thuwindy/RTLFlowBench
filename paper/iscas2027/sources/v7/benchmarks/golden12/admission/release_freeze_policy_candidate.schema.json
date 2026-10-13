@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-freeze-policy-candidate.v3.json",
+  "title": "Golden-12 release-freeze policy candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "benchmark_version_target",
+    "task_ids",
+    "budget_policy",
+    "controller_guard_policy",
+    "guard_source_bindings",
+    "material_policy",
+    "rights_policy",
+    "transition_policy",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_freeze_policy_candidate.v3"},
+    "status": {"const": "proposed_not_approved"},
+    "benchmark_version_target": {"const": "Golden-12-v1"},
+    "task_ids": {
+      "const": [
+        "G01-common-fifo-spec",
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G08-common-fifo-dv",
+        "G09-axis-fifo-dv",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    },
+    "budget_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inherit_task_specific_wall_eda_and_submission_limits",
+        "maximum_llm_calls",
+        "maximum_human_interventions",
+        "token_accounting_policy",
+        "maximum_input_tokens",
+        "maximum_output_tokens",
+        "missing_token_measurement_policy"
+      ],
+      "properties": {
+        "inherit_task_specific_wall_eda_and_submission_limits": {"const": true},
+        "maximum_llm_calls": {"const": 8},
+        "maximum_human_interventions": {"const": 0},
+        "token_accounting_policy": {"const": "enforced_limits"},
+        "maximum_input_tokens": {"const": 524288},
+        "maximum_output_tokens": {"const": 32768},
+        "missing_token_measurement_policy": {"const": "reject"}
+      }
+    },
+    "controller_guard_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_output_tokens_per_call",
+        "maximum_output_candidates_per_call",
+        "maximum_consecutive_identical_requests",
+        "maximum_consecutive_identical_errors",
+        "maximum_provider_retries",
+        "maximum_slots_per_batch",
+        "balance_probe_before_batch_required",
+        "balance_probe_after_batch_required",
+        "stop_on_balance_unavailable",
+        "finish_reason_measurement_required",
+        "stop_on_output_cap_boundary",
+        "stop_on_provider_length_truncation",
+        "incomplete_usage_policy"
+      ],
+      "properties": {
+        "maximum_output_tokens_per_call": {"const": 8192},
+        "maximum_output_candidates_per_call": {"const": 1},
+        "maximum_consecutive_identical_requests": {"const": 2},
+        "maximum_consecutive_identical_errors": {"const": 2},
+        "maximum_provider_retries": {"const": 0},
+        "maximum_slots_per_batch": {"const": 3},
+        "balance_probe_before_batch_required": {"const": true},
+        "balance_probe_after_batch_required": {"const": true},
+        "stop_on_balance_unavailable": {"const": true},
+        "finish_reason_measurement_required": {"const": true},
+        "stop_on_output_cap_boundary": {"const": true},
+        "stop_on_provider_length_truncation": {"const": true},
+        "incomplete_usage_policy": {
+          "const": "exclude_from_comparable_cohort_preserve_observed_lower_bound"
+        }
+      }
+    },
+    "guard_source_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "launch_policy",
+        "batch_plan_schema",
+        "observed_transport",
+        "guarded_batch_runner"
+      ],
+      "properties": {
+        "launch_policy": {"$ref": "#/$defs/sourceBinding"},
+        "batch_plan_schema": {"$ref": "#/$defs/sourceBinding"},
+        "observed_transport": {"$ref": "#/$defs/sourceBinding"},
+        "guarded_batch_runner": {"$ref": "#/$defs/sourceBinding"}
+      }
+    },
+    "material_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "require_candidate_component_binding",
+        "require_explicit_environment_release_freeze",
+        "require_explicit_scoring_release_freeze",
+        "development_marker_is_release_blocker"
+      ],
+      "properties": {
+        "require_candidate_component_binding": {"const": true},
+        "require_explicit_environment_release_freeze": {"const": true},
+        "require_explicit_scoring_release_freeze": {"const": true},
+        "development_marker_is_release_blocker": {"const": true}
+      }
+    },
+    "rights_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "require_independent_signed_review",
+        "self_approval_forbidden",
+        "recompute_public_digest_after_rights_and_budget_materialization"
+      ],
+      "properties": {
+        "require_independent_signed_review": {"const": true},
+        "self_approval_forbidden": {"const": true},
+        "recompute_public_digest_after_rights_and_budget_materialization": {"const": true}
+      }
+    },
+    "transition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rebuild_candidate_lock_after_materialization",
+        "preserve_supersession_receipt",
+        "reuse_pretransition_signatures",
+        "require_new_signatures_for_relocked_digest"
+      ],
+      "properties": {
+        "rebuild_candidate_lock_after_materialization": {"const": true},
+        "preserve_supersession_receipt": {"const": true},
+        "reuse_pretransition_signatures": {"const": false},
+        "require_new_signatures_for_relocked_digest": {"const": true}
+      }
+    },
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sourceBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^(benchmarks|backend)/",
+          "minLength": 1
+        },
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

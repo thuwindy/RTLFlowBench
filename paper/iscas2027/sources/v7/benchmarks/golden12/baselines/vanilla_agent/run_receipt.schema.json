@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/vanilla-run-receipt.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "status",
+    "attempt",
+    "workflow_binding_sha256",
+    "provider_runner_sha256",
+    "workspace_receipt_sha256",
+    "repository_context",
+    "iterations",
+    "resource_usage",
+    "failure",
+    "final_submission",
+    "visible_result",
+    "private_evaluator_run",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "publication_permitted",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.vanilla_run_receipt.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "status": {
+      "enum": [
+        "visible_expected_outcome_development_not_admitted",
+        "visible_failure_development_not_admitted",
+        "provider_infra_block",
+        "invalid_provider_response",
+        "control_plane_error"
+      ]
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "attempt_index",
+        "repeat_group_id",
+        "seed"
+      ],
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "repeat_group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "workflow_binding_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "provider_runner_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "workspace_receipt_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "repository_context": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "file_count",
+            "total_bytes",
+            "tree_sha256",
+            "projection_digest",
+            "projected_paths"
+          ],
+          "properties": {
+            "file_count": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "total_bytes": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "tree_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "projection_digest": {
+              "$ref": "#/$defs/sha256"
+            },
+            "projected_paths": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/path"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "iterations": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "iteration",
+          "request_sha256",
+          "response_sha256",
+          "candidate_bundle_sha256",
+          "visible_verdict",
+          "visible_expected_outcome"
+        ],
+        "properties": {
+          "iteration": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 32
+          },
+          "request_sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "response_sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "candidate_bundle_sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "visible_verdict": {
+            "type": "string",
+            "minLength": 1
+          },
+          "visible_expected_outcome": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "resource_usage": {
+      "type": "object"
+    },
+    "failure": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "classification",
+            "iteration",
+            "request_sha256",
+            "response_sha256"
+          ],
+          "properties": {
+            "classification": {
+              "enum": [
+                "provider_infra_block",
+                "invalid_provider_response"
+              ]
+            },
+            "iteration": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32
+            },
+            "request_sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "response_sha256": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/sha256"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "classification",
+            "stage",
+            "exception_class",
+            "iteration",
+            "request_sha256",
+            "response_sha256"
+          ],
+          "properties": {
+            "classification": {
+              "const": "control_plane_error"
+            },
+            "stage": {
+              "enum": [
+                "provider_invocation",
+                "materialization",
+                "visible_runner",
+                "submission_packaging",
+                "receipt_finalization"
+              ]
+            },
+            "exception_class": {
+              "type": "string",
+              "minLength": 1
+            },
+            "iteration": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32
+            },
+            "request_sha256": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/sha256"
+                }
+              ]
+            },
+            "response_sha256": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/$defs/sha256"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "final_submission": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "const": "submission.json"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "visible_result": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256",
+            "verdict",
+            "expected_outcome"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "verdict": {
+              "type": "string",
+              "minLength": 1
+            },
+            "expected_outcome": {
+              "type": "boolean"
+            }
+          }
+        }
+      ]
+    },
+    "private_evaluator_run": {
+      "const": false
+    },
+    "benchmark_ready": {
+      "const": false
+    },
+    "chipflow_adapter_ready": {
+      "const": false
+    },
+    "publication_permitted": {
+      "const": false
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))[A-Za-z0-9._/-]+$"
+    }
+  }
+}

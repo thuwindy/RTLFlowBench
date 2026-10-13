@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/mage-environment-candidate.v1.json",
+  "title": "RTLFlowBench MAGE development environment candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "status", "observed_at", "source_binding",
+    "source_assets", "public_base", "dependency_inputs",
+    "deterministic_build", "preflight", "evidence_receipts",
+    "failed_or_excluded_attempts", "rights", "readiness", "blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.mage_environment_candidate.v1"},
+    "status": {"const": "same_server_development_environment_reproduced_not_frozen"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "source_binding": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "version", "commit", "manifest_sha256"],
+      "properties": {
+        "name": {"const": "MAGE"}, "version": {"const": "1.0.1"},
+        "commit": {"$ref": "#/$defs/git"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_assets": {
+      "type": "object", "additionalProperties": false,
+      "required": ["containerfile_sha256", "runtime_probe_sha256", "runtime_probe_schema_sha256"],
+      "properties": {
+        "containerfile_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_probe_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_probe_schema_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "public_base": {
+      "type": "object", "additionalProperties": false,
+      "required": ["classification", "image_id", "image_digest", "size_bytes", "regular_file_count", "file_listing_sha256", "sensitive_path_scan_empty"],
+      "properties": {
+        "classification": {"const": "public_protocol_cli_no_private_evaluator"},
+        "image_id": {"$ref": "#/$defs/sha256"},
+        "image_digest": {"$ref": "#/$defs/imageDigest"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "regular_file_count": {"type": "integer", "minimum": 1},
+        "file_listing_sha256": {"$ref": "#/$defs/sha256"},
+        "sensitive_path_scan_empty": {"const": true}
+      }
+    },
+    "dependency_inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": ["wheelhouse", "overlay", "system_runtime"],
+      "properties": {
+        "wheelhouse": {
+          "type": "object", "additionalProperties": false,
+          "required": [
+            "entry_count", "regular_file_count", "symlink_count",
+            "total_regular_bytes", "manifest_sha256", "download_exit_code",
+            "wheel_build_exit_code", "network_acquisition_observed",
+            "frozen_build_network_access"
+          ],
+          "properties": {
+            "entry_count": {"type": "integer", "minimum": 1},
+            "regular_file_count": {"type": "integer", "minimum": 1},
+            "symlink_count": {"const": 0},
+            "total_regular_bytes": {"type": "integer", "minimum": 1},
+            "manifest_sha256": {"$ref": "#/$defs/sha256"},
+            "download_exit_code": {"const": 0},
+            "wheel_build_exit_code": {"const": 0},
+            "network_acquisition_observed": {"const": true},
+            "frozen_build_network_access": {"const": false}
+          }
+        },
+        "overlay": {
+          "type": "object", "additionalProperties": false,
+          "required": ["first", "second", "two_install_trees_equal", "install_exit_codes", "install_network_access"],
+          "properties": {
+            "first": {"$ref": "#/$defs/treeSummary"}, "second": {"$ref": "#/$defs/treeSummary"},
+            "two_install_trees_equal": {"const": true},
+            "install_exit_codes": {"type": "array", "const": [0, 0]},
+            "install_network_access": {"const": false}
+          }
+        },
+        "system_runtime": {
+          "type": "object", "additionalProperties": false,
+          "required": ["tree", "source_packages"],
+          "properties": {
+            "tree": {"$ref": "#/$defs/treeSummary"},
+            "source_packages": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/namedDigest"}}
+          }
+        }
+      }
+    },
+    "deterministic_build": {
+      "type": "object", "additionalProperties": false,
+      "required": ["image_id", "image_digest", "size_bytes", "build_exit_codes", "two_build_identity_equal", "declared_build_policy"],
+      "properties": {
+        "image_id": {"$ref": "#/$defs/sha256"}, "image_digest": {"$ref": "#/$defs/imageDigest"},
+        "size_bytes": {"type": "integer", "minimum": 1}, "build_exit_codes": {"type": "array", "const": [0, 0]},
+        "two_build_identity_equal": {"const": true},
+        "declared_build_policy": {
+          "type": "object", "additionalProperties": false,
+          "required": ["network", "no_cache", "omit_history", "timestamp"],
+          "properties": {"network": {"const": "none"}, "no_cache": {"const": true}, "omit_history": {"const": true}, "timestamp": {"const": 0}}
+        }
+      }
+    },
+    "preflight": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "receipt_sha256", "schema_valid", "checks", "observed_sandbox", "airtl_run_observed", "provider_call_observed", "provider_eda_network_separation_proven", "private_evaluator_run", "rtl_verdict_produced"],
+      "properties": {
+        "status": {"const": "pass"}, "receipt_sha256": {"$ref": "#/$defs/sha256"}, "schema_valid": {"const": true},
+        "checks": {"$ref": "#/$defs/probeChecks"},
+        "observed_sandbox": {
+          "type": "object", "additionalProperties": false,
+          "required": ["network_only_loopback", "root_filesystem_read_only", "tmpfs_writable", "forbidden_private_roots_absent", "provider_credentials_absent"],
+          "properties": {
+            "network_only_loopback": {"const": true}, "root_filesystem_read_only": {"const": true}, "tmpfs_writable": {"const": true},
+            "forbidden_private_roots_absent": {"const": true}, "provider_credentials_absent": {"const": true}
+          }
+        },
+        "airtl_run_observed": {"const": false}, "provider_call_observed": {"const": false},
+        "provider_eda_network_separation_proven": {"const": false}, "private_evaluator_run": {"const": false},
+        "rtl_verdict_produced": {"const": false}
+      }
+    },
+    "evidence_receipts": {"type": "array", "minItems": 9, "uniqueItems": true, "items": {"$ref": "#/$defs/evidenceReceipt"}},
+    "failed_or_excluded_attempts": {
+      "type": "array", "minItems": 2, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["evidence_id", "classification", "eligible", "reason"],
+        "properties": {"evidence_id": {"$ref": "#/$defs/evidenceId"}, "classification": {"type": "string", "minLength": 1}, "eligible": {"const": false}, "reason": {"type": "string", "minLength": 1}}
+      }
+    },
+    "rights": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "license_declarations_consistent", "redistribution_permitted"],
+      "properties": {"status": {"const": "pending_independent_review"}, "license_declarations_consistent": {"const": false}, "redistribution_permitted": {"type": "null"}}
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["dependency_environment_ready", "environment_release_frozen", "cross_host_reproduced", "provider_eda_isolation_ready", "submission_adapter_ready", "airtl_run_observed", "benchmark_ready", "publishable_cohort_eligible"],
+      "properties": {
+        "dependency_environment_ready": {"const": false}, "environment_release_frozen": {"const": false}, "cross_host_reproduced": {"const": false},
+        "provider_eda_isolation_ready": {"const": false}, "submission_adapter_ready": {"const": false}, "airtl_run_observed": {"const": false},
+        "benchmark_ready": {"const": false}, "publishable_cohort_eligible": {"const": false}
+      }
+    },
+    "blockers": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "excluded_claims": {"type": "array", "minItems": 3, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "git": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "imageDigest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "evidenceId": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "treeSummary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["entry_count", "regular_file_count", "symlink_count", "total_regular_bytes", "manifest_sha256"],
+      "properties": {
+        "entry_count": {"type": "integer", "minimum": 1}, "regular_file_count": {"type": "integer", "minimum": 1},
+        "symlink_count": {"type": "integer", "minimum": 0}, "total_regular_bytes": {"type": "integer", "minimum": 1},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "namedDigest": {
+      "type": "object", "additionalProperties": false, "required": ["name", "sha256"],
+      "properties": {"name": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "evidenceReceipt": {
+      "type": "object", "additionalProperties": false, "required": ["evidence_id", "artifact", "sha256"],
+      "properties": {"evidence_id": {"$ref": "#/$defs/evidenceId"}, "artifact": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]+$"}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "probeChecks": {
+      "type": "object", "additionalProperties": false,
+      "required": ["required_modules_imported", "eda_tools_exit_zero", "network_only_loopback", "root_filesystem_read_only", "tmpfs_writable", "provider_credentials_absent", "forbidden_private_roots_absent"],
+      "properties": {
+        "required_modules_imported": {"const": true}, "eda_tools_exit_zero": {"const": true}, "network_only_loopback": {"const": true},
+        "root_filesystem_read_only": {"const": true}, "tmpfs_writable": {"const": true}, "provider_credentials_absent": {"const": true},
+        "forbidden_private_roots_absent": {"const": true}
+      }
+    }
+  }
+}

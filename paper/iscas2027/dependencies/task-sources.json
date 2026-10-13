@@ -1,0 +1,294 @@
+[
+  {
+    "source_id": "common-cells-cutoff",
+    "repository_url": "https://github.com/pulp-platform/common_cells",
+    "commit": "ca493e681f208a68b9a5e8809f12d772a5db2ec7",
+    "archive_sha256": "a2fb6ab09e89ce8c533d189fc6c0e11b47699e4a702106bf9cc3779f2e0104db",
+    "license_spdx": "SHL-0.51",
+    "tasks": [
+      "G01-common-fifo-spec",
+      "G02-common-rr-arbiter-spec",
+      "G08-common-fifo-dv",
+      "G12-common-cdc-missing-contract"
+    ],
+    "projections": [
+      {
+        "task_id": "G01-common-fifo-spec",
+        "mode": "blank_scaffold",
+        "allowlist": [],
+        "required_notices": [],
+        "withheld_contract_projection": null
+      },
+      {
+        "task_id": "G02-common-rr-arbiter-spec",
+        "mode": "blank_scaffold",
+        "allowlist": [],
+        "required_notices": [],
+        "withheld_contract_projection": null
+      },
+      {
+        "task_id": "G08-common-fifo-dv",
+        "mode": "repository_base",
+        "allowlist": [
+          "src/fifo_v3.sv",
+          "LICENSE"
+        ],
+        "required_notices": [
+          "LICENSE",
+          "src/fifo_v3.sv"
+        ],
+        "withheld_contract_projection": null
+      },
+      {
+        "task_id": "G12-common-cdc-missing-contract",
+        "mode": "repository_base_with_withheld_contract",
+        "allowlist": [
+          "LICENSE",
+          "README.md",
+          "common_cells.core",
+          "include/common_cells/registers.svh",
+          "src/binary_to_gray.sv",
+          "src/cdc_fifo_gray.sv",
+          "src/gray_to_binary.sv",
+          "src/spill_register.sv",
+          "src/sync.sv"
+        ],
+        "required_notices": [
+          "LICENSE"
+        ],
+        "withheld_contract_projection": {
+          "transform_id": "g12-cdc-integration-comment-redaction-v1",
+          "transformed_paths": [
+            "src/cdc_fifo_gray.sv"
+          ],
+          "original_source_sha256": {
+            "src/cdc_fifo_gray.sv": "0ddcfd5984b21884b61efbb57a7d17783c7a862a4719065890af74f2783bd7d8"
+          },
+          "preserve_copyright_and_license_header": true,
+          "preserve_non_comment_tokens": true,
+          "withheld_sections": [
+            "Reset Behavior",
+            "Constraints"
+          ],
+          "replacement_notice": "Integration contract intentionally withheld by G12; do not infer missing semantics."
+        }
+      }
+    ]
+  },
+  {
+    "source_id": "verilog-axis-cutoff",
+    "repository_url": "https://github.com/alexforencich/verilog-axis",
+    "commit": "ed6130575df11b48a20c9e39b83d9a37011a3723",
+    "archive_sha256": "819f776b81b57d8d5f0a2eb29e449ceefb5c1df8675482d69f75866865660f06",
+    "license_spdx": "MIT",
+    "tasks": [
+      "G03-axis-fifo-backpressure",
+      "G09-axis-fifo-dv"
+    ],
+    "projections": [
+      {
+        "task_id": "G03-axis-fifo-backpressure",
+        "mode": "repository_base",
+        "allowlist": [
+          "rtl/axis_fifo.v",
+          "COPYING"
+        ],
+        "required_notices": [
+          "COPYING"
+        ],
+        "withheld_contract_projection": null
+      },
+      {
+        "task_id": "G09-axis-fifo-dv",
+        "mode": "repository_base",
+        "allowlist": [
+          "rtl/axis_fifo.v",
+          "COPYING"
+        ],
+        "required_notices": [
+          "COPYING"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "wb2axip-cutoff",
+    "repository_url": "https://github.com/ZipCPU/wb2axip",
+    "commit": "18895fa9531f9c273411de48369604ff61dd5959",
+    "archive_sha256": "63dfabd2e68f4af0305b75442f424005c82459d765065ae4a268b695cb4de768",
+    "license_spdx": "Apache-2.0",
+    "tasks": [
+      "G04-wb2axip-split-bridge"
+    ],
+    "projections": [
+      {
+        "task_id": "G04-wb2axip-split-bridge",
+        "mode": "repository_base",
+        "allowlist": [
+          "rtl/axilrd2wbsp.v",
+          "rtl/axilwr2wbsp.v",
+          "README.md"
+        ],
+        "required_notices": [
+          "README.md"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "picorv32-pr152-base",
+    "repository_url": "https://github.com/YosysHQ/picorv32",
+    "commit": "e308982e18fc952a8d446ddb7ea8b70433a998c2",
+    "archive_sha256": "e529bfbab8a0b33861c2f3404c4f2df5030a02378a6b1e0f6e102c1c77afef7a",
+    "license_spdx": "ISC",
+    "tasks": [
+      "G05-picorv32-missing-irq"
+    ],
+    "projections": [
+      {
+        "task_id": "G05-picorv32-missing-irq",
+        "mode": "repository_base",
+        "allowlist": [
+          "picorv32.v",
+          "README.md"
+        ],
+        "required_notices": [
+          "picorv32.v"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "ibex-pr475-base",
+    "repository_url": "https://github.com/lowRISC/ibex",
+    "commit": "aefbcdceb327a7af47e8c9af710a5110aab5a0eb",
+    "archive_sha256": "16151ab18e68d7eebc090e0be6890d388fd5057fa90d69b0fdb31215e79a4cbb",
+    "license_spdx": "Apache-2.0",
+    "tasks": [
+      "G06-ibex-debug-csr-exception"
+    ],
+    "projections": [
+      {
+        "task_id": "G06-ibex-debug-csr-exception",
+        "mode": "repository_base",
+        "allowlist": [
+          "rtl/ibex_controller.sv",
+          "rtl/ibex_cs_registers.sv",
+          "rtl/ibex_pkg.sv",
+          "rtl/ibex_core.sv",
+          "rtl/ibex_id_stage.sv",
+          "LICENSE",
+          "README.md"
+        ],
+        "required_notices": [
+          "LICENSE"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "ibex-pr1735-base",
+    "repository_url": "https://github.com/lowRISC/ibex",
+    "commit": "23806e2ad7d0d6fab429ae227d9a45cbd42f0fb3",
+    "archive_sha256": "1f2c7e9b14e6ef75b1e54a1fca1e40274ae690c629158379e60c346dd6a8c505",
+    "license_spdx": "Apache-2.0",
+    "tasks": [
+      "G07-ibex-ifetch-error-timing"
+    ],
+    "projections": [
+      {
+        "task_id": "G07-ibex-ifetch-error-timing",
+        "mode": "repository_base",
+        "allowlist": [
+          "rtl/ibex_id_stage.sv",
+          "rtl/ibex_core.sv",
+          "rtl/ibex_controller.sv",
+          "rtl/ibex_decoder.sv",
+          "rtl/ibex_cs_registers.sv",
+          "rtl/ibex_if_stage.sv",
+          "rtl/ibex_pmp.sv",
+          "rtl/ibex_pkg.sv",
+          "LICENSE",
+          "README.md"
+        ],
+        "required_notices": [
+          "LICENSE"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "serv-cutoff",
+    "repository_url": "https://github.com/olofk/serv",
+    "commit": "7c004e8f7b0776cf4664a5311625f534eaff49f1",
+    "archive_sha256": "ef77a74510883975771248ef3b09dcd49efd1228ab6e14a6fe93885322aec0b5",
+    "license_spdx": "ISC",
+    "tasks": [
+      "G10-serv-area-qor"
+    ],
+    "projections": [
+      {
+        "task_id": "G10-serv-area-qor",
+        "mode": "repository_base",
+        "allowlist": [
+          "LICENSE",
+          "README.md",
+          "data/params.tcl",
+          "rtl/serv_aligner.v",
+          "rtl/serv_alu.v",
+          "rtl/serv_bufreg.v",
+          "rtl/serv_bufreg2.v",
+          "rtl/serv_compdec.v",
+          "rtl/serv_csr.v",
+          "rtl/serv_ctrl.v",
+          "rtl/serv_decode.v",
+          "rtl/serv_immdec.v",
+          "rtl/serv_mem_if.v",
+          "rtl/serv_rf_if.v",
+          "rtl/serv_rf_ram.v",
+          "rtl/serv_rf_ram_if.v",
+          "rtl/serv_rf_top.v",
+          "rtl/serv_state.v",
+          "rtl/serv_synth_wrapper.v",
+          "rtl/serv_top.v",
+          "serv.core"
+        ],
+        "required_notices": [
+          "LICENSE"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  },
+  {
+    "source_id": "picorv32-cutoff",
+    "repository_url": "https://github.com/YosysHQ/picorv32",
+    "commit": "6399aeaa5981b5e77a76f5d4036d763893ab5a72",
+    "archive_sha256": "16b05316bb25a8ec010294347fce21ca79a85d139f2c665b6197c72c1ed48c0a",
+    "license_spdx": "ISC",
+    "tasks": [
+      "G11-picorv32-qor"
+    ],
+    "projections": [
+      {
+        "task_id": "G11-picorv32-qor",
+        "mode": "repository_base",
+        "allowlist": [
+          "COPYING",
+          "README.md",
+          "picorv32.v"
+        ],
+        "required_notices": [
+          "COPYING",
+          "picorv32.v"
+        ],
+        "withheld_contract_projection": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/adapter/chipflow-export.v1.json",
+  "title": "ChipFlow neutral-submission export request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "chipflow_run_id",
+    "submission_id",
+    "workflow",
+    "attempt",
+    "usage_receipt",
+    "artifacts",
+    "claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_export.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chipflow_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "submission_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "adapter_name",
+        "adapter_version",
+        "model",
+        "config_sha256"
+      ],
+      "properties": {
+        "name": {
+          "const": "ChipFlow"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapter_name": {
+          "const": "chipflow-run-export"
+        },
+        "adapter_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "name"
+          ],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "attempt": {
+      "$ref": "#/$defs/attempt"
+    },
+    "usage_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_path",
+          "submission_path",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "source_path": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "submission_path": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "attempt_index",
+        "repeat_group_id",
+        "seed"
+      ],
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "repeat_group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

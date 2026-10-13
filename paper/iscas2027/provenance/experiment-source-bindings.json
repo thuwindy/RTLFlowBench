@@ -1,0 +1,73 @@
+{
+  "schema": "g12rtl.paper_source_bindings.v1",
+  "bindings": [
+    {
+      "experiment": "E1_workflows",
+      "source": "external_native_runtime",
+      "attempts": 45
+    },
+    {
+      "experiment": "E1_workflows",
+      "source": "isolated-core-source-v7-manifest.json",
+      "attempts": 39
+    },
+    {
+      "experiment": "E1_workflows",
+      "source": "isolated-core-source-v8-manifest.json",
+      "attempts": 6
+    },
+    {
+      "experiment": "E2_debug_ablation",
+      "source": "isolated-core-source-v7-manifest.json",
+      "attempts": 48
+    },
+    {
+      "experiment": "E2_debug_ablation",
+      "source": "isolated-core-source-v8-manifest.json",
+      "attempts": 12
+    },
+    {
+      "experiment": "E3_matched_repair",
+      "source": "external_native_runtime",
+      "attempts": 90
+    },
+    {
+      "experiment": "E3_matched_repair",
+      "source": "isolated-core-source-v7-manifest.json",
+      "attempts": 180
+    }
+  ],
+  "v7_manifest_sha256": "d0b584fe0dcf821c3dbc85a1f585ddfbf5c0dc58067d8085e77febe6be34a2e8",
+  "v8_manifest_sha256": "8043ef2eba3a3c009dbd18f3cecaeba05928ad4c2baa120a562d67f562e9017b",
+  "r1_v16_manifest_sha256": "68c7f254138271e5a64fc44b818b36c1a8a99e92cb9beb74707436d6bc06ee21",
+  "r1_image_id": "sha256:5a50149c418e5c88a115b3171d0a386f1e8965200748906bbad6428d340fb541",
+  "r1_controller_subset_verified_attempts": 120,
+  "external_native_bindings": [
+    {
+      "method": "hdlagent",
+      "runtime_manifest_sha256": "7aa1ef7159c2def97fa4030dff22d4163cff18828b869e85be4d29f80d744895",
+      "image_digest": "sha256:1203f76b5b92633cd83a3587f264721bcc43db5b1910eae1f64b6a9280b94854"
+    },
+    {
+      "method": "hdlagent",
+      "runtime_manifest_sha256": "fde6d96503b89d9aafe17c17917c4919aaa497abcf5ba9aad2a02e139a6feaaf",
+      "image_digest": "sha256:1203f76b5b92633cd83a3587f264721bcc43db5b1910eae1f64b6a9280b94854"
+    },
+    {
+      "method": "mage",
+      "runtime_manifest_sha256": "c1e786d67a57259a6e7f1f269cf0d44ed2303fa0030286329181a96278feb21c",
+      "image_digest": "sha256:b2603ff50ac135f4c3926f103877cdef24a174c1f1846a07a0ae38267cbdf0bb"
+    },
+    {
+      "method": "verilogcoder",
+      "runtime_manifest_sha256": "7aa1ef7159c2def97fa4030dff22d4163cff18828b869e85be4d29f80d744895",
+      "image_digest": "sha256:c94231c94fee83b5ee6ace21846cde18e841abc38d9deac581e021c9b9ceda53"
+    },
+    {
+      "method": "verilogcoder",
+      "runtime_manifest_sha256": "fde6d96503b89d9aafe17c17917c4919aaa497abcf5ba9aad2a02e139a6feaaf",
+      "image_digest": "sha256:c94231c94fee83b5ee6ace21846cde18e841abc38d9deac581e021c9b9ceda53"
+    }
+  ],
+  "scope": "Historical manifest digests identify fuller private captures; this source subset is not those entire manifests or a runnable runtime image."
+}

@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schemas/mage_g01_development_run_receipt.schema.json",
+  "title": "RTLFlowBench MAGE G01 development-run receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "task_id",
+    "run_id",
+    "source_binding",
+    "source_assets",
+    "post_run_source_changes",
+    "provider_image",
+    "provider_stage",
+    "submission",
+    "private_evaluation",
+    "failed_or_excluded_attempts",
+    "isolation",
+    "readiness",
+    "remaining_blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.mage_g01_development_run_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "completed_evaluated_fail_f2p_development_only"},
+    "task_id": {"const": "G01-common-fifo-spec"},
+    "run_id": {"const": "g01-mage-development-deepseek-20260811c"},
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "commit", "manifest_sha256"],
+      "properties": {
+        "name": {"const": "MAGE"},
+        "version": {"const": "1.0.1"},
+        "commit": {"$ref": "#/$defs/sha1"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["containerfile", "broker", "openai_compat", "provider_runner"],
+      "properties": {
+        "containerfile": {"$ref": "#/$defs/sourceAsset"},
+        "broker": {"$ref": "#/$defs/sourceAsset"},
+        "openai_compat": {"$ref": "#/$defs/sourceAsset"},
+        "provider_runner": {"$ref": "#/$defs/sourceAsset"}
+      }
+    },
+    "post_run_source_changes": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/postRunSourceChange"}
+    },
+    "provider_image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["digest", "image_id", "size_bytes", "two_build_identity_equal"],
+      "properties": {
+        "digest": {"$ref": "#/$defs/digest"},
+        "image_id": {"$ref": "#/$defs/sha256"},
+        "size_bytes": {"type": "integer", "minimum": 1},
+        "two_build_identity_equal": {"const": true}
+      }
+    },
+    "provider_stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "model",
+        "thinking_mode",
+        "provider_preflight_status",
+        "provider_call_observed",
+        "airtl_run_observed",
+        "private_evaluator_mounted",
+        "rtl_verdict_produced",
+        "mage_internal_self_test_pass",
+        "mage_internal_self_test_is_benchmark_verdict",
+        "provider_run_receipt_sha256",
+        "output_rtl",
+        "resource_usage"
+      ],
+      "properties": {
+        "status": {"const": "completed_output_observed"},
+        "model": {"const": "deepseek-v4-flash"},
+        "thinking_mode": {"const": "disabled"},
+        "provider_preflight_status": {"const": "pass"},
+        "provider_call_observed": {"const": true},
+        "airtl_run_observed": {"const": true},
+        "private_evaluator_mounted": {"const": false},
+        "rtl_verdict_produced": {"const": false},
+        "mage_internal_self_test_pass": {"const": false},
+        "mage_internal_self_test_is_benchmark_verdict": {"const": false},
+        "provider_run_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "output_rtl": {"$ref": "#/$defs/rtlArtifact"},
+        "resource_usage": {"$ref": "#/$defs/providerUsage"}
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "submission_id",
+        "submission_sha256",
+        "bridge_receipt_sha256",
+        "rtl",
+        "bytes_preserved",
+        "workspace_network_access_observed",
+        "adapter_ready",
+        "benchmark_ready"
+      ],
+      "properties": {
+        "submission_id": {"const": "mage-g01-deepseek-development-20260811c"},
+        "submission_sha256": {"$ref": "#/$defs/sha256"},
+        "bridge_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "rtl": {"$ref": "#/$defs/rtlArtifact"},
+        "bytes_preserved": {"const": true},
+        "workspace_network_access_observed": {"const": false},
+        "adapter_ready": {"const": false},
+        "benchmark_ready": {"const": false}
+      }
+    },
+    "private_evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "classification",
+        "verdict",
+        "neutral_result_sha256",
+        "server_receipt_sha256",
+        "score_status",
+        "score_total",
+        "scope_violation_count",
+        "trust_event_count",
+        "resource_usage"
+      ],
+      "properties": {
+        "status": {"const": "completed"},
+        "classification": {"const": "fail_f2p"},
+        "verdict": {"const": "fail_f2p"},
+        "neutral_result_sha256": {"$ref": "#/$defs/sha256"},
+        "server_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "score_status": {"const": "not_scored"},
+        "score_total": {"type": "null"},
+        "scope_violation_count": {"const": 0},
+        "trust_event_count": {"const": 0},
+        "resource_usage": {"$ref": "#/$defs/evaluationUsage"}
+      }
+    },
+    "failed_or_excluded_attempts": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "classification", "eligible", "reason"],
+        "properties": {
+          "evidence_id": {"type": "string", "minLength": 1},
+          "classification": {"type": "string", "minLength": 1},
+          "eligible": {"const": false},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_control_plane_separate_from_workspace_and_eda",
+        "provider_environment_forwarded_to_eda",
+        "private_evaluator_mounted_during_provider_stage",
+        "private_evaluator_started_after_provider_exit",
+        "raw_provider_response_recorded",
+        "private_oracle_in_receipt",
+        "secret_matches"
+      ],
+      "properties": {
+        "provider_control_plane_separate_from_workspace_and_eda": {"const": true},
+        "provider_environment_forwarded_to_eda": {"const": false},
+        "private_evaluator_mounted_during_provider_stage": {"const": false},
+        "private_evaluator_started_after_provider_exit": {"const": true},
+        "raw_provider_response_recorded": {"const": false},
+        "private_oracle_in_receipt": {"const": false},
+        "secret_matches": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actual_airtl_run_observed",
+        "provider_eda_isolation_observed",
+        "cross_host_reproduced",
+        "repeatability_complete",
+        "independent_review_complete",
+        "submission_adapter_ready",
+        "benchmark_ready",
+        "publishable_cohort_eligible"
+      ],
+      "properties": {
+        "actual_airtl_run_observed": {"const": true},
+        "provider_eda_isolation_observed": {"const": true},
+        "cross_host_reproduced": {"const": false},
+        "repeatability_complete": {"const": false},
+        "independent_review_complete": {"const": false},
+        "submission_adapter_ready": {"const": false},
+        "benchmark_ready": {"const": false},
+        "publishable_cohort_eligible": {"const": false}
+      }
+    },
+    "remaining_blockers": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceAsset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "postRunSourceChange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "execution_sha256",
+        "current_sha256",
+        "classification",
+        "affects_execution_semantics",
+        "reason"
+      ],
+      "properties": {
+        "path": {
+          "enum": [
+            "benchmarks/golden12/conformance/external_workflows/mage_eda_broker.py",
+            "benchmarks/golden12/conformance/external_workflows/mage_openai_compat.py"
+          ]
+        },
+        "execution_sha256": {"$ref": "#/$defs/sha256"},
+        "current_sha256": {"$ref": "#/$defs/sha256"},
+        "classification": {
+          "enum": [
+            "controller_observation_extension_requires_future_revalidation",
+            "provider_response_decoding_changed_requires_future_revalidation"
+          ]
+        },
+        "affects_execution_semantics": {"const": true},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "rtlArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sha256", "bytes"],
+      "properties": {
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "providerUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "llm_calls",
+        "input_tokens",
+        "output_tokens",
+        "token_accounting_status",
+        "wall_time_seconds",
+        "eda_calls"
+      ],
+      "properties": {
+        "llm_calls": {"const": 6},
+        "input_tokens": {"type": "null"},
+        "output_tokens": {"type": "null"},
+        "token_accounting_status": {"const": "not_available"},
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["compile_or_lint", "simulation", "formal", "synthesis"],
+          "properties": {
+            "compile_or_lint": {"const": 1},
+            "simulation": {"const": 1},
+            "formal": {"const": 0},
+            "synthesis": {"const": 0}
+          }
+        }
+      }
+    },
+    "evaluationUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "llm_calls",
+        "input_tokens",
+        "output_tokens",
+        "missing_measurements",
+        "wall_time_seconds",
+        "human_interventions",
+        "eda_calls"
+      ],
+      "properties": {
+        "llm_calls": {"const": 6},
+        "input_tokens": {"type": "null"},
+        "output_tokens": {"type": "null"},
+        "missing_measurements": {
+          "type": "array",
+          "prefixItems": [{"const": "input_tokens"}, {"const": "output_tokens"}],
+          "items": false
+        },
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "human_interventions": {"const": 0},
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["compile_or_lint", "simulation", "formal", "synthesis"],
+          "properties": {
+            "compile_or_lint": {"const": 2},
+            "simulation": {"const": 2},
+            "formal": {"const": 0},
+            "synthesis": {"const": 1}
+          }
+        }
+      }
+    }
+  }
+}

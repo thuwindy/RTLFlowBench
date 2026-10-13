@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/reviewer-nomination-response.v1.json",
+  "title": "RTLFlowBench Golden-12 reviewer nomination response",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_sha256",
+    "assignment_handoff_sha256",
+    "status",
+    "release_authority",
+    "nominations",
+    "registry_governance",
+    "approvals_recorded",
+    "independent_review_complete",
+    "suite_ready"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.reviewer_nomination_response.v1"
+    },
+    "request_sha256": {"$ref": "#/$defs/sha256"},
+    "assignment_handoff_sha256": {"$ref": "#/$defs/sha256"},
+    "status": {"const": "submitted_pending_registry_governance"},
+    "release_authority": {"type": "string", "minLength": 1},
+    "nominations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "identity",
+          "organization",
+          "public_key",
+          "key_fingerprint",
+          "track_ids",
+          "qualifications",
+          "conflict_of_interest"
+        ],
+        "properties": {
+          "identity": {"type": "string", "minLength": 1},
+          "organization": {"type": ["string", "null"]},
+          "public_key": {
+            "type": "string",
+            "minLength": 32,
+            "pattern": "^(?:ssh-|ecdsa-|sk-)[^\\r\\n ]+ [A-Za-z0-9+/=]+(?: [^\\r\\n]+)?$"
+          },
+          "key_fingerprint": {
+            "type": "string",
+            "pattern": "^SHA256:[A-Za-z0-9+/]{43}$"
+          },
+          "track_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"$ref": "#/$defs/trackId"}
+          },
+          "qualifications": {"type": "string", "minLength": 20},
+          "conflict_of_interest": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["declared", "affected_item_keys", "statement"],
+            "properties": {
+              "declared": {"type": "boolean"},
+              "affected_item_keys": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "pattern": "^(?:protocol|G(?:0[1-9]|1[0-2])):[a-z][a-z0-9_]*$"
+                }
+              },
+              "statement": {"type": "string", "minLength": 1}
+            },
+            "allOf": [
+              {
+                "if": {"properties": {"declared": {"const": true}}},
+                "then": {
+                  "properties": {
+                    "affected_item_keys": {"minItems": 1}
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "affected_item_keys": {"maxItems": 0}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "registry_governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "governance_authority",
+        "attestation_sha256",
+        "signature_sha256"
+      ],
+      "properties": {
+        "status": {"const": "pending_independent_approval"},
+        "governance_authority": {"type": "null"},
+        "attestation_sha256": {"type": "null"},
+        "signature_sha256": {"type": "null"}
+      }
+    },
+    "approvals_recorded": {"const": 0},
+    "independent_review_complete": {"const": false},
+    "suite_ready": {"const": false}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "trackId": {
+      "enum": [
+        "rights_governance",
+        "protocol_schema_freeze",
+        "public_contract_projection",
+        "evaluator_calibration",
+        "environment_scoring_freeze",
+        "technical_admission",
+        "final_admission"
+      ]
+    }
+  }
+}

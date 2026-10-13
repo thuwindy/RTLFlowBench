@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-material-selection.v1.json",
+  "title": "Golden-12 post-candidate release material selection",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "offline_evaluator_registry_relative",
+    "tasks",
+    "benchmark_ready",
+    "chipflow_adapter_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_material_selection.v1"},
+    "status": {"const": "post_candidate_selection_not_release"},
+    "offline_evaluator_registry_relative": {
+      "const": "benchmarks/golden12/evaluation/offline_evaluator_registry_current_source_candidate.json"
+    },
+    "tasks": {
+      "type": "object",
+      "minProperties": 12,
+      "maxProperties": 12,
+      "additionalProperties": false,
+      "required": [
+        "G01-common-fifo-spec",
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G08-common-fifo-dv",
+        "G09-axis-fifo-dv",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor",
+        "G12-common-cdc-missing-contract"
+      ],
+      "properties": {
+        "G01-common-fifo-spec": {"$ref": "#/$defs/selection"},
+        "G02-common-rr-arbiter-spec": {"$ref": "#/$defs/selection"},
+        "G03-axis-fifo-backpressure": {"$ref": "#/$defs/selection"},
+        "G04-wb2axip-split-bridge": {"$ref": "#/$defs/selection"},
+        "G05-picorv32-missing-irq": {"$ref": "#/$defs/selection"},
+        "G06-ibex-debug-csr-exception": {"$ref": "#/$defs/selection"},
+        "G07-ibex-ifetch-error-timing": {"$ref": "#/$defs/selection"},
+        "G08-common-fifo-dv": {"$ref": "#/$defs/selection"},
+        "G09-axis-fifo-dv": {"$ref": "#/$defs/selection"},
+        "G10-serv-area-qor": {"$ref": "#/$defs/selection"},
+        "G11-picorv32-qor": {"$ref": "#/$defs/selection"},
+        "G12-common-cdc-missing-contract": {"$ref": "#/$defs/selection"}
+      }
+    },
+    "benchmark_ready": {"const": false},
+    "chipflow_adapter_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_lock_relative",
+        "scoring_profile_relative",
+        "runner_lock_relative",
+        "missing_candidate_components"
+      ],
+      "properties": {
+        "environment_lock_relative": {"type": ["string", "null"]},
+        "scoring_profile_relative": {"type": ["string", "null"]},
+        "runner_lock_relative": {"type": ["string", "null"]},
+        "missing_candidate_components": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"enum": ["environment_lock", "scoring_profile", "runner_lock"]}
+        }
+      }
+    }
+  }
+}

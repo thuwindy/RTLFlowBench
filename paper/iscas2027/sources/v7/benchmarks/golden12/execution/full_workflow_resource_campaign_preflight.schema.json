@@ -1,0 +1,360 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-campaign-preflight.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observed_at", "status", "decision", "scope",
+    "input_sha256", "static_inputs", "measurement_envelope",
+    "launch_contracts", "activity_observation", "summary",
+    "attempt_accounting", "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.full_workflow_resource_campaign_preflight.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "controller_preflight_blocked_not_started"},
+    "decision": {"const": "BLOCK"},
+    "scope": {
+      "const": "five_workflows_all_twelve_tasks_resource_calibration_preflight_only"
+    },
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "workflow_release_candidate", "primary_cohort_execution_plan",
+        "oci_inventory", "launch_contract_intake", "observed_transport_probe",
+        "launch_contract_schema", "measurement_request_schema", "measurement_runner",
+        "activity_ledger_schema", "activity_concurrency_builder",
+        "merged_sample_schema", "resource_aggregator", "preflight_schema",
+        "preflight_builder"
+      ],
+      "properties": {
+        "workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "primary_cohort_execution_plan": {"$ref": "#/$defs/sha256"},
+        "oci_inventory": {"$ref": "#/$defs/sha256"},
+        "launch_contract_intake": {"$ref": "#/$defs/sha256"},
+        "observed_transport_probe": {"$ref": "#/$defs/sha256"},
+        "controller_aware_measurement_envelope": {"$ref": "#/$defs/sha256"},
+        "controller_aware_measurement_envelope_schema": {"$ref": "#/$defs/sha256"},
+        "public_workspace_set": {"$ref": "#/$defs/sha256"},
+        "full_workflow_request_set": {"$ref": "#/$defs/sha256"},
+        "full_workflow_request_schema": {"$ref": "#/$defs/sha256"},
+        "full_workflow_request_set_schema": {"$ref": "#/$defs/sha256"},
+        "launch_contract_schema": {"$ref": "#/$defs/sha256"},
+        "measurement_request_schema": {"$ref": "#/$defs/sha256"},
+        "measurement_runner": {"$ref": "#/$defs/sha256"},
+        "activity_ledger_schema": {"$ref": "#/$defs/sha256"},
+        "activity_concurrency_builder": {"$ref": "#/$defs/sha256"},
+        "merged_sample_schema": {"$ref": "#/$defs/sha256"},
+        "resource_aggregator": {"$ref": "#/$defs/sha256"},
+        "preflight_schema": {"$ref": "#/$defs/sha256"},
+        "preflight_builder": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "static_inputs": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "workflow_count", "task_count", "planned_sample_count",
+        "workflow_release_candidate_bound", "primary_cohort_plan_unopened",
+        "oci_images_uniquely_resolved", "official_attempts_started"
+      ],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "task_count": {"const": 12},
+        "planned_sample_count": {"const": 200},
+        "workflow_release_candidate_bound": {"const": true},
+        "primary_cohort_plan_unopened": {"const": true},
+        "oci_images_uniquely_resolved": {"const": true},
+        "official_attempts_started": {"const": 0}
+      }
+    },
+    "measurement_envelope": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "launcher_kind", "network_policy", "required_podman_network_option",
+        "inherited_environment_keys", "controller_socket_mount_supported",
+        "observed_provider_gateway_reachable", "private_evaluator_reachable",
+        "controller_envelope_bound", "bound_launch_plan_count",
+        "bound_nonlaunch_disposition_count", "nonlaunch_metrics_are_null"
+      ],
+      "properties": {
+        "launcher_kind": {"const": "podman_oci"},
+        "network_policy": {"const": "offline"},
+        "required_podman_network_option": {"const": "--network=none"},
+        "inherited_environment_keys": {"const": ["HOME", "XDG_RUNTIME_DIR"]},
+        "controller_socket_mount_supported": {"const": true},
+        "observed_provider_gateway_reachable": {"const": true},
+        "private_evaluator_reachable": {"const": false},
+        "controller_envelope_bound": {"type": "boolean"},
+        "bound_launch_plan_count": {"enum": [0, 98]},
+        "bound_nonlaunch_disposition_count": {"enum": [0, 102]},
+        "nonlaunch_metrics_are_null": {"type": "boolean"}
+      }
+    },
+    "launch_contracts": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "required_workflow_count", "bound_workflow_count",
+        "required_request_count", "materialized_request_count",
+        "workflow_slot_status"
+      ],
+      "properties": {
+        "required_workflow_count": {"const": 5},
+        "bound_workflow_count": {"const": 5},
+        "required_request_count": {"const": 200},
+        "materialized_request_count": {"enum": [0, 200]},
+        "workflow_slot_status": {
+          "type": "array", "minItems": 5, "maxItems": 5,
+          "prefixItems": [
+            {"$ref": "#/$defs/chipflowSlot"},
+            {"$ref": "#/$defs/vanillaSlot"},
+            {"$ref": "#/$defs/external1Slot"},
+            {"$ref": "#/$defs/external2Slot"},
+            {"$ref": "#/$defs/external3Slot"}
+          ],
+          "items": false
+        }
+      }
+    },
+    "activity_observation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "ledger_schema_defined", "concurrency_receipt_builder_defined",
+        "controller_ledger_producer_defined", "provider_gateway_observation_bound",
+        "eda_broker_observation_bound"
+      ],
+      "properties": {
+        "ledger_schema_defined": {"const": true},
+        "concurrency_receipt_builder_defined": {"const": true},
+        "controller_ledger_producer_defined": {"const": true},
+        "provider_gateway_observation_bound": {"const": true},
+        "eda_broker_observation_bound": {"const": true}
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "static_input_gate_pass_count", "static_input_gate_count",
+        "launch_contract_pass_count", "launch_contract_gate_count",
+        "activity_observation_pass_count", "activity_observation_gate_count",
+        "public_workspace_count", "resource_samples_created",
+        "resource_samples_eligible"
+      ],
+      "properties": {
+        "static_input_gate_pass_count": {"const": 3},
+        "static_input_gate_count": {"const": 3},
+        "launch_contract_pass_count": {"const": 5},
+        "launch_contract_gate_count": {"const": 5},
+        "activity_observation_pass_count": {"const": 2},
+        "activity_observation_gate_count": {"const": 2},
+        "public_workspace_count": {"enum": [0, 12]},
+        "resource_samples_created": {"const": 0},
+        "resource_samples_eligible": {"const": 0}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "official_attempts_started", "official_semantic_attempts_consumed",
+        "resource_calibration_attempts_consumed", "benchmark_results_created",
+        "provider_calls", "eda_calls", "private_evaluator_calls"
+      ],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 5},
+        "private_evaluator_calls": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "static_inputs_complete", "launch_contracts_complete",
+        "observed_provider_transport_complete", "observed_eda_transport_complete",
+        "measurement_requests_materialized", "all_public_workspaces_materialized",
+        "controller_envelope_bound",
+        "resource_campaign_permitted",
+        "host_capacity_policy_derivation_permitted", "official_attempts_permitted"
+      ],
+      "properties": {
+        "static_inputs_complete": {"const": true},
+        "launch_contracts_complete": {"const": true},
+        "observed_provider_transport_complete": {"const": true},
+        "observed_eda_transport_complete": {"const": true},
+        "measurement_requests_materialized": {"type": "boolean"},
+        "all_public_workspaces_materialized": {"type": "boolean"},
+        "controller_envelope_bound": {"type": "boolean"},
+        "resource_campaign_permitted": {"const": false},
+        "host_capacity_policy_derivation_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "blockers": {
+      "oneOf": [
+        {"const": ["full_workflow_measurement_requests_missing_0_of_200"]},
+        {"const": [
+          "public_trial_workspaces_missing_0_of_12",
+          "controller_aware_measurement_envelope_not_bound",
+          "common_provider_preflight_not_passed"
+        ]},
+        {"const": [
+          "controller_aware_measurement_envelope_not_bound",
+          "common_provider_preflight_not_passed"
+        ]},
+        {"const": ["common_provider_preflight_not_passed"]}
+      ]
+    },
+    "excluded_claims": {
+      "type": "array", "minItems": 5, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "readiness": {
+            "properties": {"measurement_requests_materialized": {"const": true}}
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "input_sha256": {
+            "required": [
+              "full_workflow_request_set",
+              "full_workflow_request_schema",
+              "full_workflow_request_set_schema"
+            ]
+          },
+          "launch_contracts": {
+            "properties": {"materialized_request_count": {"const": 200}}
+          },
+          "summary": {
+            "properties": {"public_workspace_count": {"enum": [0, 12]}}
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "launch_contracts": {
+            "properties": {"materialized_request_count": {"const": 0}}
+          },
+          "summary": {
+            "properties": {"public_workspace_count": {"const": 0}}
+          },
+          "readiness": {
+            "properties": {"all_public_workspaces_materialized": {"const": false}}
+          },
+          "blockers": {
+            "const": ["full_workflow_measurement_requests_missing_0_of_200"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "readiness": {
+            "properties": {
+              "measurement_requests_materialized": {"const": true},
+              "all_public_workspaces_materialized": {"const": true}
+            },
+            "required": [
+              "measurement_requests_materialized",
+              "all_public_workspaces_materialized"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "input_sha256": {"required": ["public_workspace_set"]},
+          "summary": {
+            "properties": {"public_workspace_count": {"const": 12}}
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "summary": {
+            "properties": {"public_workspace_count": {"const": 0}}
+          },
+          "blockers": {
+            "oneOf": [
+              {"const": ["full_workflow_measurement_requests_missing_0_of_200"]},
+              {"const": [
+                "public_trial_workspaces_missing_0_of_12",
+                "controller_aware_measurement_envelope_not_bound",
+                "common_provider_preflight_not_passed"
+              ]}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "readiness": {
+            "properties": {"controller_envelope_bound": {"const": true}},
+            "required": ["controller_envelope_bound"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "input_sha256": {
+            "required": [
+              "controller_aware_measurement_envelope",
+              "controller_aware_measurement_envelope_schema"
+            ]
+          },
+          "measurement_envelope": {
+            "properties": {
+              "controller_envelope_bound": {"const": true},
+              "bound_launch_plan_count": {"const": 98},
+              "bound_nonlaunch_disposition_count": {"const": 102},
+              "nonlaunch_metrics_are_null": {"const": true}
+            }
+          },
+          "blockers": {"const": ["common_provider_preflight_not_passed"]}
+        }
+      },
+      "else": {
+        "properties": {
+          "measurement_envelope": {
+            "properties": {
+              "controller_envelope_bound": {"const": false},
+              "bound_launch_plan_count": {"const": 0},
+              "bound_nonlaunch_disposition_count": {"const": 0},
+              "nonlaunch_metrics_are_null": {"const": false}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "slotBase": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_slot_id", "workflow_id", "launch_contract_bound", "measurement_request_count"],
+      "properties": {
+        "workflow_slot_id": {"type": "string"},
+        "workflow_id": {"type": "string"},
+        "launch_contract_bound": {"const": true},
+        "measurement_request_count": {"enum": [0, 40]}
+      }
+    },
+    "chipflowSlot": {"allOf": [{"$ref": "#/$defs/slotBase"}, {"properties": {"workflow_slot_id": {"const": "chipflow"}, "workflow_id": {"const": "chipflow"}}}]},
+    "vanillaSlot": {"allOf": [{"$ref": "#/$defs/slotBase"}, {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}, "workflow_id": {"const": "same_model_vanilla_agent"}}}]},
+    "external1Slot": {"allOf": [{"$ref": "#/$defs/slotBase"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}, "workflow_id": {"const": "mage"}}}]},
+    "external2Slot": {"allOf": [{"$ref": "#/$defs/slotBase"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}, "workflow_id": {"const": "verilogcoder"}}}]},
+    "external3Slot": {"allOf": [{"$ref": "#/$defs/slotBase"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}, "workflow_id": {"const": "hdlagent"}}}]}
+  }
+}

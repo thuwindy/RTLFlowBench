@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-public-trial-submission-collection-receipt.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "canonical_verdict",
+    "task_id",
+    "workspace_receipt_sha256",
+    "public_tree_expected_sha256",
+    "public_tree_observed_sha256",
+    "projection_archive_sha256",
+    "scope",
+    "submission",
+    "private_file_count",
+    "evaluation_performed",
+    "readiness",
+    "collector_sha256",
+    "workspace_materializer_sha256",
+    "neutral_submission_packager_sha256",
+    "collection_receipt_schema_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_trial_submission_collection_receipt.v1"
+    },
+    "observed_at": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["collected_not_evaluated", "scope_violation", "invalid_submission"]
+    },
+    "canonical_verdict": {
+      "enum": [null, "scope_violation", "invalid_submission"]
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "public_tree_expected_sha256": {"$ref": "#/$defs/sha256"},
+    "public_tree_observed_sha256": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+    },
+    "projection_archive_sha256": {
+      "oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_repository_file_count",
+        "observed_worktree_file_count",
+        "editable_path_count",
+        "issue_count",
+        "issues"
+      ],
+      "properties": {
+        "baseline_repository_file_count": {"type": "integer", "minimum": 0},
+        "observed_worktree_file_count": {"type": "integer", "minimum": 0},
+        "editable_path_count": {"type": "integer", "minimum": 1},
+        "issue_count": {"type": "integer", "minimum": 0},
+        "issues": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "submission": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "submission_id",
+            "submission_sha256",
+            "bundle_tree_sha256",
+            "artifact_file_count",
+            "artifact_bytes"
+          ],
+          "properties": {
+            "submission_id": {"type": "string", "minLength": 1},
+            "submission_sha256": {"$ref": "#/$defs/sha256"},
+            "bundle_tree_sha256": {"$ref": "#/$defs/sha256"},
+            "artifact_file_count": {"type": "integer", "minimum": 1},
+            "artifact_bytes": {"type": "integer", "minimum": 0}
+          }
+        }
+      ]
+    },
+    "private_file_count": {"const": 0},
+    "evaluation_performed": {"const": false},
+    "readiness": {
+      "const": {
+        "benchmark_ready": false,
+        "chipflow_adapter_ready": false,
+        "publishable_score_permitted": false
+      }
+    },
+    "collector_sha256": {"$ref": "#/$defs/sha256"},
+    "workspace_materializer_sha256": {"$ref": "#/$defs/sha256"},
+    "neutral_submission_packager_sha256": {"$ref": "#/$defs/sha256"},
+    "collection_receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "collected_not_evaluated"}}},
+      "then": {
+        "properties": {
+          "canonical_verdict": {"type": "null"},
+          "submission": {"type": "object"},
+          "scope": {
+            "properties": {
+              "issue_count": {"const": 0},
+              "issues": {"maxItems": 0}
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {"enum": ["scope_violation", "invalid_submission"]}
+        }
+      },
+      "then": {
+        "properties": {
+          "submission": {"type": "null"},
+          "scope": {
+            "properties": {
+              "issue_count": {"minimum": 1},
+              "issues": {"minItems": 1}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

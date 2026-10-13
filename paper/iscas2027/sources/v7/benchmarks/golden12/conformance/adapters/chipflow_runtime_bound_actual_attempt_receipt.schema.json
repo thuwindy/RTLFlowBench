@@ -1,0 +1,356 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/adapter/chipflow-runtime-bound-actual-attempt-receipt.v2.json",
+  "title": "Runtime-bound content-addressed evidence receipt for one actual ChipFlow attempt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "task_id",
+    "evidence_locator",
+    "workflow",
+    "adapter",
+    "offline_development_evaluator",
+    "raw_metrics",
+    "isolation",
+    "evidence_sha256",
+    "source_sha256",
+    "readiness",
+    "blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_runtime_bound_actual_attempt_receipt.v2"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "const": "single_development_attempt_evaluated_pass_not_frozen"
+    },
+    "task_id": {
+      "const": "G01-common-fifo-spec"
+    },
+    "evidence_locator": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9._-]+:outputs/[A-Za-z0-9._/-]+$"
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chipflow_run_id",
+        "submission_id",
+        "status",
+        "judge_decision",
+        "design_iterations",
+        "executor_status",
+        "executor_receipt_sha256",
+        "public_visible_verdict",
+        "public_visible_check_count",
+        "immutable_evidence_sha256",
+        "release_sha256",
+        "runtime_source_path",
+        "runtime_source_sha256",
+        "runtime_manifest_hash",
+        "semantic_dispatch_bindings",
+        "config_evidence_sha256",
+        "workflow_entrypoint",
+        "private_evaluator_run_inside_workflow"
+      ],
+      "properties": {
+        "chipflow_run_id": {"type": "string", "minLength": 1},
+        "submission_id": {"type": "string", "minLength": 1},
+        "status": {"const": "verified"},
+        "judge_decision": {"const": "ACCEPT"},
+        "design_iterations": {"type": "integer", "minimum": 1},
+        "executor_status": {"const": "pass"},
+        "executor_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "public_visible_verdict": {"const": "pass"},
+        "public_visible_check_count": {"type": "integer", "minimum": 1},
+        "immutable_evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "release_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_source_path": {
+          "const": "backend/packages/harness/deerflow/chipflow/research/design_unit_runtime.py"
+        },
+        "runtime_source_sha256": {"$ref": "#/$defs/sha256"},
+        "runtime_manifest_hash": {"$ref": "#/$defs/sha256"},
+        "semantic_dispatch_bindings": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^planning/semantic_dispatch_checkpoints/[0-9a-f]{64}/binding\\.json$"
+              },
+              "sha256": {"$ref": "#/$defs/sha256"}
+            }
+          }
+        },
+        "config_evidence_sha256": {"$ref": "#/$defs/sha256"},
+        "workflow_entrypoint": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "execution_sha256"],
+          "properties": {
+            "path": {"const": "scripts/run_golden12_g01_chipflow.py"},
+            "execution_sha256": {"$ref": "#/$defs/sha256"}
+          }
+        },
+        "private_evaluator_run_inside_workflow": {"const": false}
+      }
+    },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "neutral_submission_materialized",
+        "artifact_count",
+        "artifact_path",
+        "artifact_bytes",
+        "artifact_sha256"
+      ],
+      "properties": {
+        "status": {"const": "submission_materialized"},
+        "neutral_submission_materialized": {"const": true},
+        "artifact_count": {"const": 1},
+        "artifact_path": {"const": "rtl/golden12_fifo.sv"},
+        "artifact_bytes": {"type": "integer", "minimum": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "offline_development_evaluator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_boundary",
+        "suite_status",
+        "verdict",
+        "f2p_check_count",
+        "p2p_check_count",
+        "formal_depth",
+        "synthesis_status",
+        "score_status",
+        "score_total",
+        "score_profile_status",
+        "benchmark_pass_claimed"
+      ],
+      "properties": {
+        "execution_boundary": {
+          "const": "outside_workflow_run_root_after_neutral_finalization"
+        },
+        "suite_status": {"const": "development_not_frozen"},
+        "verdict": {"const": "pass"},
+        "f2p_check_count": {"type": "integer", "minimum": 1},
+        "p2p_check_count": {"type": "integer", "minimum": 1},
+        "formal_depth": {"type": "integer", "minimum": 1},
+        "synthesis_status": {"const": "pass"},
+        "score_status": {"const": "scored"},
+        "score_total": {"type": "number", "minimum": 0, "maximum": 100},
+        "score_profile_status": {"const": "development_not_frozen"},
+        "benchmark_pass_claimed": {"const": false}
+      }
+    },
+    "raw_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "functional_correctness",
+        "protocol_correctness",
+        "f2p",
+        "p2p",
+        "formal_depth",
+        "scope_violation_count",
+        "trust_event_count",
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions",
+        "unavailable_metric_ids",
+        "not_applicable_metric_ids"
+      ],
+      "properties": {
+        "functional_correctness": {"const": 1.0},
+        "protocol_correctness": {"const": 1.0},
+        "f2p": {"const": 1.0},
+        "p2p": {"const": 1.0},
+        "formal_depth": {"type": "integer", "minimum": 1},
+        "scope_violation_count": {"const": 0},
+        "trust_event_count": {"const": 0},
+        "wall_time_seconds": {"type": "number", "minimum": 0},
+        "input_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "llm_calls": {"type": "integer", "minimum": 1},
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {"type": "integer", "minimum": 0},
+            "simulation": {"type": "integer", "minimum": 0},
+            "formal": {"type": "integer", "minimum": 0},
+            "synthesis": {"type": "integer", "minimum": 0}
+          }
+        },
+        "human_interventions": {"type": "integer", "minimum": 0},
+        "unavailable_metric_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "simulation_coverage",
+              "area",
+              "timing",
+              "performance",
+              "input_tokens",
+              "output_tokens"
+            ]
+          }
+        },
+        "not_applicable_metric_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["mutation_kill_rate", "false_positive_rate"]
+          }
+        }
+      }
+    },
+    "isolation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_workspace_monitoring_complete",
+        "network_isolation_enforced",
+        "network_access_observed",
+        "network_attempt_count",
+        "neutral_bundle_exact_scope",
+        "neutral_bundle_read_only",
+        "public_sensitive_marker_count",
+        "sanitized_absolute_path_count",
+        "sanitized_private_source_path_count"
+      ],
+      "properties": {
+        "task_workspace_monitoring_complete": {"const": true},
+        "network_isolation_enforced": {"const": true},
+        "network_access_observed": {"const": false},
+        "network_attempt_count": {"const": 0},
+        "neutral_bundle_exact_scope": {"const": true},
+        "neutral_bundle_read_only": {"const": true},
+        "public_sensitive_marker_count": {"const": 0},
+        "sanitized_absolute_path_count": {"const": 0},
+        "sanitized_private_source_path_count": {"const": 0}
+      }
+    },
+    "evidence_sha256": {
+      "type": "object",
+      "minProperties": 10,
+      "additionalProperties": false,
+      "required": [
+        "run/orchestration_summary.json",
+        "run/benchmark_evidence/task_workspace_monitor.json",
+        "run/benchmark_evidence/usage_events.json",
+        "run/benchmark_usage_receipt.json",
+        "run/benchmark_export.json",
+        "run/benchmark_submission.json",
+        "run/benchmark_adapter_receipt.json",
+        "run/verification/visible_suite/result.json",
+        "private-evaluation/g01-hidden-development/result.json",
+        "sanitized-result/result.json",
+        "neutral-submission/rtl/golden12_fifo.sv"
+      ],
+      "properties": {
+        "run/orchestration_summary.json": {"$ref": "#/$defs/sha256"},
+        "run/benchmark_evidence/task_workspace_monitor.json": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run/benchmark_evidence/usage_events.json": {
+          "$ref": "#/$defs/sha256"
+        },
+        "run/benchmark_usage_receipt.json": {"$ref": "#/$defs/sha256"},
+        "run/benchmark_export.json": {"$ref": "#/$defs/sha256"},
+        "run/benchmark_submission.json": {"$ref": "#/$defs/sha256"},
+        "run/benchmark_adapter_receipt.json": {"$ref": "#/$defs/sha256"},
+        "run/verification/visible_suite/result.json": {
+          "$ref": "#/$defs/sha256"
+        },
+        "private-evaluation/g01-hidden-development/result.json": {
+          "$ref": "#/$defs/sha256"
+        },
+        "sanitized-result/result.json": {"$ref": "#/$defs/sha256"},
+        "neutral-submission/rtl/golden12_fifo.sv": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "minProperties": 5,
+      "additionalProperties": {
+        "$ref": "#/$defs/sha256"
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "development_server_runner_observed",
+        "actual_airtl_export_observed",
+        "actual_private_evaluator_result_observed",
+        "multi_run_repeatability_observed",
+        "benchmark_ready",
+        "chipflow_adapter_ready",
+        "independent_review_complete"
+      ],
+      "properties": {
+        "development_server_runner_observed": {"const": true},
+        "actual_airtl_export_observed": {"const": true},
+        "actual_private_evaluator_result_observed": {"const": true},
+        "multi_run_repeatability_observed": {"const": false},
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false},
+        "independent_review_complete": {"const": false}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

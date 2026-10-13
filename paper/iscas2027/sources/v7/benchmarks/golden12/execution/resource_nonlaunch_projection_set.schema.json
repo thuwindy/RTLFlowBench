@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/resource-nonlaunch-projection-set-v1.json",
+  "title": "Golden-12 current controller nonlaunch projection set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "observed_at",
+    "input_sha256",
+    "source_sha256",
+    "projections",
+    "summary",
+    "readiness",
+    "attempt_accounting",
+    "blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.resource_nonlaunch_projection_set.v1"
+    },
+    "status": {
+      "const": "current_controller_nonlaunch_projection_complete_not_resource_release"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "resource_measurement_supersession_candidate",
+        "current_controller_envelope",
+        "current_resource_request_set",
+        "current_bridge_request_set",
+        "current_public_workspace_set",
+        "current_workflow_release_candidate",
+        "current_public_suite_server_receipt"
+      ],
+      "properties": {
+        "resource_measurement_supersession_candidate": {"$ref": "#/$defs/sha256"},
+        "current_controller_envelope": {"$ref": "#/$defs/sha256"},
+        "current_resource_request_set": {"$ref": "#/$defs/sha256"},
+        "current_bridge_request_set": {"$ref": "#/$defs/sha256"},
+        "current_public_workspace_set": {"$ref": "#/$defs/sha256"},
+        "current_workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "current_public_suite_server_receipt": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder",
+        "schema",
+        "supersession_builder",
+        "supersession_schema",
+        "envelope_builder",
+        "envelope_schema",
+        "controller_runner",
+        "nonlaunch_receipt_schema",
+        "resource_request_builder",
+        "bridge_request_builder",
+        "workspace_set_builder"
+      ],
+      "properties": {
+        "builder": {"$ref": "#/$defs/sha256"},
+        "schema": {"$ref": "#/$defs/sha256"},
+        "supersession_builder": {"$ref": "#/$defs/sha256"},
+        "supersession_schema": {"$ref": "#/$defs/sha256"},
+        "envelope_builder": {"$ref": "#/$defs/sha256"},
+        "envelope_schema": {"$ref": "#/$defs/sha256"},
+        "controller_runner": {"$ref": "#/$defs/sha256"},
+        "nonlaunch_receipt_schema": {"$ref": "#/$defs/sha256"},
+        "resource_request_builder": {"$ref": "#/$defs/sha256"},
+        "bridge_request_builder": {"$ref": "#/$defs/sha256"},
+        "workspace_set_builder": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "projections": {
+      "type": "array",
+      "minItems": 102,
+      "maxItems": 102,
+      "items": {"$ref": "#/$defs/projection"}
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "historical_nonlaunch_sample_count",
+        "supersession_nonlaunch_regeneration_required_count",
+        "current_controller_nonlaunch_projection_count",
+        "unique_current_nonlaunch_receipt_count",
+        "current_launch_plan_count",
+        "current_planned_slot_count",
+        "resource_metric_not_available_count",
+        "provider_call_count",
+        "eda_call_count",
+        "private_evaluator_call_count",
+        "official_attempt_count"
+      ],
+      "properties": {
+        "historical_nonlaunch_sample_count": {"const": 102},
+        "supersession_nonlaunch_regeneration_required_count": {"const": 102},
+        "current_controller_nonlaunch_projection_count": {"const": 102},
+        "unique_current_nonlaunch_receipt_count": {"const": 102},
+        "current_launch_plan_count": {"const": 98},
+        "current_planned_slot_count": {"const": 200},
+        "resource_metric_not_available_count": {"const": 102},
+        "provider_call_count": {"const": 0},
+        "eda_call_count": {"const": 0},
+        "private_evaluator_call_count": {"const": 0},
+        "official_attempt_count": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_102_current_controller_projections_bound",
+        "all_resource_metrics_not_available",
+        "historical_execution_hashes_preserved",
+        "historical_receipts_rebound",
+        "independent_review_complete",
+        "resource_calibration_release_frozen",
+        "official_attempts_permitted"
+      ],
+      "properties": {
+        "all_102_current_controller_projections_bound": {"const": true},
+        "all_resource_metrics_not_available": {"const": true},
+        "historical_execution_hashes_preserved": {"const": true},
+        "historical_receipts_rebound": {"const": false},
+        "independent_review_complete": {"const": false},
+        "resource_calibration_release_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_attempts_started",
+        "official_semantic_attempts_consumed",
+        "resource_calibration_attempts_consumed",
+        "provider_calls",
+        "eda_calls",
+        "private_evaluator_calls",
+        "benchmark_results_created"
+      ],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "benchmark_results_created": {"const": 0}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "independent_resource_supersession_review_missing",
+          "resource_remeasurement_required_samples_incomplete",
+          "resource_calibration_release_receipt_missing",
+          "current_common_provider_gate_not_5_of_5_pass"
+        ]
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_time_seconds",
+        "cpu_time_seconds",
+        "peak_memory_bytes",
+        "peak_scratch_bytes",
+        "peak_process_count",
+        "peak_eda_concurrency",
+        "peak_llm_concurrency",
+        "llm_call_count",
+        "eda_call_count"
+      ],
+      "properties": {
+        "wall_time_seconds": {"type": "null"},
+        "cpu_time_seconds": {"type": "null"},
+        "peak_memory_bytes": {"type": "null"},
+        "peak_scratch_bytes": {"type": "null"},
+        "peak_process_count": {"type": "null"},
+        "peak_eda_concurrency": {"type": "null"},
+        "peak_llm_concurrency": {"type": "null"},
+        "llm_call_count": {"type": "null"},
+        "eda_call_count": {"type": "null"}
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sample_id",
+        "workflow_slot_id",
+        "workflow_id",
+        "task_id",
+        "calibration_run_index",
+        "historical_nonlaunch_receipt_sha256",
+        "current_nonlaunch_receipt_sha256",
+        "historical_execution_hash_preserved",
+        "previous_public_tree_sha256",
+        "current_public_tree_sha256",
+        "current_resource_request_sha256",
+        "current_controller_disposition",
+        "resource_metric_availability",
+        "metrics",
+        "provider_calls",
+        "eda_calls",
+        "private_evaluator_calls",
+        "resource_calibration_attempt_consumed",
+        "official_semantic_attempt_consumed"
+      ],
+      "properties": {
+        "sample_id": {"type": "string", "minLength": 1},
+        "workflow_slot_id": {
+          "enum": [
+            "chipflow",
+            "same_model_vanilla_agent",
+            "external_airtl_1",
+            "external_airtl_2",
+            "external_airtl_3"
+          ]
+        },
+        "workflow_id": {
+          "enum": [
+            "chipflow",
+            "same_model_vanilla_agent",
+            "mage",
+            "verilogcoder",
+            "hdlagent"
+          ]
+        },
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-"},
+        "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+        "historical_nonlaunch_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "current_nonlaunch_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "historical_execution_hash_preserved": {"const": true},
+        "previous_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "current_public_tree_sha256": {"$ref": "#/$defs/sha256"},
+        "current_resource_request_sha256": {"$ref": "#/$defs/sha256"},
+        "current_controller_disposition": {
+          "const": "controller_block_preclassified_not_run"
+        },
+        "resource_metric_availability": {"const": "not_available_not_launched"},
+        "metrics": {"$ref": "#/$defs/nullableMetrics"},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "resource_calibration_attempt_consumed": {"const": false},
+        "official_semantic_attempt_consumed": {"const": false}
+      }
+    }
+  }
+}

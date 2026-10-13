@@ -1,0 +1,107 @@
+{
+  "schema_version": "chipflow.golden12.interface_spec.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "interface_kind": "axi_lite_to_wishbone_split_bridge_integration",
+  "top_module": "golden12_axil_wb_split_bridge",
+  "language": "systemverilog",
+  "cpu_interface_spec_required": false,
+  "projection": "independent_non_cpu_interface_spec",
+  "parameters": [
+    {"name": "C_AXI_DATA_WIDTH", "type": "positive_integer", "default": 32, "valid_range": "C_AXI_DATA_WIDTH == 32 for the pinned dependency revision"},
+    {"name": "C_AXI_ADDR_WIDTH", "type": "positive_integer", "default": 28, "valid_range": "C_AXI_ADDR_WIDTH > $clog2(C_AXI_DATA_WIDTH/8)"},
+    {"name": "LGFIFO", "type": "positive_integer", "default": 3, "valid_range": "LGFIFO >= 1"}
+  ],
+  "derived_widths": {
+    "BYTE_LANES": "C_AXI_DATA_WIDTH/8",
+    "ADDR_LSB": "$clog2(C_AXI_DATA_WIDTH/8)",
+    "WB_ADDR_WIDTH": "C_AXI_ADDR_WIDTH-ADDR_LSB"
+  },
+  "clock": {"port": "i_clk", "active_edge": "rising", "clock_domains": 1},
+  "reset": {
+    "port": "i_axi_reset_n",
+    "polarity": "active_low",
+    "timing": "synchronous",
+    "sample_edge": "rising_i_clk",
+    "priority": "higher_than_axi_and_wishbone_handshakes",
+    "asynchronous_effect_between_edges": false,
+    "compatibility_output": "o_reset equals !i_axi_reset_n combinationally"
+  },
+  "ports": [
+    {"name": "i_clk", "direction": "input", "width": "1"},
+    {"name": "i_axi_reset_n", "direction": "input", "width": "1"},
+    {"name": "i_axi_awvalid", "direction": "input", "width": "1"},
+    {"name": "o_axi_awready", "direction": "output", "width": "1"},
+    {"name": "i_axi_awaddr", "direction": "input", "width": "C_AXI_ADDR_WIDTH"},
+    {"name": "i_axi_awprot", "direction": "input", "width": "3"},
+    {"name": "i_axi_wvalid", "direction": "input", "width": "1"},
+    {"name": "o_axi_wready", "direction": "output", "width": "1"},
+    {"name": "i_axi_wdata", "direction": "input", "width": "C_AXI_DATA_WIDTH"},
+    {"name": "i_axi_wstrb", "direction": "input", "width": "BYTE_LANES"},
+    {"name": "o_axi_bvalid", "direction": "output", "width": "1"},
+    {"name": "i_axi_bready", "direction": "input", "width": "1"},
+    {"name": "o_axi_bresp", "direction": "output", "width": "2"},
+    {"name": "i_axi_arvalid", "direction": "input", "width": "1"},
+    {"name": "o_axi_arready", "direction": "output", "width": "1"},
+    {"name": "i_axi_araddr", "direction": "input", "width": "C_AXI_ADDR_WIDTH"},
+    {"name": "i_axi_arprot", "direction": "input", "width": "3"},
+    {"name": "o_axi_rvalid", "direction": "output", "width": "1"},
+    {"name": "i_axi_rready", "direction": "input", "width": "1"},
+    {"name": "o_axi_rdata", "direction": "output", "width": "C_AXI_DATA_WIDTH"},
+    {"name": "o_axi_rresp", "direction": "output", "width": "2"},
+    {"name": "o_reset", "direction": "output", "width": "1"},
+    {"name": "o_wb_cyc", "direction": "output", "width": "1"},
+    {"name": "o_wb_stb", "direction": "output", "width": "1"},
+    {"name": "o_wb_we", "direction": "output", "width": "1"},
+    {"name": "o_wb_addr", "direction": "output", "width": "WB_ADDR_WIDTH"},
+    {"name": "o_wb_data", "direction": "output", "width": "C_AXI_DATA_WIDTH"},
+    {"name": "o_wb_sel", "direction": "output", "width": "BYTE_LANES"},
+    {"name": "i_wb_stall", "direction": "input", "width": "1"},
+    {"name": "i_wb_ack", "direction": "input", "width": "1"},
+    {"name": "i_wb_data", "direction": "input", "width": "C_AXI_DATA_WIDTH"},
+    {"name": "i_wb_err", "direction": "input", "width": "1"}
+  ],
+  "transaction_semantics": {
+    "axi_handshake": "A channel transfer occurs only on VALID && READY at a rising edge",
+    "aw_w_independence": "AW and W may be accepted in either order and are paired in acceptance order by the supplied write dependency",
+    "wishbone_request_accept": "o_wb_cyc && o_wb_stb && !i_wb_stall at a rising edge",
+    "wishbone_completion": "Exactly one of i_wb_ack or i_wb_err completes an accepted beat",
+    "ordering": "Read and write responses preserve per-channel AXI acceptance order",
+    "owner_hold": "A granted internal master owns the external bus until that internal CYC deasserts",
+    "response_isolation": "ACK, ERR, and read data are visible only to the selected owner"
+  },
+  "arbitration_semantics": {
+    "unit": "complete_internal_wishbone_cycle",
+    "single_request": "grant the sole requester",
+    "simultaneous_after_reset": "grant read",
+    "simultaneous_after_completion": "grant the master other than the most recently completed owner",
+    "non_owner": "forced stalled and receives no ACK or ERR"
+  },
+  "state_semantics": {
+    "stalled_output": "While o_wb_cyc && o_wb_stb && i_wb_stall, WE, address, data, and select remain stable",
+    "normal_response": "AXI response is OKAY (2'b00)",
+    "error_response": "AXI response is SLVERR (2'b10)",
+    "reset_state": "No owner, no Wishbone request, read wins the next simultaneous request, and no pre-reset response survives"
+  },
+  "latency_semantics": {
+    "mode": "functional_not_cycle_frozen",
+    "combinational_fall_through_required": false,
+    "progress": "Every accepted request eventually receives one response when the external target eventually accepts and completes every request"
+  },
+  "invalid_parameter_behavior": {"required_result": "elaboration_or_static_failure", "runtime_behavior_defined": false},
+  "dependency_bindings": [
+    {
+      "module": "axilrd2wbsp",
+      "source_path": "rtl/axilrd2wbsp.v",
+      "instance_count": 1,
+      "required_parameter_bindings": ["C_AXI_DATA_WIDTH", "C_AXI_ADDR_WIDTH", "LGFIFO"],
+      "required_port_bindings": ["i_clk", "i_axi_reset_n", "i_axi_arvalid", "o_axi_arready", "i_axi_araddr", "i_axi_arprot", "o_axi_rvalid", "i_axi_rready", "o_axi_rdata", "o_axi_rresp", "o_wb_cyc", "o_wb_stb", "o_wb_addr", "o_wb_sel", "i_wb_stall", "i_wb_ack", "i_wb_data", "i_wb_err"]
+    },
+    {
+      "module": "axilwr2wbsp",
+      "source_path": "rtl/axilwr2wbsp.v",
+      "instance_count": 1,
+      "required_parameter_bindings": ["C_AXI_DATA_WIDTH", "C_AXI_ADDR_WIDTH", "LGFIFO"],
+      "required_port_bindings": ["i_clk", "i_axi_reset_n", "i_axi_awvalid", "o_axi_awready", "i_axi_awaddr", "i_axi_awprot", "i_axi_wvalid", "o_axi_wready", "i_axi_wdata", "i_axi_wstrb", "o_axi_bvalid", "i_axi_bready", "o_axi_bresp", "o_wb_cyc", "o_wb_stb", "o_wb_addr", "o_wb_data", "o_wb_sel", "i_wb_stall", "i_wb_ack", "i_wb_err"]
+    }
+  ]
+}

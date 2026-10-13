@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/complete-public-measurement-request.v2.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["measurement_id", "workflow_id", "workflow_slot_id", "task_id", "calibration_run_index", "route", "request_relative_root", "bundle_relative_root", "runtime_relative_root", "runtime_manifest_sha256", "request_binding_sha256", "public_intake_sha256", "native_prerequisite_gaps", "output_shape", "file_count", "tree_sha256", "baseline_resource_request", "baseline_resource_request_sha256", "baseline_resource_relative_path"],
+  "properties": {
+    "measurement_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "workflow_id": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]},
+    "workflow_slot_id": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]},
+    "task_id": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"},
+    "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+    "route": {"enum": ["existing_native", "mage_complete_public", "external_complete_public"]},
+    "request_relative_root": {"type": "string", "minLength": 1},
+    "bundle_relative_root": {"type": "string", "minLength": 1},
+    "runtime_relative_root": {"type": ["string", "null"]},
+    "runtime_manifest_sha256": {"$ref": "#/$defs/optionalSha"},
+    "request_binding_sha256": {"$ref": "#/$defs/optionalSha"},
+    "public_intake_sha256": {"$ref": "#/$defs/sha"},
+    "native_prerequisite_gaps": {"type": ["array", "null"], "items": {"type": "object"}},
+    "output_shape": {"type": ["object", "null"]},
+    "file_count": {"type": "integer", "minimum": 1},
+    "tree_sha256": {"$ref": "#/$defs/sha"},
+    "baseline_resource_request": {"type": "object", "description": "Additionally validated against the immutable baseline request schema by the semantic validator."},
+    "baseline_resource_request_sha256": {"$ref": "#/$defs/sha"},
+    "baseline_resource_relative_path": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "optionalSha": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha"}]}
+  }
+}

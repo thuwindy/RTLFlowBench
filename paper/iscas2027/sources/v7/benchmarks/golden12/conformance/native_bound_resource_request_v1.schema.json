@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/native-bound-resource-request.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_purpose",
+    "measurement_id",
+    "measurement_scope",
+    "workflow_slot_id",
+    "workflow_id",
+    "task_id",
+    "attempt_id",
+    "source_binding",
+    "runtime_binding",
+    "native_request_sha256",
+    "supervisor_request_sha256",
+    "traced_command_argv_sha256",
+    "workflow_source_manifest_sha256",
+    "collector_source_manifest_sha256",
+    "public_input_binding",
+    "controller_binding",
+    "resource_scope",
+    "execution_permission",
+    "public_launch_request_sha256",
+    "official_attempt_binding",
+    "seed_semantics",
+    "provider_seed_observed"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "chipflow.native_bound_resource_request.v1"
+    },
+    "run_purpose": {
+      "enum": [
+        "diagnostic_local_provider_denial",
+        "authorized_native_acceptance"
+      ]
+    },
+    "measurement_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"
+    },
+    "measurement_scope": {
+      "const": "full_workflow_calibration"
+    },
+    "workflow_slot_id": {
+      "const": "chipflow"
+    },
+    "workflow_id": {
+      "const": "chipflow"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240
+    },
+    "source_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "manifest_sha256"
+      ],
+      "properties": {
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "manifest_sha256": {
+          "$ref": "#/$defs/sha"
+        }
+      }
+    },
+    "runtime_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "image_id",
+        "image_digest"
+      ],
+      "properties": {
+        "image_id": {
+          "$ref": "#/$defs/image"
+        },
+        "image_digest": {
+          "$ref": "#/$defs/image"
+        }
+      }
+    },
+    "native_request_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "supervisor_request_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "traced_command_argv_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "workflow_source_manifest_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "collector_source_manifest_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "public_input_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_task_sha256",
+        "public_tree_sha256",
+        "private_assets_included"
+      ],
+      "properties": {
+        "external_task_sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "public_tree_sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "private_assets_included": {
+          "const": false
+        }
+      }
+    },
+    "controller_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "network_policy",
+        "provider_transport",
+        "eda_observation",
+        "private_evaluator_reachable",
+        "provider_source_sha256",
+        "eda_source_sha256"
+      ],
+      "properties": {
+        "network_policy": {
+          "const": "offline"
+        },
+        "provider_transport": {
+          "const": "host_observed_openai_compatible_unix_socket"
+        },
+        "eda_observation": {
+          "const": "native_runner_hook_v3_with_protected_host_exec_reconciliation_v3"
+        },
+        "private_evaluator_reachable": {
+          "const": false
+        },
+        "provider_source_sha256": {
+          "$ref": "#/$defs/sha"
+        },
+        "eda_source_sha256": {
+          "$ref": "#/$defs/sha"
+        }
+      }
+    },
+    "resource_scope": {
+      "const": "native_protected_terminal_container_and_sampled_workspace_v1"
+    },
+    "execution_permission": {
+      "const": false
+    },
+    "public_launch_request_sha256": {
+      "$ref": "#/$defs/sha"
+    },
+    "official_attempt_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attempt_id",
+        "attempt_index",
+        "repeat_group_id",
+        "seed"
+      ],
+      "properties": {
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "attempt_index": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "repeat_group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "seed_semantics": {
+      "const": "declared_schedule_seed_only"
+    },
+    "provider_seed_observed": {
+      "type": "null"
+    }
+  },
+  "$defs": {
+    "sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "image": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  },
+  "$comment": "Successor for declared public attempt binding; v1 native and legacy v2 request schemas remain immutable. Declaration is not provider seed observation or execution authority."
+}

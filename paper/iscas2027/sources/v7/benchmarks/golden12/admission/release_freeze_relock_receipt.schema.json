@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/release-freeze-relock-receipt.v1.json",
+  "title": "Golden-12 release-freeze relock candidate receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "materialization_receipt_sha256",
+    "task_count",
+    "tasks",
+    "source",
+    "apply_permitted",
+    "pretransition_signature_reuse_permitted",
+    "private_bundle_rebuild_required",
+    "review_workspace_rebuild_required",
+    "new_review_required",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "suite_ready",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.release_freeze_relock_receipt.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "relocked_candidate_pending_package_and_new_review"},
+    "classification": {"const": "release_authority_only"},
+    "materialization_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "task_count": {"const": 12},
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "schema_sha256",
+        "materialization_schema_sha256",
+        "public_packager_sha256",
+        "review_packet_rebinder_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "materialization_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "public_packager_sha256": {"$ref": "#/$defs/sha256"},
+        "review_packet_rebinder_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "apply_permitted": {"const": false},
+    "pretransition_signature_reuse_permitted": {"const": false},
+    "private_bundle_rebuild_required": {"const": true},
+    "review_workspace_rebuild_required": {"const": true},
+    "new_review_required": {"const": true},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "suite_ready": {"const": false},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_id",
+        "pretransition_candidate_lock_sha256",
+        "posttransition_candidate_lock_sha256",
+        "posttransition_review_packet_sha256",
+        "public_archive_sha256",
+        "public_archive_bytes",
+        "public_archive_receipt_sha256",
+        "public_content_manifest_sha256",
+        "component_count",
+        "all_components_content_bound",
+        "all_review_items_pending",
+        "pretransition_signatures_invalidated",
+        "private_bundle_rebuild_required",
+        "review_workspace_rebuild_required",
+        "new_review_required",
+        "benchmark_ready",
+        "chipflow_adapter_ready"
+      ],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "pretransition_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "posttransition_candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "posttransition_review_packet_sha256": {"$ref": "#/$defs/sha256"},
+        "public_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "public_archive_bytes": {"type": "integer", "minimum": 1},
+        "public_archive_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "public_content_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "component_count": {"type": "integer", "minimum": 1},
+        "all_components_content_bound": {"const": true},
+        "all_review_items_pending": {"const": true},
+        "pretransition_signatures_invalidated": {"const": true},
+        "private_bundle_rebuild_required": {"const": true},
+        "review_workspace_rebuild_required": {"const": true},
+        "new_review_required": {"const": true},
+        "benchmark_ready": {"const": false},
+        "chipflow_adapter_ready": {"const": false}
+      }
+    }
+  }
+}

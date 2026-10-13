@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Please cite this versioned software companion when using its source; the associated paper is a submission, not an accepted publication."
+type: software
+title: "G12-RTL paper source companion"
+authors:
+  - family-names: Fu
+    given-names: Jinhan
+    affiliation: "School of Integrated Circuits, Tsinghua University"
+  - family-names: Sun
+    given-names: Haonan
+    affiliation: "School of Integrated Circuits, Tsinghua University"
+  - family-names: He
+    given-names: Hu
+    affiliation: "School of Integrated Circuits, Tsinghua University"
+repository-code: "https://github.com/thuwindy/RTLFlowBench"
+version: "paper-source-20261013"

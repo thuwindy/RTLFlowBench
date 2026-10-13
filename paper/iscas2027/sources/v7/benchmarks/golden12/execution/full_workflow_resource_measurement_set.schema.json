@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-measurement-set.v2.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "measurement_set_id", "scope", "workflow_release_candidate_sha256",
+    "primary_cohort_execution_plan_sha256", "oci_inventory_sha256",
+    "launch_receipt_schema_sha256", "nonlaunch_receipt_schema_sha256",
+    "sample_count", "launch_sample_count", "controller_nonlaunch_count",
+    "samples", "attempt_accounting", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.full_workflow_resource_measurement_set.v2"},
+    "measurement_set_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "scope": {"const": "five_workflows_all_twelve_tasks_resource_calibration_only"},
+    "workflow_release_candidate_sha256": {"$ref": "#/$defs/sha256"},
+    "primary_cohort_execution_plan_sha256": {"$ref": "#/$defs/sha256"},
+    "oci_inventory_sha256": {"$ref": "#/$defs/sha256"},
+    "launch_receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "nonlaunch_receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "sample_count": {"const": 200},
+    "launch_sample_count": {"const": 98},
+    "controller_nonlaunch_count": {"const": 102},
+    "samples": {
+      "type": "array", "minItems": 200, "maxItems": 200, "uniqueItems": true,
+      "items": {"$ref": "#/$defs/sample"}
+    },
+    "attempt_accounting": {"$ref": "#/$defs/accounting"},
+    "excluded_claims": {
+      "type": "array", "minItems": 4, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 40}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "slot": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]},
+    "workflow": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]},
+    "sample": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sample_id", "workflow_slot_id", "workflow_id", "task_id", "calibration_run_index", "measurement_id", "attempt_id", "receipt_kind", "receipt_relative_path", "receipt_sha256"],
+      "properties": {
+        "sample_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,159}$"},
+        "workflow_slot_id": {"$ref": "#/$defs/slot"},
+        "workflow_id": {"$ref": "#/$defs/workflow"},
+        "task_id": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"},
+        "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 40},
+        "measurement_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+        "attempt_id": {"type": "string", "pattern": "^resource-calibration-[a-z0-9][a-z0-9-]{0,218}$"},
+        "receipt_kind": {"enum": ["measured_launch", "controller_nonlaunch"]},
+        "receipt_relative_path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[a-zA-Z0-9._-]+(?:/[a-zA-Z0-9._-]+)*\\.json$"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 98},
+        "benchmark_results_created": {"const": 0},
+        "private_evaluator_calls": {"const": 0}
+      }
+    }
+  }
+}

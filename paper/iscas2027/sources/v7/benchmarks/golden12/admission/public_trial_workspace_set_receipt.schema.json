@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.example/schemas/golden12-public-trial-workspace-set-receipt-v1.json",
+  "title": "Golden-12 public trial workspace set receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "public_suite",
+    "summary",
+    "tasks",
+    "source_sha256",
+    "readiness",
+    "attempt_accounting",
+    "blockers",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_trial_workspace_set_receipt.v1"
+    },
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "development_public_trial_workspace_set_materialized_not_admitted"
+    },
+    "public_suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "archive_sha256",
+        "server_receipt_sha256",
+        "task_count",
+        "public_only"
+      ],
+      "properties": {
+        "archive_sha256": {"$ref": "#/$defs/sha256"},
+        "server_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "task_count": {"const": 12},
+        "public_only": {"const": true},
+        "release_archive_sha256": {"$ref": "#/$defs/sha256"},
+        "release_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "release_class": {"const": "Golden-12 AI-reviewed v1"},
+        "trust_receipt_kind": {
+          "const": "ai_reviewed_v1_global_release_lock"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_count",
+        "workspace_count",
+        "projection_workspace_count",
+        "blank_workspace_count",
+        "public_file_count",
+        "repository_file_count",
+        "private_file_count"
+      ],
+      "properties": {
+        "task_count": {"const": 12},
+        "workspace_count": {"const": 12},
+        "projection_workspace_count": {"const": 10},
+        "blank_workspace_count": {"const": 2},
+        "public_file_count": {"type": "integer", "minimum": 12},
+        "repository_file_count": {"type": "integer", "minimum": 0},
+        "private_file_count": {"const": 0}
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "workspace_receipt_sha256",
+          "public_tree_sha256",
+          "workspace_payload_sha256",
+          "public_file_count",
+          "repository_file_count",
+          "projection_required",
+          "private_file_count"
+        ],
+        "properties": {
+          "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-[a-z0-9-]+$"},
+          "workspace_receipt_sha256": {"$ref": "#/$defs/sha256"},
+          "public_tree_sha256": {"$ref": "#/$defs/sha256"},
+          "workspace_payload_sha256": {"$ref": "#/$defs/sha256"},
+          "public_file_count": {"type": "integer", "minimum": 1},
+          "repository_file_count": {"type": "integer", "minimum": 0},
+          "projection_required": {"type": "boolean"},
+          "private_file_count": {"const": 0}
+        }
+      }
+    },
+    "source_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workspace_set_builder",
+        "workspace_materializer",
+        "workspace_receipt_schema",
+        "public_suite_verifier"
+      ],
+      "properties": {
+        "workspace_set_builder": {"$ref": "#/$defs/sha256"},
+        "workspace_materializer": {"$ref": "#/$defs/sha256"},
+        "workspace_receipt_schema": {"$ref": "#/$defs/sha256"},
+        "public_suite_verifier": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "all_public_workspaces_materialized",
+        "public_private_path_isolation_verified",
+        "controller_measurement_envelope_bound",
+        "rights_review_complete",
+        "suite_frozen",
+        "official_attempts_permitted",
+        "publishable_score_permitted"
+      ],
+      "properties": {
+        "all_public_workspaces_materialized": {"const": true},
+        "public_private_path_isolation_verified": {"const": true},
+        "controller_measurement_envelope_bound": {"const": false},
+        "rights_review_complete": {"const": false},
+        "suite_frozen": {"const": false},
+        "official_attempts_permitted": {"const": false},
+        "publishable_score_permitted": {"const": false}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "official_attempts_started",
+        "semantic_attempts_consumed",
+        "provider_calls",
+        "eda_calls",
+        "private_evaluator_calls",
+        "benchmark_results_created"
+      ],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "semantic_attempts_consumed": {"const": 0},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "benchmark_results_created": {"const": 0}
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

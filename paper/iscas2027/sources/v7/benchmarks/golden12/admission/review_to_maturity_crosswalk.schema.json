@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/review-to-maturity-crosswalk.v1.json",
+  "title": "Golden-12 review-item to maturity-gate crosswalk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "tasks",
+    "protocol_review_ids",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.review_to_maturity_crosswalk.v1"},
+    "status": {"const": "development_mapping_not_admission"},
+    "tasks": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/task"}
+    },
+    "protocol_review_ids": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "reviewIds": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "gateMapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gate_id", "primary_review_ids", "required_review_ids"],
+      "properties": {
+        "gate_id": {"type": "string", "minLength": 1},
+        "primary_review_ids": {"$ref": "#/$defs/reviewIds"},
+        "required_review_ids": {
+          "allOf": [
+            {"$ref": "#/$defs/reviewIds"},
+            {"minItems": 1}
+          ]
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "mapping_mode", "final_gate_id"],
+      "properties": {
+        "task_id": {"type": "string", "pattern": "^G(0[1-9]|1[0-2])-"},
+        "mapping_mode": {"enum": ["identity", "explicit_all_of"]},
+        "final_gate_id": {"type": "string", "minLength": 1},
+        "gate_mappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/gateMapping"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"mapping_mode": {"const": "identity"}}},
+          "then": {"not": {"required": ["gate_mappings"]}},
+          "else": {"required": ["gate_mappings"]}
+        }
+      ]
+    }
+  }
+}

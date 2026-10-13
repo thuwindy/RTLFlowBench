@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/adapter/chipflow-usage-receipt.v1.json",
+  "title": "ChipFlow benchmark usage receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "chipflow_run_id",
+    "started_at",
+    "completed_at",
+    "collection_status",
+    "resource_usage",
+    "network_monitor",
+    "event_ledger",
+    "evidence_manifest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.chipflow_usage_receipt.v1"
+    },
+    "chipflow_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "collection_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_time",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions"
+      ],
+      "properties": {
+        "wall_time": {
+          "const": "complete"
+        },
+        "llm_calls": {
+          "const": "complete"
+        },
+        "eda_calls": {
+          "const": "complete"
+        },
+        "human_interventions": {
+          "const": "complete"
+        }
+      }
+    },
+    "resource_usage": {
+      "$ref": "#/$defs/resourceUsage"
+    },
+    "network_monitor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "network_access_observed",
+        "attempt_count",
+        "method"
+      ],
+      "properties": {
+        "status": {
+          "const": "complete"
+        },
+        "network_access_observed": {
+          "type": "boolean"
+        },
+        "attempt_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "event_ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "evidence_manifest": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "path": {
+            "$ref": "#/$defs/relativePath"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))(?!.*\\\\).+$"
+    },
+    "resourceUsage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_time_seconds",
+        "input_tokens",
+        "output_tokens",
+        "llm_calls",
+        "eda_calls",
+        "human_interventions",
+        "missing_measurements"
+      ],
+      "properties": {
+        "wall_time_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "input_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "output_tokens": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "llm_calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "eda_calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compile_or_lint",
+            "simulation",
+            "formal",
+            "synthesis"
+          ],
+          "properties": {
+            "compile_or_lint": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "simulation": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "formal": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "synthesis": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "human_interventions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "missing_measurements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "input_tokens",
+              "output_tokens"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

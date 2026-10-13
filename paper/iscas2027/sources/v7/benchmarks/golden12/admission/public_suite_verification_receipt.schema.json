@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/golden12-public-suite-verification-receipt.v1.json",
+  "title": "Golden-12 public suite development verification receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "suite_id",
+    "archive_sha256",
+    "archive_bytes",
+    "archive_member_count",
+    "manifest_entry_count",
+    "manifest_sha256",
+    "suite_descriptor_sha256",
+    "task_count",
+    "task_ids",
+    "candidate_lock_sha256",
+    "task_public_archive_sha256",
+    "private_file_count",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "protocol_ready",
+    "suite_ready",
+    "publishable_score_permitted",
+    "extraction_performed",
+    "verifier_sha256",
+    "receipt_schema_sha256",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.golden12_public_suite_verification_receipt.v1"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "const": "verified_development_candidate_not_released"
+    },
+    "suite_id": {
+      "const": "Golden-12-v1-development-candidate"
+    },
+    "archive_sha256": {"$ref": "#/$defs/sha256"},
+    "archive_bytes": {"type": "integer", "minimum": 1},
+    "archive_member_count": {"type": "integer", "minimum": 1},
+    "manifest_entry_count": {"type": "integer", "minimum": 1},
+    "manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "suite_descriptor_sha256": {"$ref": "#/$defs/sha256"},
+    "task_count": {"const": 12},
+    "task_ids": {"$ref": "#/$defs/task_ids"},
+    "candidate_lock_sha256": {"$ref": "#/$defs/task_digest_map"},
+    "task_public_archive_sha256": {"$ref": "#/$defs/task_digest_map"},
+    "private_file_count": {"const": 0},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "protocol_ready": {"const": false},
+    "suite_ready": {"const": false},
+    "publishable_score_permitted": {"const": false},
+    "extraction_performed": {"const": true},
+    "verifier_sha256": {"$ref": "#/$defs/sha256"},
+    "receipt_schema_sha256": {"$ref": "#/$defs/sha256"},
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 3,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "task_ids": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "G01-common-fifo-spec"},
+        {"const": "G02-common-rr-arbiter-spec"},
+        {"const": "G03-axis-fifo-backpressure"},
+        {"const": "G04-wb2axip-split-bridge"},
+        {"const": "G05-picorv32-missing-irq"},
+        {"const": "G06-ibex-debug-csr-exception"},
+        {"const": "G07-ibex-ifetch-error-timing"},
+        {"const": "G08-common-fifo-dv"},
+        {"const": "G09-axis-fifo-dv"},
+        {"const": "G10-serv-area-qor"},
+        {"const": "G11-picorv32-qor"},
+        {"const": "G12-common-cdc-missing-contract"}
+      ],
+      "items": false,
+      "minItems": 12,
+      "maxItems": 12
+    },
+    "task_digest_map": {
+      "type": "object",
+      "minProperties": 12,
+      "maxProperties": 12,
+      "additionalProperties": false,
+      "required": [
+        "G01-common-fifo-spec",
+        "G02-common-rr-arbiter-spec",
+        "G03-axis-fifo-backpressure",
+        "G04-wb2axip-split-bridge",
+        "G05-picorv32-missing-irq",
+        "G06-ibex-debug-csr-exception",
+        "G07-ibex-ifetch-error-timing",
+        "G08-common-fifo-dv",
+        "G09-axis-fifo-dv",
+        "G10-serv-area-qor",
+        "G11-picorv32-qor",
+        "G12-common-cdc-missing-contract"
+      ],
+      "properties": {
+        "G01-common-fifo-spec": {"$ref": "#/$defs/sha256"},
+        "G02-common-rr-arbiter-spec": {"$ref": "#/$defs/sha256"},
+        "G03-axis-fifo-backpressure": {"$ref": "#/$defs/sha256"},
+        "G04-wb2axip-split-bridge": {"$ref": "#/$defs/sha256"},
+        "G05-picorv32-missing-irq": {"$ref": "#/$defs/sha256"},
+        "G06-ibex-debug-csr-exception": {"$ref": "#/$defs/sha256"},
+        "G07-ibex-ifetch-error-timing": {"$ref": "#/$defs/sha256"},
+        "G08-common-fifo-dv": {"$ref": "#/$defs/sha256"},
+        "G09-axis-fifo-dv": {"$ref": "#/$defs/sha256"},
+        "G10-serv-area-qor": {"$ref": "#/$defs/sha256"},
+        "G11-picorv32-qor": {"$ref": "#/$defs/sha256"},
+        "G12-common-cdc-missing-contract": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

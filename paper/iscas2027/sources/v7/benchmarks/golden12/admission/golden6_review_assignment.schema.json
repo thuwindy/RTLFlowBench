@@ -1,0 +1,250 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/golden6-review-assignment.v1.json",
+  "title": "Golden-6 alpha reviewer assignment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "observed_at",
+    "status",
+    "classification",
+    "release_target",
+    "subjects",
+    "task_ids",
+    "subject_count",
+    "task_count",
+    "total_review_item_count",
+    "assigned_review_item_count",
+    "approved_review_item_count",
+    "pending_review_item_count",
+    "assignment_ready",
+    "trusted_reviewer_registry_supplied",
+    "registry_governance_complete",
+    "independent_review_complete",
+    "protocol_ready",
+    "benchmark_ready_task_count",
+    "chipflow_adapter_ready_task_count",
+    "golden6_alpha_ready",
+    "golden12_v1_ready",
+    "workflow_workspace_exposure_permitted",
+    "full_assignment",
+    "tracks",
+    "items",
+    "source",
+    "excluded_claims"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "track_id": {
+      "enum": [
+        "rights_governance",
+        "protocol_schema_freeze",
+        "public_contract_projection",
+        "evaluator_calibration",
+        "environment_scoring_freeze",
+        "technical_admission",
+        "final_admission"
+      ]
+    },
+    "subject_id": {
+      "enum": ["protocol", "G01", "G03", "G05", "G08", "G10", "G12"]
+    },
+    "task_id": {
+      "enum": [
+        "G01-common-fifo-spec",
+        "G03-axis-fifo-backpressure",
+        "G05-picorv32-missing-irq",
+        "G08-common-fifo-dv",
+        "G10-serv-area-qor",
+        "G12-common-cdc-missing-contract"
+      ]
+    },
+    "subject_digest_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["protocol", "G01", "G03", "G05", "G08", "G10", "G12"],
+      "properties": {
+        "protocol": {"$ref": "#/$defs/sha256"},
+        "G01": {"$ref": "#/$defs/sha256"},
+        "G03": {"$ref": "#/$defs/sha256"},
+        "G05": {"$ref": "#/$defs/sha256"},
+        "G08": {"$ref": "#/$defs/sha256"},
+        "G10": {"$ref": "#/$defs/sha256"},
+        "G12": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.golden6_review_assignment.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "verified_unassigned_pending_independent_review"},
+    "classification": {"const": "evaluator_private_reviewer_only"},
+    "release_target": {"const": "golden6_alpha"},
+    "subjects": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "protocol"},
+        {"const": "G01"},
+        {"const": "G03"},
+        {"const": "G05"},
+        {"const": "G08"},
+        {"const": "G10"},
+        {"const": "G12"}
+      ],
+      "items": false,
+      "minItems": 7,
+      "maxItems": 7
+    },
+    "task_ids": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "G01-common-fifo-spec"},
+        {"const": "G03-axis-fifo-backpressure"},
+        {"const": "G05-picorv32-missing-irq"},
+        {"const": "G08-common-fifo-dv"},
+        {"const": "G10-serv-area-qor"},
+        {"const": "G12-common-cdc-missing-contract"}
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "subject_count": {"const": 7},
+    "task_count": {"const": 6},
+    "total_review_item_count": {"const": 54},
+    "assigned_review_item_count": {"const": 0},
+    "approved_review_item_count": {"const": 0},
+    "pending_review_item_count": {"const": 54},
+    "assignment_ready": {"const": true},
+    "trusted_reviewer_registry_supplied": {"const": false},
+    "registry_governance_complete": {"const": false},
+    "independent_review_complete": {"const": false},
+    "protocol_ready": {"const": false},
+    "benchmark_ready_task_count": {"const": 0},
+    "chipflow_adapter_ready_task_count": {"const": 0},
+    "golden6_alpha_ready": {"const": false},
+    "golden12_v1_ready": {"const": false},
+    "workflow_workspace_exposure_permitted": {"const": false},
+    "full_assignment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "receipt_sha256",
+        "expected_receipt_sha256",
+        "trust_anchor_digest_match",
+        "subject_count",
+        "task_count",
+        "total_review_item_count"
+      ],
+      "properties": {
+        "schema_version": {"const": "rtlflowbench.review_assignment_handoff.v1"},
+        "receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "expected_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "trust_anchor_digest_match": {"const": true},
+        "subject_count": {"const": 13},
+        "task_count": {"const": 12},
+        "total_review_item_count": {"const": 102}
+      }
+    },
+    "tracks": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["track_id", "description", "item_count", "item_keys"],
+        "properties": {
+          "track_id": {"$ref": "#/$defs/track_id"},
+          "description": {"type": "string", "minLength": 1},
+          "item_count": {"type": "integer", "minimum": 0, "maximum": 54},
+          "item_keys": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 3}
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "minItems": 54,
+      "maxItems": 54,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "item_key",
+          "subject_id",
+          "task_id",
+          "review_id",
+          "scope",
+          "primary_track",
+          "candidate_lock_sha256",
+          "review_packet_sha256",
+          "verified_workspace_relative_path",
+          "signature_namespace",
+          "assignment_status",
+          "reviewer_identity",
+          "conflict_of_interest_declaration_required",
+          "detached_signature_required",
+          "approval_status"
+        ],
+        "properties": {
+          "item_key": {"type": "string", "minLength": 3},
+          "subject_id": {"$ref": "#/$defs/subject_id"},
+          "task_id": {"anyOf": [{"type": "null"}, {"$ref": "#/$defs/task_id"}]},
+          "review_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "scope": {"type": "string", "minLength": 1},
+          "primary_track": {"$ref": "#/$defs/track_id"},
+          "candidate_lock_sha256": {"$ref": "#/$defs/sha256"},
+          "review_packet_sha256": {"$ref": "#/$defs/sha256"},
+          "verified_workspace_relative_path": {
+            "type": "string",
+            "minLength": 1,
+            "not": {"pattern": "(^/|(^|/)\\.\\.(/|$))"}
+          },
+          "signature_namespace": {
+            "type": "string",
+            "pattern": "^rtlflowbench-(protocol|g(?:01|03|05|08|10|12))-review$"
+          },
+          "assignment_status": {"const": "unassigned"},
+          "reviewer_identity": {"type": "null"},
+          "conflict_of_interest_declaration_required": {"const": true},
+          "detached_signature_required": {"const": true},
+          "approval_status": {"const": "pending"}
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "builder_sha256",
+        "schema_sha256",
+        "full_assignment_sha256",
+        "full_assignment_schema_sha256",
+        "candidate_lock_sha256",
+        "review_packet_sha256"
+      ],
+      "properties": {
+        "builder_sha256": {"$ref": "#/$defs/sha256"},
+        "schema_sha256": {"$ref": "#/$defs/sha256"},
+        "full_assignment_sha256": {"$ref": "#/$defs/sha256"},
+        "full_assignment_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "candidate_lock_sha256": {"$ref": "#/$defs/subject_digest_map"},
+        "review_packet_sha256": {"$ref": "#/$defs/subject_digest_map"}
+      }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

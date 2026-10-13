@@ -1,0 +1,50 @@
+{
+  "schema": "g12rtl.paper_scorer_bindings.v1",
+  "bindings": [
+    {
+      "task": "G03",
+      "task_id": "G03-axis-fifo-backpressure",
+      "source_manifest_sha256": "536920f4be114425659b1254880bcb54d1ce0bfd990daf75a25466104122d25e",
+      "registry_sha256": "1b4b11bf59617371230762f9bfe4206ab7c01f497c592cd0382c15145d8927c7",
+      "public_task_descriptor_sha256": "d4ea206ff6dea600611ec7b7e94ae9133b0e11aead3e27542d7cc2187c79af4d",
+      "public_task_file_sha256": "2e16d7491d5f9accc9e6bb2202765067c716a5eedb0d5df01164472ad67d7bb3",
+      "submission_template_sha256": "95d2fcf4eba0e5210d20dfdbcc687e7e9e1909c1b952d15cbee79d826cefcd6d",
+      "source_file_count": 3312,
+      "provenance": "Exact scorer/registry used for independent fixed-start qualification of this parent; all three methods share it."
+    },
+    {
+      "task": "G04",
+      "task_id": "G04-wb2axip-split-bridge",
+      "source_manifest_sha256": "fc1b788b05e92e0903969c7acfe3ce9e67d85493447dc1be326a83ea2a6bb0e3",
+      "registry_sha256": "e25bc87add36c8dc743f3e146eba4a406d1119a42130a9827dca6427777cdb50",
+      "public_task_descriptor_sha256": "fff834fe032308da957c47fb1174d8313202c37de937d1be749a3df47781372b",
+      "public_task_file_sha256": "0ca1427c1930e918c6188ead93a31c035fbfd93189eb41ad5d58548c48e97046",
+      "submission_template_sha256": "ba669e81c0df95cb05279786a97258252f81158b28c8767786f38f482da18e65",
+      "source_file_count": 3312,
+      "provenance": "Exact scorer/registry used for independent fixed-start qualification of this parent; all three methods share it."
+    },
+    {
+      "task": "G05",
+      "task_id": "G05-picorv32-missing-irq",
+      "source_manifest_sha256": "6f7d94321460c93206eec2b6c77ee6ed90a2408aea4654cdda9ae0222c3554ab",
+      "registry_sha256": "a3e4c7a5164563fd376a9e2ebd711117d29b51ca3eec810b483c211f14f0f696",
+      "public_task_descriptor_sha256": "9dc9c559e05a39474786f065cba58222cd0d4ce43019cbb7ebd54ec762ed75ec",
+      "public_task_file_sha256": "f409106801585aa6f3f9bd02b832f559314b9ad003eee404d329cc885eadd27c",
+      "submission_template_sha256": "dfdf457d27fd0ed7a88b46d30db3ae1775819b66b9a3a99ddeeb58dd5fe5b3d1",
+      "source_file_count": 3312,
+      "provenance": "Exact scorer/registry used for independent fixed-start qualification of this parent; all three methods share it."
+    },
+    {
+      "task": "G06",
+      "task_id": "G06-ibex-debug-csr-exception",
+      "source_manifest_sha256": "c431bb4eb223d78374378dbfc6dd9fa0cdde242d23c2e0831db27ecedc14ab46",
+      "registry_sha256": "2fe31bf6bfeaa1a6103a9e95605f62494535c04eebdf083064ff7d5cb94221ad",
+      "public_task_descriptor_sha256": "d55b1cf2dd03bb3c200b4ea021e8b793222b79e73098b6db322291839ff8285b",
+      "public_task_file_sha256": "30d331485e79462586207dd38d72a6103037376dd8b9c65f0459a70e2ee89a3a",
+      "submission_template_sha256": "556ca793e381155349b1c42fa4ef18e6f1aefc46f100746d0e56c41f9ad3e64c",
+      "source_file_count": 3312,
+      "provenance": "Same functional evaluator as fixture qualification, with prospective common budget metadata and verified positive/negative controls."
+    }
+  ],
+  "scope": "Expected historical identities, not certification of full scorer availability in this source companion."
+}

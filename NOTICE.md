@@ -1,5 +1,7 @@
 # Provenance and redistribution scope
 
+## September public task preview
+
 The task suite draws its project context from:
 
 - https://github.com/pulp-platform/common_cells
@@ -27,3 +29,18 @@ The newly authored preview helper `rtlflowbench.py` and its tests are available
 under the MIT license in `TOOLS_LICENSE.txt`. This limited grant does not apply to
 the imported packet corpus, schemas or upstream material. A complete licensing
 manifest is required before the fully reusable v1 release.
+
+## ISCAS 2027 paper source companion
+
+The statements above describe the original `candidate/` preview and its tools.
+The additive `paper/iscas2027/` directory also includes selected benchmark and
+evaluator-helper source, execution-bound public packets, and source-provenance
+metadata. Its file-level scope and omissions are described in
+[the paper source guide](paper/iscas2027/README.md).
+
+The copied DeerFlow-derived tools retain their original MIT notices in
+[DEERFLOW_LICENSE.txt](paper/iscas2027/DEERFLOW_LICENSE.txt). This does not extend
+the preview helper's limited license to the imported task corpus, schemas or
+upstream RTL, nor establish new rights/admission approvals. The existing task
+preview and its candidate hashes are unchanged. No hidden evaluator fixture
+package, full upstream repository or raw model/execution log is distributed.

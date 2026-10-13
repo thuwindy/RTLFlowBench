@@ -1,0 +1,34 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G05-picorv32-missing-irq",
+  "status": "implemented_development_not_frozen",
+  "planned_checks": [
+    "Validate one-file replacement scope, repository-base digests, and preservation of the embedded ISC notice",
+    "Compile and lint the supplied PicoRV32 repository projection as Verilog 2005",
+    "Exercise one unmasked latched external IRQ source",
+    "Exercise the existing internal timer IRQ source",
+    "Exercise one public service-edge merge case in which a new external source and timer expiry coincide with acknowledgement of a different pending source",
+    "Check active-low synchronous reset clearing for pending and eoi state",
+    "Reject missing, extra, renamed, oversized, or out-of-scope submission files",
+    "Keep broader sequence sweeps, differential-state traces, firmware, formal, and mutant oracles private"
+  ],
+  "planned_oracle_types": [
+    "build",
+    "lint",
+    "directed_simulation",
+    "scope"
+  ],
+  "verdict_parser_status": "implemented_strict_exact_sentinel",
+  "pass_sentinel": "GOLDEN12_VISIBLE_PASS task=G05-picorv32-missing-irq external_irq=1 timer_irq=1 service_edge_merge=1 reset=1",
+  "raw_log_contract_status": "implemented_development_not_frozen",
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "contains_testbench": true,
+  "calibration_status": "changed_public_f2p_smoke_pending_recalibration",
+  "excluded_claims": [
+    "The previous non-triggering visible-smoke calibration does not apply to this changed public F2P candidate.",
+    "The changed visible suite requires fresh base/positive/negative local and server calibration plus independent review.",
+    "No hidden evaluator, formal proof, differential trace, or mutant calibration exists.",
+    "The benchmark task remains not_ready."
+  ]
+}

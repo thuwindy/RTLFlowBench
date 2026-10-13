@@ -1,0 +1,28 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G04-wb2axip-split-bridge",
+  "status": "implemented_development_not_frozen",
+  "planned_checks": [
+    "Validate the one-file additive submission scope and both read-only dependency digests",
+    "Compile the exact top-level parameter and port contract with both supplied dependencies",
+    "Exercise an AXI read through a stalled Wishbone request and verify data plus OKAY response",
+    "Exercise AW-before-W and W-before-AW writes with address, data, select, and OKAY checks",
+    "Check reset-state read preference under simultaneous read/write requests",
+    "Check owner hold, non-owner isolation, and stalled external field stability",
+    "Check read and write Wishbone ERR map only to the matching AXI SLVERR response",
+    "Reject a public illegal C_AXI_DATA_WIDTH combination during elaboration or at time zero"
+  ],
+  "planned_oracle_types": ["build", "lint", "directed_simulation", "scope"],
+  "verdict_parser_status": "implemented_strict_exact_sentinel",
+  "pass_sentinel": "GOLDEN12_VISIBLE_PASS task=G04-wb2axip-split-bridge data_width=32 addr_width=16",
+  "raw_log_contract_status": "implemented_development_not_frozen",
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "contains_testbench": true,
+  "calibration_status": "server_reference_observed_negative_calibration_pending",
+  "excluded_claims": [
+    "One SERVER26 reference run passed all four visible stages; negative calibration, independent review, and freeze remain pending.",
+    "No hidden F2P/P2P, formal, coverage, synthesis, environment, scoring, or admission claim exists.",
+    "The benchmark task remains not_ready."
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/private/vanilla-workflow-binding.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "workflow",
+    "controller_sha256",
+    "workflow_binding_schema_sha256",
+    "provider_runner_sha256",
+    "provider_response_schema_sha256",
+    "run_receipt_schema_sha256",
+    "scan_submission_adapter_sha256",
+    "visible_runner_contract_schema_sha256",
+    "decoding_config_sha256",
+    "maximum_iterations",
+    "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "rtlflowbench.vanilla_workflow_binding.v1"
+    },
+    "status": {
+      "enum": [
+        "development_not_frozen",
+        "frozen"
+      ]
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "version",
+        "adapter_name",
+        "adapter_version",
+        "model",
+        "config_sha256"
+      ],
+      "properties": {
+        "name": {
+          "const": "same-model-vanilla-agent"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapter_name": {
+          "const": "rtlflowbench-vanilla-provider-bridge"
+        },
+        "adapter_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "name"
+          ],
+          "properties": {
+            "provider": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "controller_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "workflow_binding_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "provider_runner_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "provider_response_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "run_receipt_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "scan_submission_adapter_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "visible_runner_contract_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "decoding_config_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "maximum_iterations": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32
+    },
+    "excluded_claims": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "frozen"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "maximum_iterations": {
+            "maximum": 8
+          }
+        }
+      }
+    }
+  ]
+}

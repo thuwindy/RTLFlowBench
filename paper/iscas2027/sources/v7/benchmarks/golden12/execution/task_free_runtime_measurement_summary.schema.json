@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/task-free-runtime-measurement-summary.v1.json",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "observed_at", "status", "scope", "source_binding", "request_set_sha256", "inputs_sha256", "workflows", "summary", "attempt_accounting", "readiness", "excluded_claims"],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.task_free_runtime_measurement_summary.v1"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "five_task_free_runtime_baselines_complete_not_resource_calibration"},
+    "scope": {"const": "uniform_offline_task_free_oci_probe_without_task_or_provider"},
+    "source_binding": {"$ref": "#/$defs/sourceBinding"},
+    "request_set_sha256": {"$ref": "#/$defs/sha256"},
+    "inputs_sha256": {"type": "object", "minProperties": 4, "maxProperties": 4, "additionalProperties": {"$ref": "#/$defs/sha256"}},
+    "workflows": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "chipflow"}, "workflow_id": {"const": "chipflow"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "same_model_vanilla_agent"}, "workflow_id": {"const": "same_model_vanilla_agent"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_1"}, "workflow_id": {"const": "mage"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_2"}, "workflow_id": {"const": "verilogcoder"}}}]},
+        {"allOf": [{"$ref": "#/$defs/workflow"}, {"properties": {"workflow_slot_id": {"const": "external_airtl_3"}, "workflow_id": {"const": "hdlagent"}}}]}
+      ], "items": false
+    },
+    "summary": {"type": "object", "additionalProperties": false, "required": ["workflow_count", "task_free_measurement_complete_count", "container_cgroup_measurement_complete_count", "raw_marker_match_count", "stderr_empty_count", "full_workflow_resource_calibration_complete_count"], "properties": {"workflow_count": {"const": 5}, "task_free_measurement_complete_count": {"const": 5}, "container_cgroup_measurement_complete_count": {"const": 5}, "raw_marker_match_count": {"const": 5}, "stderr_empty_count": {"const": 5}, "full_workflow_resource_calibration_complete_count": {"const": 0}}},
+    "attempt_accounting": {"$ref": "#/$defs/zeroAttempts"},
+    "readiness": {"type": "object", "additionalProperties": false, "required": ["all_five_task_free_runtime_baselines_complete", "full_workflow_resource_calibration_complete", "host_capacity_policy_derivation_permitted", "official_attempts_permitted"], "properties": {"all_five_task_free_runtime_baselines_complete": {"const": true}, "full_workflow_resource_calibration_complete": {"const": false}, "host_capacity_policy_derivation_permitted": {"const": false}, "official_attempts_permitted": {"const": false}}},
+    "excluded_claims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "sourceBinding": {"type": "object", "additionalProperties": false, "required": ["commit", "manifest_sha256"], "properties": {"commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "manifest_sha256": {"$ref": "#/$defs/sha256"}}},
+    "metrics": {"type": "object", "additionalProperties": false, "required": ["wall_time_seconds", "peak_container_cgroup_memory_bytes", "container_cgroup_cpu_time_seconds", "peak_container_cgroup_pids", "peak_scratch_bytes", "peak_eda_concurrency", "peak_llm_concurrency"], "properties": {"wall_time_seconds": {"type": "number", "exclusiveMinimum": 0}, "peak_container_cgroup_memory_bytes": {"type": "integer", "minimum": 1}, "container_cgroup_cpu_time_seconds": {"type": "number", "minimum": 0}, "peak_container_cgroup_pids": {"type": "integer", "minimum": 1}, "peak_scratch_bytes": {"const": 2097152}, "peak_eda_concurrency": {"type": "null"}, "peak_llm_concurrency": {"type": "null"}}},
+    "workflow": {"type": "object", "additionalProperties": false, "required": ["workflow_slot_id", "workflow_id", "request_sha256", "receipt_sha256", "runtime_image_digest", "runtime_image_id", "metrics", "task_free_measurement_complete", "full_workflow_resource_calibration_complete", "official_attempts_permitted"], "properties": {"workflow_slot_id": {"type": "string"}, "workflow_id": {"type": "string"}, "request_sha256": {"$ref": "#/$defs/sha256"}, "receipt_sha256": {"$ref": "#/$defs/sha256"}, "runtime_image_digest": {"$ref": "#/$defs/image"}, "runtime_image_id": {"$ref": "#/$defs/image"}, "metrics": {"$ref": "#/$defs/metrics"}, "task_free_measurement_complete": {"const": true}, "full_workflow_resource_calibration_complete": {"const": false}, "official_attempts_permitted": {"const": false}}},
+    "zeroAttempts": {"type": "object", "additionalProperties": false, "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls"], "properties": {"official_attempts_started": {"const": 0}, "official_semantic_attempts_consumed": {"const": 0}, "resource_calibration_attempts_consumed": {"const": 0}, "benchmark_results_created": {"const": 0}, "private_evaluator_calls": {"const": 0}}}
+  }
+}

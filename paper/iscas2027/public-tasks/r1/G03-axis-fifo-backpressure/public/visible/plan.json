@@ -1,0 +1,36 @@
+{
+  "schema_version": "chipflow.golden12.visible_plan.v1",
+  "task_id": "G03-axis-fifo-backpressure",
+  "status": "implemented_development_not_frozen",
+  "planned_checks": [
+    "Validate one-file additive submission scope and read-only dependency digests",
+    "Compile the exact wrapper parameter and port contract with axis_fifo.v",
+    "Confirm the elaborated wrapper contains the required axis_fifo instance and parameter bindings",
+    "Exercise two short frames with tkeep and tlast preservation",
+    "Apply deterministic source idle cycles and sink backpressure",
+    "Check stalled-output stability and no loss, duplication, or reordering",
+    "Check that a partial frame is not exposed before its tlast is accepted",
+    "Check synchronous reset during a partial frame and during output backpressure",
+    "Reject a public non-byte-aligned DATA_WIDTH during elaboration or at time zero",
+    "Reject a public DEPTH_BYTES value that is not an integral beat capacity during elaboration or at time zero",
+    "Reject a public non-power-of-two beat capacity during elaboration or at time zero"
+  ],
+  "planned_oracle_types": [
+    "build",
+    "lint",
+    "directed_simulation",
+    "scope"
+  ],
+  "verdict_parser_status": "implemented_strict_exact_sentinel",
+  "pass_sentinel": "GOLDEN12_VISIBLE_PASS task=G03-axis-fifo-backpressure width=32 depth_bytes=64",
+  "raw_log_contract_status": "implemented_development_not_frozen",
+  "result_schema_path": "visible/result.schema.json",
+  "runner_path": "visible/runner.py",
+  "contains_testbench": true,
+  "calibration_status": "local_server_reference_observed_not_frozen",
+  "excluded_claims": [
+    "Development visible calibration is not a benchmark PASS or frozen result.",
+    "Hidden seeded backpressure and parameter development evidence remain private; upstream regression and frozen cross-environment coverage remain future work.",
+    "The benchmark task remains not_ready."
+  ]
+}

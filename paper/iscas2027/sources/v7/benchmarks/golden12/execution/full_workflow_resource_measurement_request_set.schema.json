@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.org/schema/full-workflow-resource-measurement-request-set.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "request_set_id", "observed_at", "status", "scope",
+    "input_sha256", "requests", "summary", "attempt_accounting",
+    "readiness", "blockers", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.full_workflow_resource_measurement_request_set.v1"},
+    "request_set_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "requests_materialized_execution_blocked"},
+    "scope": {"const": "five_workflows_all_twelve_tasks_resource_calibration_only"},
+    "input_sha256": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_release_candidate", "primary_cohort_execution_plan", "oci_inventory", "launch_contract_intake", "observed_transport_probe", "common_model_candidate", "launch_policy", "request_schema", "set_schema", "builder"],
+      "properties": {
+        "workflow_release_candidate": {"$ref": "#/$defs/sha256"},
+        "primary_cohort_execution_plan": {"$ref": "#/$defs/sha256"},
+        "oci_inventory": {"$ref": "#/$defs/sha256"},
+        "launch_contract_intake": {"$ref": "#/$defs/sha256"},
+        "observed_transport_probe": {"$ref": "#/$defs/sha256"},
+        "common_model_candidate": {"$ref": "#/$defs/sha256"},
+                "launch_policy": {"$ref": "#/$defs/sha256"},
+                "public_workspace_set": {"$ref": "#/$defs/sha256"},
+        "request_schema": {"$ref": "#/$defs/sha256"},
+        "set_schema": {"$ref": "#/$defs/sha256"},
+        "builder": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "requests": {
+      "type": "array", "minItems": 200, "maxItems": 200, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["measurement_id", "workflow_slot_id", "workflow_id", "task_id", "calibration_run_index", "request_relative_path", "request_sha256"],
+        "properties": {
+          "measurement_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,127}$"},
+          "workflow_slot_id": {"enum": ["chipflow", "same_model_vanilla_agent", "external_airtl_1", "external_airtl_2", "external_airtl_3"]},
+          "workflow_id": {"enum": ["chipflow", "same_model_vanilla_agent", "mage", "verilogcoder", "hdlagent"]},
+          "task_id": {"type": "string", "pattern": "^G(?:0[1-9]|1[0-2])-[a-z0-9-]+$"},
+          "calibration_run_index": {"type": "integer", "minimum": 1, "maximum": 5},
+          "request_relative_path": {"type": "string", "pattern": "^requests/[a-z0-9_-]+/G(?:0[1-9]|1[0-2])-[a-z0-9-]+/run-[1-5]\\.json$"},
+          "request_sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["workflow_count", "task_count", "workflow_task_cell_count", "request_count", "requests_per_workflow", "three_run_cell_count", "five_run_cell_count", "public_workspace_count", "controller_envelope_count", "provider_preflight_pass_count"],
+      "properties": {
+        "workflow_count": {"const": 5},
+        "task_count": {"const": 12},
+        "workflow_task_cell_count": {"const": 60},
+        "request_count": {"const": 200},
+        "requests_per_workflow": {"const": 40},
+        "three_run_cell_count": {"const": 50},
+        "five_run_cell_count": {"const": 10},
+                "public_workspace_count": {"enum": [0, 12]},
+        "controller_envelope_count": {"const": 0},
+        "provider_preflight_pass_count": {"const": 0}
+      }
+    },
+    "attempt_accounting": {
+      "type": "object", "additionalProperties": false,
+      "required": ["official_attempts_started", "official_semantic_attempts_consumed", "resource_calibration_attempts_consumed", "benchmark_results_created", "private_evaluator_calls", "provider_calls", "eda_calls"],
+      "properties": {
+        "official_attempts_started": {"const": 0},
+        "official_semantic_attempts_consumed": {"const": 0},
+        "resource_calibration_attempts_consumed": {"const": 0},
+        "benchmark_results_created": {"const": 0},
+        "private_evaluator_calls": {"const": 0},
+        "provider_calls": {"const": 0},
+        "eda_calls": {"const": 0}
+      }
+    },
+    "readiness": {
+      "type": "object", "additionalProperties": false,
+      "required": ["all_requests_materialized", "all_public_workspaces_materialized", "controller_envelope_bound", "common_provider_preflight_passed", "resource_campaign_permitted", "host_capacity_policy_derivation_permitted", "official_attempts_permitted"],
+      "properties": {
+        "all_requests_materialized": {"const": true},
+                "all_public_workspaces_materialized": {"type": "boolean"},
+        "controller_envelope_bound": {"const": false},
+        "common_provider_preflight_passed": {"const": false},
+        "resource_campaign_permitted": {"const": false},
+        "host_capacity_policy_derivation_permitted": {"const": false},
+        "official_attempts_permitted": {"const": false}
+      }
+    },
+        "blockers": {
+          "oneOf": [
+            {
+              "const": [
+                "public_trial_workspaces_missing_0_of_12",
+                "controller_aware_measurement_envelope_not_bound",
+                "common_provider_preflight_not_passed"
+              ]
+            },
+            {
+              "const": [
+                "controller_aware_measurement_envelope_not_bound",
+                "common_provider_preflight_not_passed"
+              ]
+            }
+          ]
+        },
+    "excluded_claims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 40}}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

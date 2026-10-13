@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rtlflowbench.local/schemas/yosys-top-output-bmc-result-v1.json",
+  "title": "RTLFlowBench public Yosys top-output BMC result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "task_id", "verdict", "pass", "reason",
+    "contract_sha256", "baseline_manifest_sha256", "candidate_manifest_sha256",
+    "compared_source_count", "proof", "tool", "process", "evidence", "excluded_claims"
+  ],
+  "properties": {
+    "schema_version": {"const": "rtlflowbench.yosys_top_output_bmc_result.v1"},
+    "task_id": {"type": "string"},
+    "verdict": {"enum": ["pass", "equivalence_fail", "compile_error", "timeout", "infra_error", "invalid_input"]},
+    "pass": {"type": "boolean"},
+    "reason": {"type": "string", "minLength": 1},
+    "contract_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+    "baseline_manifest_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+    "candidate_manifest_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+    "compared_source_count": {"type": "integer", "minimum": 0},
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method", "sequential_depth", "reset_signal", "reset_active_level",
+        "reset_cycles", "initial_state_policy", "ignore_baseline_x_outputs",
+        "proof_obligation_discharged", "complete_equivalence_claimed"
+      ],
+      "properties": {
+        "method": {"const": "yosys_miter_sat_reset_bmc"},
+        "sequential_depth": {"anyOf": [{"type": "integer", "minimum": 2, "maximum": 32}, {"type": "null"}]},
+        "reset_signal": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "reset_active_level": {"anyOf": [{"enum": [0, 1]}, {"type": "null"}]},
+        "reset_cycles": {"anyOf": [{"type": "integer", "minimum": 1, "maximum": 31}, {"type": "null"}]},
+        "initial_state_policy": {"anyOf": [{"const": "zero"}, {"type": "null"}]},
+        "ignore_baseline_x_outputs": {"anyOf": [{"type": "boolean"}, {"type": "null"}]},
+        "proof_obligation_discharged": {"type": "boolean"},
+        "complete_equivalence_claimed": {"const": false}
+      }
+    },
+    "tool": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "path", "sha256", "version"],
+      "properties": {
+        "name": {"const": "yosys"},
+        "path": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "version": {"anyOf": [{"type": "string"}, {"type": "null"}]}
+      }
+    },
+    "process": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "exit_code", "wall_time_seconds", "command"],
+      "properties": {
+        "status": {"enum": ["completed", "timeout", "not_started"]},
+        "exit_code": {"anyOf": [{"type": "integer"}, {"type": "null"}]},
+        "wall_time_seconds": {"anyOf": [{"type": "number", "minimum": 0}, {"type": "null"}]},
+        "command": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["script_path", "script_sha256", "stdout_path", "stdout_sha256", "stderr_path", "stderr_sha256", "stdout_tail", "stderr_tail"],
+      "properties": {
+        "script_path": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "script_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "stdout_path": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "stdout_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "stderr_path": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+        "stderr_sha256": {"anyOf": [{"type": "string", "pattern": "^[0-9a-f]{64}$"}, {"type": "null"}]},
+        "stdout_tail": {"type": "string"},
+        "stderr_tail": {"type": "string"}
+      }
+    },
+    "excluded_claims": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"verdict": {"const": "pass"}}},
+      "then": {"properties": {"pass": {"const": true}, "proof": {"properties": {"proof_obligation_discharged": {"const": true}}}}},
+      "else": {"properties": {"pass": {"const": false}, "proof": {"properties": {"proof_obligation_discharged": {"const": false}}}}}
+    }
+  ]
+}
